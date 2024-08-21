@@ -11,8 +11,8 @@ class CustomNavigationBar extends StatelessWidget {
       currentIndex: currentIndex,
       items: const [
         BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-        BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month), label: 'Reminders'),
+        // BottomNavigationBarItem(
+        //     icon: Icon(Icons.calendar_month), label: 'Reminders'),
         BottomNavigationBarItem(
             icon: Icon(Icons.medication), label: 'Medication'),
         BottomNavigationBarItem(
@@ -27,15 +27,12 @@ class CustomNavigationBar extends StatelessWidget {
             Navigator.popAndPushNamed(context, '/');
             break;
           case 1:
-            Navigator.popAndPushNamed(context, '/reminders');
-            break;
-          case 2:
             Navigator.popAndPushNamed(context, '/medications');
             break;
-          case 3:
+          case 2:
             Navigator.popAndPushNamed(context, '/allergies');
             break;
-          case 4:
+          case 3:
             Navigator.popAndPushNamed(context, '/profile');
             break;
         }

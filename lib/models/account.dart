@@ -8,9 +8,7 @@ class Account {
   int weightInLbs;
   int heightInInches;
 
-  List<AllergyInfo> allergies = [];
-
-  Account({required this.firstName, required this.lastName, required this.birthDate, required this.weightInLbs, required this.heightInInches, required this.allergies});
+  Account({required this.firstName, required this.lastName, required this.birthDate, required this.weightInLbs, required this.heightInInches});
 
   factory Account.fromJson(Map<String, dynamic> json) {
     return Account(
@@ -19,7 +17,6 @@ class Account {
       birthDate: json['birthDate'],
       weightInLbs: json['weightInLbs'],
       heightInInches: json['heightInInches'],
-      allergies: json['allergies'],
     );
   }
 
@@ -29,7 +26,6 @@ class Account {
     'birthDate': birthDate,
     'weightInLbs': weightInLbs,
     'heightInInches': heightInInches,
-    'allergies': allergies,
   };
 
   Duration getAge() {

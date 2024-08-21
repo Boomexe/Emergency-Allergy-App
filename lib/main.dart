@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const Dashboard(),
       routes: {
-        '/reminders': (context) => const Reminders(),
+        // '/reminders': (context) => const Reminders(),
         '/medications': (context) => const Medications(),
         '/allergies': (context) => const Allergies(),
         '/profile': (context) => const Profile(),

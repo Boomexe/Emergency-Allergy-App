@@ -83,6 +83,6 @@ class _ProfileState extends State<Profile> {
             )
           ],
         )),
-        bottomNavigationBar: const CustomNavigationBar(currentIndex: 4));
+        bottomNavigationBar: const CustomNavigationBar(currentIndex: 3));
   }
 }
