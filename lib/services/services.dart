@@ -33,21 +33,21 @@ class Services {
 
   static Future<List<Medication>> loadMedications() async {
     String? medicationsString = await readData('medications');
-    print(medicationsString);
 
     if (medicationsString == null) {
       return [];
     }
 
+
+
     List<Medication> medications =
-        Medication.fromJsonList(jsonDecode(medicationsString!)['medications']);
+        Medication.fromJsonList(jsonDecode(medicationsString)['medications']);
 
     return medications;
   }
 
   static void saveMedication(medication) async {
     List<Medication> medications = await loadMedications();
-    // print(medications);
 
     medications.add(medication);
     saveData('medications', jsonEncode(Medication.toJsonList(medications)));
@@ -66,7 +66,7 @@ class Services {
   }
 
   static Future<String?> readData(key) async {
-    print(await storage.read(key: key));
+    // print(await storage.read(key: key));
     return await storage.read(key: key);
   }
 

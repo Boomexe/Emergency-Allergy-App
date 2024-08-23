@@ -1,3 +1,4 @@
+import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:uuid/uuid.dart';
 
 class Medication {
@@ -7,7 +8,7 @@ class Medication {
   final String note;
   final String dosage;
 
-  final List<String> reminders;
+  final List<Reminder> reminders;
 
   Medication({
     required this.name,
@@ -17,12 +18,14 @@ class Medication {
   }) : id = const Uuid().v4();
 
   factory Medication.fromJson(Map<String, dynamic> json) {
-    return Medication(
+    Medication medication = Medication(
       name: json['name'],
       note: json['note'],
       dosage: json['dosage'],
-      reminders: List<String>.from(json['reminders']),
+      reminders: Reminder.fromJsonList(json['reminders']),
     );
+    
+    return medication;
   }
 
   static List<Medication> fromJsonList(List<dynamic> jsonList) {
@@ -40,7 +43,7 @@ class Medication {
       'name': medication.name,
       'note': medication.note,
       'dosage': medication.dosage,
-      'reminders': medication.reminders,
+      'reminders': Reminder.toJsonList(medication.reminders),
     };
   }
 

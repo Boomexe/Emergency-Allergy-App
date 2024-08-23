@@ -1,6 +1,7 @@
 import 'package:day_picker/day_picker.dart';
-import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
+import 'package:emergency_allergy_app/components/nav_bar.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
+import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/services/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,10 +78,7 @@ class _MedicationsState extends State<Medications> {
           },
           backgroundColor: Theme.of(context).primaryColor,
           child: const Icon(Icons.add, color: Colors.white),
-        ),
-        bottomNavigationBar: const CustomNavigationBar(
-          currentIndex: 1,
-        ));
+        ),);
   }
 }
 
@@ -98,11 +96,8 @@ class _CreateMedicationState extends State<CreateMedication> {
   TextEditingController note = TextEditingController();
   TextEditingController dosage = TextEditingController();
 
-
   bool medicationHasReminderSwitch = false;
-  List<String> reminders = [];
-
-  DateTime? medicationReminderTime;
+  DateTime? medicationReminderTime = DateTime.now();
 
   final List<DayInWeek> days = [
     DayInWeek('Sun', dayKey: 'sunday'),
@@ -115,6 +110,19 @@ class _CreateMedicationState extends State<CreateMedication> {
   ];
 
   void saveButtonPressed() async {
+    List<Reminder> reminders = [];
+
+    if (medicationHasReminderSwitch) {
+      print(medicationReminderTime);
+      reminders.add(Reminder(
+        days: days
+            .where((day) => day.isSelected)
+            .map((day) => day.dayKey)
+            .toList(),
+        time: medicationReminderTime!,
+      ));
+    }
+
     Medication medication = Medication(
       name: name.text,
       note: note.text,

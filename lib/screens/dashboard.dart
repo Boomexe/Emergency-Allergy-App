@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../components/custom_navigation_bar.dart';
+import '../components/nav_bar.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -14,8 +14,7 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return const Scaffold(
         body: Center(
-          child: Text('Welcome to the Allergy Emergency App!'),
-        ),
-        bottomNavigationBar: CustomNavigationBar());
+      child: Text('Welcome to the Allergy Emergency App!'),
+    ));
   }
 }

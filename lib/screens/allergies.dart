@@ -1,4 +1,4 @@
-import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
+import 'package:emergency_allergy_app/components/nav_bar.dart';
 import 'package:emergency_allergy_app/models/allergy_info.dart';
 import 'package:emergency_allergy_app/services/services.dart';
 import 'package:flutter/material.dart';
@@ -14,28 +14,26 @@ class _AllergiesState extends State<Allergies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: const Center(
-          child: Text('Allergies'),
-        ),
-        floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  useSafeArea: true,
-                  builder: (context) => Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom,
-                            left: 20,
-                            right: 20),
-                        child: const CreateAllergy(),
-                      ));
-            },
-            backgroundColor: Theme.of(context).primaryColor,
-            child: const Icon(Icons.add, color: Colors.white)),
-        bottomNavigationBar: const CustomNavigationBar(
-          currentIndex: 2,
-        ));
+      body: const Center(
+        child: Text('Allergies'),
+      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                useSafeArea: true,
+                builder: (context) => Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                          left: 20,
+                          right: 20),
+                      child: const CreateAllergy(),
+                    ));
+          },
+          backgroundColor: Theme.of(context).primaryColor,
+          child: const Icon(Icons.add, color: Colors.white)),
+    );
   }
 }
 

@@ -1,4 +1,4 @@
-import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
+import 'package:emergency_allergy_app/components/nav_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,7 +82,6 @@ class _ProfileState extends State<Profile> {
               ],
             )
           ],
-        )),
-        bottomNavigationBar: const CustomNavigationBar(currentIndex: 3));
+        )),);
   }
 }
