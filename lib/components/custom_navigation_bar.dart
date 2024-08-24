@@ -7,8 +7,6 @@ class CustomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // int currentIndex = 0;
-
     return NavigationBar(
       selectedIndex: currentIndex,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
