@@ -1,4 +1,4 @@
-import 'package:emergency_allergy_app/components/nav_bar.dart';
+import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 class Reminders extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:emergency_allergy_app/models/allergy_info.dart';
+import 'package:emergency_allergy_app/models/allergy.dart';
 
 class Account {
   String firstName;

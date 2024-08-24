@@ -1,9 +1,9 @@
-import 'package:emergency_allergy_app/components/nav_bar.dart';
-import 'package:emergency_allergy_app/screens/allergies.dart';
-import 'package:emergency_allergy_app/screens/dashboard.dart';
-import 'package:emergency_allergy_app/screens/medications.dart';
-import 'package:emergency_allergy_app/screens/profile.dart';
-import 'package:emergency_allergy_app/screens/reminders.dart';
+import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
+import 'package:emergency_allergy_app/screens/allergy_screen.dart';
+import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
+import 'package:emergency_allergy_app/screens/medication_screen.dart';
+import 'package:emergency_allergy_app/screens/profile_screen.dart';
+import 'package:emergency_allergy_app/screens/reminder_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
