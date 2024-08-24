@@ -1,5 +1,4 @@
 import 'package:day_picker/day_picker.dart';
-import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/services/services.dart';

@@ -1,5 +1,5 @@
-import 'package:emergency_allergy_app/models/medication.dart';
-import 'package:flutter/foundation.dart';
+// import 'package:emergency_allergy_app/models/medication.dart';
+// import 'package:flutter/foundation.dart';
 
 class AllergyInfo {
   final String name;

@@ -1,6 +1,5 @@
-import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
-import 'package:emergency_allergy_app/models/allergy.dart';
-import 'package:emergency_allergy_app/services/services.dart';
+// import 'package:emergency_allergy_app/models/allergy.dart';
+// import 'package:emergency_allergy_app/services/services.dart';
 import 'package:flutter/material.dart';
 
 class Allergies extends StatefulWidget {

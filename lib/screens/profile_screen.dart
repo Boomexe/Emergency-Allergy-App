@@ -1,4 +1,3 @@
-import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
