@@ -2,7 +2,7 @@ import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:flutter/material.dart';
 
 class AllergyDetails extends StatefulWidget {
-  final AllergyInfo allergy;
+  final Allergy allergy;
 
   const AllergyDetails({super.key, required this.allergy});
 

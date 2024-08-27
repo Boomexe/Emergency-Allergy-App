@@ -7,12 +7,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class Services {
   static FlutterSecureStorage storage = const FlutterSecureStorage();
 
-  static Future<List<AllergyInfo>> loadAllergies() async {
+  static Future<List<Allergy>> loadAllergies() async {
     Future<String?> allergiesString = readData('allergies');
 
     allergiesString.then((value) {
-      List<AllergyInfo> allergies =
-          AllergyInfo.fromJsonList(jsonDecode(value!)['allergies']);
+      List<Allergy> allergies =
+          Allergy.fromJsonList(jsonDecode(value!)['allergies']);
 
       return allergies;
     });
@@ -21,7 +21,7 @@ class Services {
   }
 
   static void saveAllergy(allergy) async {
-    Future<List<AllergyInfo>> allergies = loadAllergies();
+    Future<List<Allergy>> allergies = loadAllergies();
 
     allergies.then((value) {
       value.add(allergy);

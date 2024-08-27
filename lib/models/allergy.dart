@@ -1,31 +1,35 @@
 // import 'package:emergency_allergy_app/models/medication.dart';
 // import 'package:flutter/foundation.dart';
 
-class AllergyInfo {
+class Allergy {
   final String name;
   final String description;
 
   final AllergyType type;
   final AllergySeverity severity;
 
-  final List<int> medications;
+  final List<String> medicationIds;
 
-  AllergyInfo({required this.name, required this.description, required this.type, required this.severity, required this.medications});
+  Allergy(
+      {required this.name,
+      required this.description,
+      required this.type,
+      required this.severity,
+      required this.medicationIds});
 
-  factory AllergyInfo.fromJson(Map<String, dynamic> json) {
-    return AllergyInfo(
-      name: json['name'],
-      description: json['description'],
-      type: AllergyType.values[json['type']],
-      severity: AllergySeverity.values[json['severity']],
-      medications: json['medications']
-    );
+  factory Allergy.fromJson(Map<String, dynamic> json) {
+    return Allergy(
+        name: json['name'],
+        description: json['description'],
+        type: AllergyType.values[json['type']],
+        severity: AllergySeverity.values[json['severity']],
+        medicationIds: json['medications']);
   }
 
-  static List<AllergyInfo> fromJsonList(List<dynamic> jsonList) {
-    List<AllergyInfo> allergies = [];
+  static List<Allergy> fromJsonList(List<dynamic> jsonList) {
+    List<Allergy> allergies = [];
     for (var json in jsonList) {
-      allergies.add(AllergyInfo.fromJson(json));
+      allergies.add(Allergy.fromJson(json));
     }
 
     return allergies;
@@ -44,12 +48,7 @@ enum AllergyType {
   other
 }
 
-enum AllergySeverity {
-  mild,
-  moderate,
-  severe,
-  lifeThreatening
-}
+enum AllergySeverity { mild, moderate, severe }
 
 // enum AllergyReaction {
 //   hives,

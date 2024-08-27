@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "38785005400",
+    "project_id": "emergency-allergy-app",
+    "storage_bucket": "emergency-allergy-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38785005400:android:0753073e150c1b538f972d",
+        "android_client_info": {
+          "package_name": "com.example.emergency_allergy_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBRjPYNe1zaKU_MLxp9azoYg0JK6WrSiA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

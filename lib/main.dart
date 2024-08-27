@@ -1,12 +1,20 @@
+import 'package:flutter/material.dart';
+
 import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
+
 import 'package:emergency_allergy_app/screens/allergy_screen.dart';
 import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
 import 'package:emergency_allergy_app/screens/medication_screen.dart';
 import 'package:emergency_allergy_app/screens/profile_screen.dart';
-// import 'package:emergency_allergy_app/screens/reminder_screen.dart';
-import 'package:flutter/material.dart';
 
-void main() {
+import 'package:emergency_allergy_app/themes/dark_theme.dart';
+import 'package:emergency_allergy_app/themes/light_theme.dart';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:emergency_allergy_app/firebase_options.dart';
+
+Future<void> main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -37,10 +45,8 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Allergy Emergency',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
-        useMaterial3: true,
-      ),
+      theme: lightTheme,
+      darkTheme: darkTheme,
       home: Scaffold(
         body: screens[selectedIndex],
         bottomNavigationBar: CustomNavigationBar(
@@ -48,12 +54,6 @@ class _MyAppState extends State<MyApp> {
           currentIndex: selectedIndex,
         ),
       ),
-      // routes: {
-      //   // '/reminders': (context) => const Reminders(),
-      //   '/medications': (context) => const Medications(),
-      //   '/allergies': (context) => const Allergies(),
-      //   '/profile': (context) => const Profile(),
-      // },
     );
   }
 }

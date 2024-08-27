@@ -4,7 +4,7 @@ import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/services/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 
 class Medications extends StatefulWidget {
   const Medications({super.key});
@@ -75,8 +75,8 @@ class _MedicationsState extends State<Medications> {
                           CreateMedication(onSaveMedication: onSaveMedication),
                     ));
           },
-          backgroundColor: Theme.of(context).primaryColor,
-          child: const Icon(Icons.add, color: Colors.white),
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          child: const Icon(Icons.add),
         ),);
   }
 }
@@ -99,13 +99,13 @@ class _CreateMedicationState extends State<CreateMedication> {
   DateTime? medicationReminderTime = DateTime.now();
 
   final List<DayInWeek> days = [
-    DayInWeek('Sun', dayKey: 'sunday'),
-    DayInWeek('Mon', dayKey: 'monday'),
-    DayInWeek('Tue', dayKey: 'tuesday'),
-    DayInWeek('Wed', dayKey: 'wednesday'),
-    DayInWeek('Thu', dayKey: 'thursday'),
-    DayInWeek('Fri', dayKey: 'friday'),
-    DayInWeek('Sat', dayKey: 'saturday'),
+    DayInWeek('S', dayKey: 'sunday'),
+    DayInWeek('M', dayKey: 'monday'),
+    DayInWeek('T', dayKey: 'tuesday'),
+    DayInWeek('W', dayKey: 'wednesday'),
+    DayInWeek('T', dayKey: 'thursday'),
+    DayInWeek('F', dayKey: 'friday'),
+    DayInWeek('S', dayKey: 'saturday'),
   ];
 
   void saveButtonPressed() async {
@@ -189,6 +189,10 @@ class _CreateMedicationState extends State<CreateMedication> {
                           });
                         }),
                     SelectWeekDays(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      daysFillColor: Theme.of(context).colorScheme.secondary,
+                      selectedDayTextColor: Theme.of(context).colorScheme.onSecondary,
+                      unSelectedDayTextColor: Theme.of(context).colorScheme.onPrimary,
                         onSelect: (values) {
                           List<String> days = values;
                           print('days: $days');

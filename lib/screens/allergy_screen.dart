@@ -1,6 +1,8 @@
-// import 'package:emergency_allergy_app/models/allergy.dart';
-// import 'package:emergency_allergy_app/services/services.dart';
+import 'package:emergency_allergy_app/models/medication.dart';
+import 'package:emergency_allergy_app/services/services.dart';
+import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class Allergies extends StatefulWidget {
   const Allergies({super.key});
@@ -10,6 +12,26 @@ class Allergies extends StatefulWidget {
 }
 
 class _AllergiesState extends State<Allergies> {
+  void onFloatingActionButtonPressed() async {
+    List<Medication> medications = await Services.loadMedications();
+
+    showAllergyCreationScreen(medications);
+  }
+
+  void showAllergyCreationScreen(List<Medication> medications) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        useSafeArea: true,
+        builder: (context) => Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                  left: 20,
+                  right: 20),
+              child: CreateAllergy(medications: medications),
+            ));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,17 +40,7 @@ class _AllergiesState extends State<Allergies> {
       ),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                useSafeArea: true,
-                builder: (context) => Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom,
-                          left: 20,
-                          right: 20),
-                      child: const CreateAllergy(),
-                    ));
+            onFloatingActionButtonPressed();
           },
           backgroundColor: Theme.of(context).primaryColor,
           child: const Icon(Icons.add, color: Colors.white)),
@@ -37,18 +49,29 @@ class _AllergiesState extends State<Allergies> {
 }
 
 class CreateAllergy extends StatefulWidget {
-  const CreateAllergy({super.key});
+  final List<Medication> medications;
+  const CreateAllergy({super.key, required this.medications});
 
   @override
   State<CreateAllergy> createState() => _CreateAllergyState();
 }
 
 class _CreateAllergyState extends State<CreateAllergy> {
-  TextEditingController name = TextEditingController();
-  TextEditingController note = TextEditingController();
-  TextEditingController type = TextEditingController();
-  TextEditingController severity = TextEditingController();
-  TextEditingController medications = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController noteController = TextEditingController();
+
+  AllergyType? allergyType;
+  AllergySeverity? allergySeverity;
+
+  late List<MultiSelectItem<Medication>> medicationMultiSelectItems;
+  List<Medication> selectedMedications = [];
+
+  @override
+  void initState() {
+    super.initState();
+    medicationMultiSelectItems =
+        widget.medications.map((e) => MultiSelectItem(e, e.name)).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,15 +87,99 @@ class _CreateAllergyState extends State<CreateAllergy> {
             TextFormField(
               decoration: const InputDecoration(labelText: 'Note'),
             ),
-            TextFormField(
-              decoration: const InputDecoration(labelText: 'Dosage'),
+            DropdownButton(
+              hint: const Text('Allergy Type'),
+              value: allergyType,
+              items: AllergyType.values.map(
+                (e) {
+                  return DropdownMenuItem(
+                      value: e,
+                      child:
+                          Text(e.name[0].toUpperCase() + e.name.substring(1)));
+                },
+              ).toList(),
+              onChanged: (value) {
+                setState(() {
+                  allergyType = value as AllergyType;
+                });
+              },
             ),
+            DropdownButton(
+              hint: const Text('Allergy Severity'),
+              value: allergySeverity,
+              items: AllergySeverity.values.map(
+                (e) {
+                  return DropdownMenuItem(
+                      value: e,
+                      child:
+                          Text(e.name[0].toUpperCase() + e.name.substring(1)));
+                },
+              ).toList(),
+              onChanged: (value) {
+                setState(() {
+                  allergySeverity = value as AllergySeverity;
+                });
+              },
+            ),
+            Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5)),
+                child: Column(
+                  children: [
+                    MultiSelectDialogField(
+                      decoration: const BoxDecoration(),
+                      searchable: true,
+                      listType: MultiSelectListType.CHIP,
+                      buttonText: const Text('Select Medications'),
+                      title: const Text('Medications'),
+                      items: medicationMultiSelectItems,
+                      onConfirm: (values) {
+                        setState(() {
+                          selectedMedications = values.cast<Medication>();
+                        });
+                      },
+                      chipDisplay: MultiSelectChipDisplay.none(),
+                    ),
+                    Divider(
+                      height: 2,
+                      thickness: 2,
+                      color: Colors.grey.shade400,
+                    ),
+                    MultiSelectChipDisplay(
+                      decoration: const BoxDecoration(),
+                      height: 50,
+                      items: selectedMedications
+                          .map((e) => MultiSelectItem(e, e.name))
+                          .toList(),
+                      scroll: true,
+                      onTap: (value) {
+                        setState(() {
+                          selectedMedications.remove(value);
+                        });
+                      },
+                    ),
+                    selectedMedications.isEmpty
+                        ? const SizedBox(
+                            height: 50,
+                            child:
+                                Center(child: Text('No medications selected')))
+                        : const SizedBox.shrink(),
+                  ],
+                )),
             TextButton(
                 onPressed: () {
-                  // AllergyInfo allergy = AllergyInfo(name: name.text, description: note.text, type: type.text, severity: severity.text, medications: medications.text)
-                  // Services.saveAllergy(allergy);
+                  print('${nameController.text} ${noteController.text} $allergyType $allergySeverity ${selectedMedications.map((e) => e.id).toList()}');
+                  Allergy allergy = Allergy(
+                      name: nameController.text,
+                      description: noteController.text,
+                      type: allergyType!,
+                      severity: allergySeverity!,
+                      medicationIds:
+                          selectedMedications.map((e) => e.id).toList());
+                  Services.saveAllergy(allergy);
                 },
-                child: const Text("Save")),
+                child: const Text('Save')),
           ]),
         ),
       ),

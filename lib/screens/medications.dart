@@ -4,7 +4,7 @@ import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/services/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+// import 'package:flutter/widgets.dart';
 
 class Medications extends StatefulWidget {
   const Medications({super.key});
