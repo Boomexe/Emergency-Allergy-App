@@ -1,3 +1,4 @@
+import 'package:emergency_allergy_app/auth/login_or_register_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
@@ -14,6 +15,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:emergency_allergy_app/firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
@@ -26,11 +29,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  static const List<Widget> screens = [
-    Dashboard(),
-    Medications(),
-    Allergies(),
-    Profile(),
+  static List<Widget> screens = [
+    // Dashboard(),
+    const LoginOrRegister(),
+    const Medications(),
+    const Allergies(),
+    const Profile(),
   ];
 
   int selectedIndex = 0;
