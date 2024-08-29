@@ -1,6 +1,3 @@
-// import 'package:emergency_allergy_app/models/medication.dart';
-// import 'package:flutter/foundation.dart';
-
 class Allergy {
   final String name;
   final String description;
