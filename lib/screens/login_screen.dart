@@ -3,23 +3,58 @@ import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   final void Function() onTap;
-  LoginScreen({super.key, required this.onTap});
+  const LoginScreen({super.key, required this.onTap});
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
+
   final TextEditingController passwordController = TextEditingController();
 
+  String? emailTextFieldError;
+  String? passwordTextFieldError;
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(title),
+              content: Text(message),
+            ));
+  }
+
   void login(BuildContext context) async {
-    final authService = AuthService();
+    final auth = AuthService();
+
+    emailTextFieldError = null;
+    passwordTextFieldError = null;
+
+    if (emailController.text.isEmpty) {
+      setState(() {
+        emailTextFieldError = 'Please enter your email.';
+      });
+      return;
+    }
+
+    if (passwordController.text.isEmpty) {
+      setState(() {
+        passwordTextFieldError = 'Please enter your password.';
+      });
+      return;
+    }
 
     try {
-      await authService.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
           emailController.text, passwordController.text);
     } catch (e) {
-      showDialog(
-          context: context,
-          builder: (context) => AlertDialog(title: Text(e.toString())));
+      List<String> errorMessage =
+          AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
+      showAlertDialog(context, errorMessage[0], errorMessage[1]);
     }
   }
 
@@ -32,12 +67,19 @@ class LoginScreen extends StatelessWidget {
           children: [
             const Icon(Icons.medical_services, size: 100),
             const SizedBox(height: 25),
-            FormTextField(hintText: 'Email', textController: emailController),
+            FormTextField(
+              hintText: 'Email',
+              textController: emailController,
+              keyboardType: TextInputType.emailAddress,
+              errorMsg: emailTextFieldError,
+            ),
             const SizedBox(height: 10),
             FormTextField(
-                hintText: 'Password',
-                obscureText: true,
-                textController: passwordController),
+              hintText: 'Password',
+              obscureText: true,
+              textController: passwordController,
+              errorMsg: passwordTextFieldError,
+            ),
             const SizedBox(height: 25),
             FormButton(onTap: () => login(context), text: 'Login'),
             const SizedBox(height: 10),
@@ -46,7 +88,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 const Text('Don\'t have an account? '),
                 GestureDetector(
-                  onTap: onTap,
+                  onTap: widget.onTap,
                   child: const Text(
                     'Sign Up',
                     style: TextStyle(fontWeight: FontWeight.bold),

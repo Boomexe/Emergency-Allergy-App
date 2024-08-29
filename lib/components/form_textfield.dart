@@ -4,13 +4,23 @@ class FormTextField extends StatelessWidget {
   final String hintText;
   final bool obscureText;
   final TextEditingController textController;
-  const FormTextField({super.key, required this.hintText, this.obscureText = false, required this.textController});
+  final String Function(String)? validator;
+  final String? errorMsg;
+  final TextInputType? keyboardType;
+  const FormTextField(
+      {super.key,
+      required this.hintText,
+      this.obscureText = false,
+      required this.textController,
+      this.validator,
+      this.errorMsg, this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: TextField(
+      child: TextFormField(
+        keyboardType: keyboardType ?? TextInputType.text,
         controller: textController,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
@@ -20,11 +30,12 @@ class FormTextField extends StatelessWidget {
               borderSide:
                   BorderSide(color: Theme.of(context).colorScheme.secondary)),
           hintText: hintText,
+          errorText: errorMsg,
           filled: true,
           fillColor: Theme.of(context).colorScheme.primary,
         ),
-
         obscureText: obscureText,
+        validator: (value) => validator!(value!),
       ),
     );
   }
