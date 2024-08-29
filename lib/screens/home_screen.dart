@@ -1,5 +1,4 @@
 import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
-import 'package:emergency_allergy_app/components/new_custom_navbar.dart';
 import 'package:emergency_allergy_app/screens/allergy_screen.dart';
 import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
 import 'package:emergency_allergy_app/screens/medications.dart';

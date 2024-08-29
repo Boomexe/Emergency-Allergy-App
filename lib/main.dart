@@ -1,18 +1,13 @@
 import 'package:emergency_allergy_app/auth/auth_gate.dart';
 import 'package:flutter/material.dart';
 
-// import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
-
-// import 'package:emergency_allergy_app/screens/allergy_screen.dart';
-// import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
-// import 'package:emergency_allergy_app/screens/medication_screen.dart';
-// import 'package:emergency_allergy_app/screens/profile_screen.dart';
-
 import 'package:emergency_allergy_app/themes/dark_theme.dart';
 import 'package:emergency_allergy_app/themes/light_theme.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:emergency_allergy_app/firebase_options.dart';
+
+// todo: add google-services.json and GoogleService-Info.plist to gitignore
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
