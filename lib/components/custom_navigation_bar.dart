@@ -15,7 +15,8 @@ class CustomNavigationBar extends StatelessWidget {
         child: NavigationBar(
           selectedIndex: currentIndex,
           height: 64,
-          backgroundColor: Theme.of(context).colorScheme.primary,
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          indicatorColor: Theme.of(context).colorScheme.surfaceContainerHighest,
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           destinations: [
             NavigationDestination(icon: Icon(Icons.home, color: Theme.of(context).colorScheme.onSurface), label: 'Home'),

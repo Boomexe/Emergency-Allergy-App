@@ -1,5 +1,6 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
+import 'package:emergency_allergy_app/services/firestore.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -24,7 +25,8 @@ class _DashboardState extends State<Dashboard> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Text('Welcome to the Allergy Emergency App!'),
-          FormButton(onTap: logout, text: 'Sign Out')
+          FormButton(onTap: logout, text: 'Sign Out'),
+          FormButton(onTap: FirestoreService.getMedications, text: 'Get Medications')
         ],
       ),
     ));

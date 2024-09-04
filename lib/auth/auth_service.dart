@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -35,6 +37,28 @@ class AuthService {
     return await auth.signOut();
   }
 
+  Future<void> sendPasswordResetEmail(String email) async {
+    return await auth.sendPasswordResetEmail(email: email);
+  }
+
+  Future<void> verifyEmail() async {
+    final User? user = auth.currentUser;
+    return await user!.sendEmailVerification();
+  }
+
+  Future<void> deleteUser() async {
+    try {
+      User? user = auth.currentUser;
+      if (user != null) {
+        await user.delete();
+      } else {
+        throw Exception('not-signed-in');
+      }
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
+  }
+
   static List<String> getMessageFromErrorCode(String code) {
     switch (code) {
       case 'invalid-credential':
@@ -49,6 +73,8 @@ class AuthService {
         return ['Email in use', 'The email address you provided is already in use by another account.'];
       case 'weak-password':
         return ['Weak password', 'The password you provided is too weak.'];
+      case 'user-disabled':
+        return ['Account disabled', 'This account has been disabled.'];
       default:
         return ['Error', 'An error occurred. Code: $code'];
     }

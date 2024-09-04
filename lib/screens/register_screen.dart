@@ -46,6 +46,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
+    if (!emailController.text.contains('@')) {
+      setState(() {
+        emailTextFieldError = 'Please format your email correctly.';
+      });
+      return;
+    }
+
     if (passwordController.text.isEmpty) {
       setState(() {
         passwordTextFieldError = 'Please enter your password.';

@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
+import 'package:emergency_allergy_app/services/firestore.dart';
 import 'package:emergency_allergy_app/services/services.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,70 +16,98 @@ class Medications extends StatefulWidget {
 }
 
 class _MedicationsState extends State<Medications> {
-  late Future<List<Medication>> medications;
+  // late Future<List<Medication>> medications;
 
-  Future<List<Medication>> fetchMedications() async {
-    return await Services.loadMedications();
-  }
+  // Future<List<Medication>> fetchMedications() async {
+  //   return await Services.loadMedications();
+  // }
 
   void onSaveMedication(newMedications) {
-    setState(() {
-      medications = newMedications;
-    });
+    // FirestoreService.addMedication(newMedications);
+    // setState(() {
+    //   medications = newMedications;
+    // });
   }
 
   @override
   void initState() {
+    // medications = fetchMedications();
     super.initState();
-    medications = fetchMedications();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: FutureBuilder(
-          future: medications,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              if (snapshot.data!.isNotEmpty) {
-                return ListView.builder(
-                    itemCount: snapshot.data!.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(snapshot.data![index].name),
-                        subtitle: Text(snapshot.data![index].note),
-                        trailing: Text(snapshot.data![index].dosage),
-                      );
-                    });
-              } else {
-                return const Center(child: Text('No medications found'));
-              }
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                enableDrag: false,
-                useSafeArea: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-                builder: (context) => Padding(
-                      padding: EdgeInsets.only(
-                        bottom: MediaQuery.of(context).viewInsets.bottom,
-                      ),
-                      child:
-                          CreateMedication(onSaveMedication: onSaveMedication),
-                    ));
-          },
-          backgroundColor: Theme.of(context).colorScheme.secondary,
-          child: const Icon(Icons.add),
-        ),);
+      body: 
+      FutureBuilder(
+        future: FirestoreService.getMedications(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (snapshot.hasError) {
+            return Center(child: Text('Error retrieving data: ${snapshot.error}'));
+          }
+          
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            print(snapshot.data);
+            return const Center(child: Text('No medications found'));
+          }
+
+          return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                print('snapshot.data: ${'${snapshot.data![index].name} ${snapshot.data![index].dosage} ${snapshot.data![index].note}'}');
+                return ListTile(
+                  title: Text(snapshot.data![index].name),
+                  subtitle: Text(snapshot.data![index].note, style: TextStyle(color: Colors.red),),
+                  trailing: Text(snapshot.data![index].dosage, style: TextStyle(color: Colors.red),),
+                );
+              });
+        },
+        // future: medications,
+        // builder: (context, snapshot) {
+        //   if (snapshot.hasData) {
+        //     if (snapshot.data!.isNotEmpty) {
+        //       return ListView.builder(
+        //           itemCount: snapshot.data!.length,
+        //           itemBuilder: (context, index) {
+        //             return ListTile(
+        //               title: Text(snapshot.data![index].name),
+        //               subtitle: Text(snapshot.data![index].note),
+        //               trailing: Text(snapshot.data![index].dosage),
+        //             );
+        //           });
+        //     } else {
+        //       return const Center(child: Text('No medications found'));
+        //     }
+        //   } else {
+        //     return const Center(child: CircularProgressIndicator());
+        //   }
+        // },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              enableDrag: false,
+              useSafeArea: true,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
+              builder: (context) => Padding(
+                    padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom,
+                    ),
+                    child: CreateMedication(onSaveMedication: onSaveMedication),
+                  ));
+        },
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
 
@@ -112,14 +142,16 @@ class _CreateMedicationState extends State<CreateMedication> {
     List<Reminder> reminders = [];
 
     if (medicationHasReminderSwitch) {
-      print(medicationReminderTime);
-      reminders.add(Reminder(
+      // print(medicationReminderTime);
+      Reminder reminder = Reminder(
         days: days
             .where((day) => day.isSelected)
             .map((day) => day.dayKey)
             .toList(),
         time: medicationReminderTime!,
-      ));
+      );
+      reminders.add(reminder);
+      print('REMINDER: ${Reminder.toJson(reminder)}');
     }
 
     Medication medication = Medication(
@@ -129,10 +161,10 @@ class _CreateMedicationState extends State<CreateMedication> {
       reminders: reminders,
     );
 
-    Future<List<Medication>> medications =
-        Services.saveAndReturnMedications(medication);
+    Future<DocumentReference<Object?>> medications =
+        FirestoreService.addMedication(medication);
 
-    widget.onSaveMedication(medications);
+    // widget.onSaveMedication(medications);
     Navigator.pop(context);
   }
 
@@ -189,10 +221,12 @@ class _CreateMedicationState extends State<CreateMedication> {
                           });
                         }),
                     SelectWeekDays(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      daysFillColor: Theme.of(context).colorScheme.secondary,
-                      selectedDayTextColor: Theme.of(context).colorScheme.onSecondary,
-                      unSelectedDayTextColor: Theme.of(context).colorScheme.onPrimary,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        daysFillColor: Theme.of(context).colorScheme.secondary,
+                        selectedDayTextColor:
+                            Theme.of(context).colorScheme.onSecondary,
+                        unSelectedDayTextColor:
+                            Theme.of(context).colorScheme.onPrimary,
                         onSelect: (values) {
                           List<String> days = values;
                           print('days: $days');

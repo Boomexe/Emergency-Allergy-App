@@ -12,12 +12,17 @@ class FormButton extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          color: Theme.of(context).colorScheme.primary,
+          color: Theme.of(context).colorScheme.surfaceContainer,
         ),
-        padding: const EdgeInsets.all(25),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         margin: const EdgeInsets.symmetric(horizontal: 25),
         child: Center(
-          child: Text(text),
+          child: Text(text,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+                )),
         ),
       ),
     );

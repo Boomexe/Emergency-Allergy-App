@@ -41,6 +41,13 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    if (!emailController.text.contains('@')) {
+      setState(() {
+        emailTextFieldError = 'Please format your email correctly.';
+      });
+      return;
+    }
+
     if (passwordController.text.isEmpty) {
       setState(() {
         passwordTextFieldError = 'Please enter your password.';
@@ -81,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
               errorMsg: passwordTextFieldError,
             ),
             const SizedBox(height: 25),
-            FormButton(onTap: () => login(context), text: 'Login'),
+            FormButton(onTap: () => login(context), text: 'Log in'),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
