@@ -19,14 +19,15 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    String? userName = AuthService().auth.currentUser?.email;
+
     return Scaffold(
         body: Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text('Welcome to the Allergy Emergency App!'),
-          FormButton(onTap: logout, text: 'Sign Out'),
-          FormButton(onTap: FirestoreService.getMedications, text: 'Get Medications')
+          Text('Welcome to the Allergy Emergency App, $userName!'),
+          FormButton(onTap: logout, text: 'Sign Out')
         ],
       ),
     ));

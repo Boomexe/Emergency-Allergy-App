@@ -1,12 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:day_picker/day_picker.dart';
+import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/services/firestore.dart';
-import 'package:emergency_allergy_app/services/services.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter/widgets.dart';
 
 class Medications extends StatefulWidget {
   const Medications({super.key});
@@ -30,16 +29,9 @@ class _MedicationsState extends State<Medications> {
   }
 
   @override
-  void initState() {
-    // medications = fetchMedications();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: 
-      FutureBuilder(
+      body: FutureBuilder(
         future: FirestoreService.getMedications(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -47,22 +39,31 @@ class _MedicationsState extends State<Medications> {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error retrieving data: ${snapshot.error}'));
+            return Center(
+                child: Text('Error retrieving data: ${snapshot.error}'));
           }
-          
+
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            print(snapshot.data);
             return const Center(child: Text('No medications found'));
           }
 
           return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                print('snapshot.data: ${'${snapshot.data![index].name} ${snapshot.data![index].dosage} ${snapshot.data![index].note}'}');
+                print(
+                    'snapshot.data: ${'${snapshot.data![index].name} ${snapshot.data![index].dosage} ${snapshot.data![index].note}'}');
                 return ListTile(
                   title: Text(snapshot.data![index].name),
-                  subtitle: Text(snapshot.data![index].note, style: TextStyle(color: Colors.red),),
-                  trailing: Text(snapshot.data![index].dosage, style: TextStyle(color: Colors.red),),
+                  subtitle: Text(
+                    snapshot.data![index].note,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondary),
+                  ),
+                  trailing: Text(
+                    snapshot.data![index].dosage,
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSecondary),
+                  ),
                 );
               });
         },
@@ -125,8 +126,9 @@ class _CreateMedicationState extends State<CreateMedication> {
   TextEditingController note = TextEditingController();
   TextEditingController dosage = TextEditingController();
 
-  bool medicationHasReminderSwitch = false;
   DateTime? medicationReminderTime = DateTime.now();
+
+  int testAmount = 0;
 
   final List<DayInWeek> days = [
     DayInWeek('S', dayKey: 'sunday'),
@@ -141,18 +143,18 @@ class _CreateMedicationState extends State<CreateMedication> {
   void saveButtonPressed() async {
     List<Reminder> reminders = [];
 
-    if (medicationHasReminderSwitch) {
-      // print(medicationReminderTime);
-      Reminder reminder = Reminder(
-        days: days
-            .where((day) => day.isSelected)
-            .map((day) => day.dayKey)
-            .toList(),
-        time: medicationReminderTime!,
-      );
-      reminders.add(reminder);
-      print('REMINDER: ${Reminder.toJson(reminder)}');
-    }
+    // if (medicationHasReminderSwitch) {
+    //   // print(medicationReminderTime);
+    //   Reminder reminder = Reminder(
+    //     days: days
+    //         .where((day) => day.isSelected)
+    //         .map((day) => day.dayKey)
+    //         .toList(),
+    //     time: medicationReminderTime!,
+    //   );
+    //   reminders.add(reminder);
+    //   print('REMINDER: ${Reminder.toJson(reminder)}');
+    // }
 
     Medication medication = Medication(
       name: name.text,
@@ -173,76 +175,111 @@ class _CreateMedicationState extends State<CreateMedication> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                IconButton(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: const Icon(Icons.close)),
-              ],
+                    child: Text('Cancel',
+                        style: TextStyle(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerLow)),
+                  ),
+                  Text('Add Medication',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          color: Theme.of(context).colorScheme.onPrimary)),
+                  TextButton(
+                      onPressed: () {
+                        saveButtonPressed();
+                      },
+                      child: Text('Add',
+                          style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerLow)))
+                ],
+              ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Name'),
-                      controller: name,
+                    FormTextField(hintText: 'Name', textController: name),
+                    const SizedBox(height: 10),
+                    FormTextField(hintText: 'Note', textController: note),
+                    const SizedBox(height: 10),
+                    FormTextField(hintText: 'Dosage', textController: dosage),
+                    const SizedBox(height: 25),
+                    Text(
+                      'Reminders',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 16),
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Note'),
-                      controller: note,
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'Dosage'),
-                      controller: dosage,
-                    ),
-                    TextButton(
-                        onPressed: () {
-                          saveButtonPressed();
-                        },
-                        child: const Text('Save')),
-                    TextButton(
-                        onPressed: () {
-                          Services.clearData();
-                        },
-                        child: const Text('Clear all')),
-                    SwitchListTile(
-                        title: const Text('Has Reminder'),
-                        value: medicationHasReminderSwitch,
-                        onChanged: (value) {
-                          setState(() {
-                            medicationHasReminderSwitch = value;
-                          });
+                    ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: testAmount + 1,
+                        itemBuilder: (context, index) {
+                          if (index == testAmount) {
+                            return ListTile(
+                              onTap: () {
+                                setState(() {
+                                  testAmount++;
+                                });
+                              },
+                              // leading: Icon(
+                              //   null,
+                              //   color: Theme.of(context)
+                              //       .colorScheme
+                              //       .surfaceContainerHighest,
+                              // ),
+                              title: Text(
+                                'Add Reminder',
+                                style: TextStyle(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .surfaceContainer),
+                              ),
+                            );
+                          }
+
+                          return const ReminderListTile();
                         }),
-                    SelectWeekDays(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        daysFillColor: Theme.of(context).colorScheme.secondary,
-                        selectedDayTextColor:
-                            Theme.of(context).colorScheme.onSecondary,
-                        unSelectedDayTextColor:
-                            Theme.of(context).colorScheme.onPrimary,
-                        onSelect: (values) {
-                          List<String> days = values;
-                          print('days: $days');
-                        },
-                        days: days),
-                    SizedBox(
-                      height: 200,
-                      child: CupertinoDatePicker(
-                        initialDateTime: DateTime.now(),
-                        mode: CupertinoDatePickerMode.time,
-                        use24hFormat: false,
-                        onDateTimeChanged: (DateTime newDate) {
-                          setState(() => medicationReminderTime = newDate);
-                        },
-                      ),
-                    ),
+                    // SelectWeekDays(
+                    //     backgroundColor: Theme.of(context).colorScheme.primary,
+                    //     daysFillColor: Theme.of(context).colorScheme.secondary,
+                    //     selectedDayTextColor:
+                    //         Theme.of(context).colorScheme.onSecondary,
+                    //     unSelectedDayTextColor:
+                    //         Theme.of(context).colorScheme.onPrimary,
+                    //     onSelect: (values) {
+                    //       List<String> days = values;
+                    //       print('days: $days');
+                    //     },
+                    //     days: days),
+                    // SizedBox(
+                    //   height: 200,
+                    //   child: CupertinoDatePicker(
+                    //     initialDateTime: DateTime.now(),
+                    //     mode: CupertinoDatePickerMode.time,
+                    //     use24hFormat: false,
+                    //     onDateTimeChanged: (DateTime newDate) {
+                    //       setState(() => medicationReminderTime = newDate);
+                    //     },
+                    //   ),
+                    // ),
                   ]),
             ),
           ],

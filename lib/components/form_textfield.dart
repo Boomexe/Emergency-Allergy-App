@@ -13,12 +13,14 @@ class FormTextField extends StatelessWidget {
       this.obscureText = false,
       required this.textController,
       this.validator,
-      this.errorMsg, this.keyboardType});
+      this.errorMsg,
+      this.keyboardType});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
+      // padding: const EdgeInsets.symmetric(horizontal: 25),
+      padding: const EdgeInsets.all(0),
       child: TextFormField(
         keyboardType: keyboardType ?? TextInputType.text,
         cursorColor: Theme.of(context).colorScheme.surfaceContainerLow,
@@ -31,7 +33,8 @@ class FormTextField extends StatelessWidget {
               borderSide:
                   BorderSide(color: Theme.of(context).colorScheme.secondary)),
           hintText: hintText,
-          hintStyle: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+          hintStyle:
+              TextStyle(color: Theme.of(context).colorScheme.onSecondary),
           errorText: errorMsg,
           filled: true,
           fillColor: Theme.of(context).colorScheme.secondary,

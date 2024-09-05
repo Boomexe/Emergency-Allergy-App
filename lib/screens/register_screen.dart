@@ -94,49 +94,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.medical_services, size: 100),
-            const SizedBox(height: 25),
-            FormTextField(
-              hintText: 'Email',
-              textController: emailController,
-              errorMsg: emailTextFieldError,
-              keyboardType: TextInputType.emailAddress,
-            ),
-            const SizedBox(height: 10),
-            FormTextField(
-              hintText: 'Password',
-              obscureText: true,
-              textController: passwordController,
-              errorMsg: passwordTextFieldError,
-            ),
-            const SizedBox(height: 10),
-            FormTextField(
-              hintText: 'Confirm Password',
-              obscureText: true,
-              textController: confirmPasswordController,
-              errorMsg: confirmPasswordTextFieldError,
-            ),
-            const SizedBox(height: 25),
-            FormButton(onTap: () => register(context), text: 'Register'),
-            const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text('Already have an account? '),
-                GestureDetector(
-                  onTap: widget.onTap,
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                )
-              ],
-            )
-          ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.medical_services, size: 100),
+              const SizedBox(height: 25),
+              FormTextField(
+                hintText: 'Email',
+                textController: emailController,
+                errorMsg: emailTextFieldError,
+                keyboardType: TextInputType.emailAddress,
+              ),
+              const SizedBox(height: 10),
+              FormTextField(
+                hintText: 'Password',
+                obscureText: true,
+                textController: passwordController,
+                errorMsg: passwordTextFieldError,
+              ),
+              const SizedBox(height: 10),
+              FormTextField(
+                hintText: 'Confirm Password',
+                obscureText: true,
+                textController: confirmPasswordController,
+                errorMsg: confirmPasswordTextFieldError,
+              ),
+              const SizedBox(height: 25),
+              FormButton(onTap: () => register(context), text: 'Register'),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Already have an account? '),
+                  GestureDetector(
+                    onTap: widget.onTap,
+                    child: const Text(
+                      'Login',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -15,7 +15,7 @@ class FormButton extends StatelessWidget {
           color: Theme.of(context).colorScheme.surfaceContainer,
         ),
         padding: const EdgeInsets.symmetric(vertical: 10),
-        margin: const EdgeInsets.symmetric(horizontal: 25),
+        // margin: const EdgeInsets.symmetric(horizontal: 25),
         child: Center(
           child: Text(text,
               style: TextStyle(
