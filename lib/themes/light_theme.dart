@@ -31,4 +31,9 @@ ThemeData lightTheme = ThemeData(
     // error: Colors.red,
     // onError: Colors.white,
   ),
+  appBarTheme: AppBarTheme(
+    backgroundColor: Colors.transparent,
+    // scrolledUnderElevation: true,
+    surfaceTintColor: Colors.grey.shade100,
+  ),
 );

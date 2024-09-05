@@ -173,116 +173,111 @@ class _CreateMedicationState extends State<CreateMedication> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        surfaceTintColor: Theme.of(context).colorScheme.onPrimary,
+        backgroundColor: Colors.transparent,
+        scrolledUnderElevation: 20,
+        centerTitle: true,
+        title: Text('Add Medication',
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+                color: Theme.of(context).colorScheme.onPrimary)),
+        // leading: TextButton(
+        //   onPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        //   child: Text('Cancel',
+        //       style: TextStyle(
+        //           color: Theme.of(context).colorScheme.surfaceContainerLow)),
+        // ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                saveButtonPressed();
+              },
+              icon: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary,))
+          // TextButton(
+          //     onPressed: () {
+          //       saveButtonPressed();
+          //     },
+          //     child: Text('Add',
+          //         style: TextStyle(
+          //             color:
+          //                 Theme.of(context).colorScheme.surfaceContainerLow))),
+        ],
+      ),
       resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Cancel',
-                        style: TextStyle(
-                            color: Theme.of(context)
-                                .colorScheme
-                                .surfaceContainerLow)),
-                  ),
-                  Text('Add Medication',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Theme.of(context).colorScheme.onPrimary)),
-                  TextButton(
-                      onPressed: () {
-                        saveButtonPressed();
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            FormTextField(hintText: 'Name', textController: name),
+            const SizedBox(height: 10),
+            FormTextField(hintText: 'Note', textController: note),
+            const SizedBox(height: 10),
+            FormTextField(hintText: 'Dosage', textController: dosage),
+            const SizedBox(height: 25),
+            Text(
+              'Reminders',
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary, fontSize: 16),
+            ),
+            ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: testAmount + 1,
+                itemBuilder: (context, index) {
+                  if (index == testAmount) {
+                    return ListTile(
+                      onTap: () {
+                        setState(() {
+                          testAmount++;
+                        });
                       },
-                      child: Text('Add',
-                          style: TextStyle(
-                              color: Theme.of(context)
-                                  .colorScheme
-                                  .surfaceContainerLow)))
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FormTextField(hintText: 'Name', textController: name),
-                    const SizedBox(height: 10),
-                    FormTextField(hintText: 'Note', textController: note),
-                    const SizedBox(height: 10),
-                    FormTextField(hintText: 'Dosage', textController: dosage),
-                    const SizedBox(height: 25),
-                    Text(
-                      'Reminders',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          fontSize: 16),
-                    ),
-                    ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: testAmount + 1,
-                        itemBuilder: (context, index) {
-                          if (index == testAmount) {
-                            return ListTile(
-                              onTap: () {
-                                setState(() {
-                                  testAmount++;
-                                });
-                              },
-                              // leading: Icon(
-                              //   null,
-                              //   color: Theme.of(context)
-                              //       .colorScheme
-                              //       .surfaceContainerHighest,
-                              // ),
-                              title: Text(
-                                'Add Reminder',
-                                style: TextStyle(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .surfaceContainer),
-                              ),
-                            );
-                          }
+                      // leading: Icon(
+                      //   null,
+                      //   color: Theme.of(context)
+                      //       .colorScheme
+                      //       .surfaceContainerHighest,
+                      // ),
+                      title: Text(
+                        'Add Reminder',
+                        style: TextStyle(
+                            color:
+                                Theme.of(context).colorScheme.surfaceContainer),
+                      ),
+                    );
+                  }
 
-                          return const ReminderListTile();
-                        }),
-                    // SelectWeekDays(
-                    //     backgroundColor: Theme.of(context).colorScheme.primary,
-                    //     daysFillColor: Theme.of(context).colorScheme.secondary,
-                    //     selectedDayTextColor:
-                    //         Theme.of(context).colorScheme.onSecondary,
-                    //     unSelectedDayTextColor:
-                    //         Theme.of(context).colorScheme.onPrimary,
-                    //     onSelect: (values) {
-                    //       List<String> days = values;
-                    //       print('days: $days');
-                    //     },
-                    //     days: days),
-                    // SizedBox(
-                    //   height: 200,
-                    //   child: CupertinoDatePicker(
-                    //     initialDateTime: DateTime.now(),
-                    //     mode: CupertinoDatePickerMode.time,
-                    //     use24hFormat: false,
-                    //     onDateTimeChanged: (DateTime newDate) {
-                    //       setState(() => medicationReminderTime = newDate);
-                    //     },
-                    //   ),
-                    // ),
-                  ]),
-            ),
-          ],
+                  return const ReminderListTile();
+                }),
+            // SelectWeekDays(
+            //     backgroundColor: Theme.of(context).colorScheme.primary,
+            //     daysFillColor: Theme.of(context).colorScheme.secondary,
+            //     selectedDayTextColor:
+            //         Theme.of(context).colorScheme.onSecondary,
+            //     unSelectedDayTextColor:
+            //         Theme.of(context).colorScheme.onPrimary,
+            //     onSelect: (values) {
+            //       List<String> days = values;
+            //       print('days: $days');
+            //     },
+            //     days: days),
+            // SizedBox(
+            //   height: 200,
+            //   child: CupertinoDatePicker(
+            //     initialDateTime: DateTime.now(),
+            //     mode: CupertinoDatePickerMode.time,
+            //     use24hFormat: false,
+            //     onDateTimeChanged: (DateTime newDate) {
+            //       setState(() => medicationReminderTime = newDate);
+            //     },
+            //   ),
+            // ),
+          ]),
         ),
       ),
     );
