@@ -27,7 +27,6 @@ class _ReminderListTileState extends State<ReminderListTile> {
 
   @override
   void initState() {
-    print('time: ${widget.reminder.time}');
     titleText = ReminderUtils.timeOfDayToString(widget.reminder.time);
     subtitleText = ReminderUtils.getSelectedDayString(widget.reminder.days);
     trailingText = widget.reminder.active ? 'On' : 'Off';

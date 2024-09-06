@@ -2,7 +2,6 @@ import 'package:day_picker/day_picker.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CreateReminderScreen extends StatefulWidget {
