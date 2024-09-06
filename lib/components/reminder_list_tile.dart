@@ -1,7 +1,6 @@
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ReminderListTile extends StatefulWidget {

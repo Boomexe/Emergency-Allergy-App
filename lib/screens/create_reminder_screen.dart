@@ -27,22 +27,6 @@ class _CreateReminderScreenState extends State<CreateReminderScreen> {
   late TimeOfDay selectedTime;
   late bool isReminderEnabled;
 
-  DateTime currentTime = DateTime.now();
-
-  DateTime getSelectedTime() {
-    if (widget.reminder != null) {
-      return DateTime(
-        currentTime.year,
-        currentTime.month,
-        currentTime.day,
-        widget.reminder?.time.hour ?? 0,
-        widget.reminder?.time.minute ?? 0,
-      );
-    }
-
-    return DateTime.now();
-  }
-
   void onSaveReminderButtonPressed() {
     Reminder reminder = Reminder(
       days: selectedDays,
