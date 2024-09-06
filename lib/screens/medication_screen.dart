@@ -4,7 +4,9 @@ import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
+import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
 import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Medications extends StatefulWidget {
@@ -50,8 +52,8 @@ class _MedicationsState extends State<Medications> {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                print(
-                    'snapshot.data: ${'${snapshot.data![index].name} ${snapshot.data![index].dosage} ${snapshot.data![index].note}'}');
+                // print(
+                //     'snapshot.data: ${'${snapshot.data![index].name} ${snapshot.data![index].dosage} ${snapshot.data![index].note}'}');
                 return ListTile(
                   title: Text(snapshot.data![index].name),
                   subtitle: Text(
@@ -67,26 +69,6 @@ class _MedicationsState extends State<Medications> {
                 );
               });
         },
-        // future: medications,
-        // builder: (context, snapshot) {
-        //   if (snapshot.hasData) {
-        //     if (snapshot.data!.isNotEmpty) {
-        //       return ListView.builder(
-        //           itemCount: snapshot.data!.length,
-        //           itemBuilder: (context, index) {
-        //             return ListTile(
-        //               title: Text(snapshot.data![index].name),
-        //               subtitle: Text(snapshot.data![index].note),
-        //               trailing: Text(snapshot.data![index].dosage),
-        //             );
-        //           });
-        //     } else {
-        //       return const Center(child: Text('No medications found'));
-        //     }
-        //   } else {
-        //     return const Center(child: CircularProgressIndicator());
-        //   }
-        // },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -126,22 +108,33 @@ class _CreateMedicationState extends State<CreateMedication> {
   TextEditingController note = TextEditingController();
   TextEditingController dosage = TextEditingController();
 
-  DateTime? medicationReminderTime = DateTime.now();
+  TimeOfDay? medicationReminderTime;
 
-  int testAmount = 0;
+  List<Reminder> reminders = [];
 
-  final List<DayInWeek> days = [
-    DayInWeek('S', dayKey: 'sunday'),
-    DayInWeek('M', dayKey: 'monday'),
-    DayInWeek('T', dayKey: 'tuesday'),
-    DayInWeek('W', dayKey: 'wednesday'),
-    DayInWeek('T', dayKey: 'thursday'),
-    DayInWeek('F', dayKey: 'friday'),
-    DayInWeek('S', dayKey: 'saturday'),
-  ];
+  void onAddReminder(Reminder reminder) {
+    setState(() {
+      reminders.add(reminder);
+    });
+    Navigator.pop(context);
+  }
+
+  void onUpdateReminder(Reminder reminder, int index) {
+    setState(() {
+      reminders[index] = reminder;
+    });
+    Navigator.pop(context);
+  }
+
+  void onDeleteReminder(int index) {
+    setState(() {
+      reminders.removeAt(index);
+    });
+    Navigator.pop(context);
+  }
 
   void saveButtonPressed() async {
-    List<Reminder> reminders = [];
+    // List<Reminder> reminders = [];
 
     // if (medicationHasReminderSwitch) {
     //   // print(medicationReminderTime);
@@ -163,9 +156,6 @@ class _CreateMedicationState extends State<CreateMedication> {
       reminders: reminders,
     );
 
-    Future<DocumentReference<Object?>> medications =
-        FirestoreService.addMedication(medication);
-
     // widget.onSaveMedication(medications);
     Navigator.pop(context);
   }
@@ -174,9 +164,6 @@ class _CreateMedicationState extends State<CreateMedication> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        surfaceTintColor: Theme.of(context).colorScheme.onPrimary,
-        backgroundColor: Colors.transparent,
-        scrolledUnderElevation: 20,
         centerTitle: true,
         title: Text('Add Medication',
             style: TextStyle(
@@ -196,7 +183,10 @@ class _CreateMedicationState extends State<CreateMedication> {
               onPressed: () {
                 saveButtonPressed();
               },
-              icon: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary,))
+              icon: Icon(
+                Icons.add,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ))
           // TextButton(
           //     onPressed: () {
           //       saveButtonPressed();
@@ -228,14 +218,28 @@ class _CreateMedicationState extends State<CreateMedication> {
             ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: testAmount + 1,
+                itemCount: reminders.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == testAmount) {
+                  if (index == reminders.length) {
                     return ListTile(
                       onTap: () {
-                        setState(() {
-                          testAmount++;
-                        });
+                        showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            enableDrag: false,
+                            useSafeArea: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero,
+                            ),
+                            builder: (context) => Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
+                                  child: CreateReminderScreen(
+                                      onSaveReminder: onAddReminder),
+                                ));
                       },
                       // leading: Icon(
                       //   null,
@@ -252,31 +256,13 @@ class _CreateMedicationState extends State<CreateMedication> {
                     );
                   }
 
-                  return const ReminderListTile();
+                  return ReminderListTile(
+                      key: ValueKey(reminders[index]),
+                      index: index,
+                      reminder: reminders[index],
+                      onUpdateReminder: onUpdateReminder,
+                      onDeleteReminder: onDeleteReminder);
                 }),
-            // SelectWeekDays(
-            //     backgroundColor: Theme.of(context).colorScheme.primary,
-            //     daysFillColor: Theme.of(context).colorScheme.secondary,
-            //     selectedDayTextColor:
-            //         Theme.of(context).colorScheme.onSecondary,
-            //     unSelectedDayTextColor:
-            //         Theme.of(context).colorScheme.onPrimary,
-            //     onSelect: (values) {
-            //       List<String> days = values;
-            //       print('days: $days');
-            //     },
-            //     days: days),
-            // SizedBox(
-            //   height: 200,
-            //   child: CupertinoDatePicker(
-            //     initialDateTime: DateTime.now(),
-            //     mode: CupertinoDatePickerMode.time,
-            //     use24hFormat: false,
-            //     onDateTimeChanged: (DateTime newDate) {
-            //       setState(() => medicationReminderTime = newDate);
-            //     },
-            //   ),
-            // ),
           ]),
         ),
       ),

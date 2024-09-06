@@ -1,15 +1,18 @@
+import 'package:emergency_allergy_app/utils/reminder_utils.dart';
+import 'package:flutter/material.dart';
+
 class Reminder {
   final List<String> days;
-  final DateTime time;
-  bool active = true;
+  final TimeOfDay time;
+  final bool active;
 
-  Reminder({required this.days, required this.time, bool? active});
+  Reminder({required this.days, required this.time, required this.active});
 
   factory Reminder.fromJson(Map<String, dynamic> json) {
     return Reminder(
       days: List<String>.from(json['days']),
-      time: DateTime.parse(json['time']),
-      active: json['active'] == 1,
+      time: ReminderUtils.parseTimeOfDay(json['time']),
+      active: json['active'],
     );
   }
 
@@ -25,13 +28,10 @@ class Reminder {
   static Map<String, dynamic> toJson(Reminder reminder) {
     return {
       'days': reminder.days,
-      'time': reminder.time.toIso8601String(),
-      'active': reminder.active ? 1 : 0,
+      'time': ReminderUtils.timeOfDayToString(reminder.time),
+      'active': reminder.active,
     };
   }
-
-
-
 
   static List<Map<String, dynamic>> toJsonList(List<Reminder> reminders) {
     List<Map<String, dynamic>> jsonList = [];
@@ -40,17 +40,5 @@ class Reminder {
     }
 
     return jsonList;
-  }
-
-  void setUnactive() {
-    active = false;
-  }
-
-  void setActive() {
-    active = true;
-  }
-
-  bool isActive() {
-    return active;
   }
 }
