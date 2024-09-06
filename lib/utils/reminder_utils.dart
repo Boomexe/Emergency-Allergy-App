@@ -1,4 +1,3 @@
-import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
