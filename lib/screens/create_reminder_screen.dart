@@ -109,15 +109,10 @@ class _CreateReminderScreenState extends State<CreateReminderScreen> {
                         child: Container(
                           color: Theme.of(context).colorScheme.secondary,
                           child: SwitchListTile(
-                              activeTrackColor: Theme.of(context)
-                                  .colorScheme
-                                  .primary,
+                              activeTrackColor:
+                                  Theme.of(context).colorScheme.primary,
                               inactiveTrackColor:
                                   Theme.of(context).colorScheme.primary,
-                              trackOutlineColor:
-                                  WidgetStateProperty.resolveWith((state) {
-                                // return Colors.transparent;
-                              }),
                               title: const Text('Enabled'),
                               value: isReminderEnabled,
                               onChanged: (value) =>
@@ -215,8 +210,7 @@ class _CreateReminderScreenState extends State<CreateReminderScreen> {
                   SelectWeekDays(
                       backgroundColor: Theme.of(context).colorScheme.secondary,
                       daysBorderColor: Theme.of(context).colorScheme.primary,
-                      daysFillColor:
-                          Theme.of(context).colorScheme.tertiary,
+                      daysFillColor: Theme.of(context).colorScheme.tertiary,
                       selectedDayTextColor:
                           Theme.of(context).colorScheme.onTertiary,
                       unSelectedDayTextColor:
