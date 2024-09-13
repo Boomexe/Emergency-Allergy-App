@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late int selectedIndex;
 
-  static List<Widget> screens = [
+  final List<Widget> screens = [
     const Dashboard(),
     const Medications(),
     const Allergies(),
@@ -38,7 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[selectedIndex],
+      body: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 100),
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+        child: screens[selectedIndex],
+      ),
       bottomNavigationBar: CustomNavigationBar(
         currentIndex: selectedIndex,
         onUpdateIndex: onUpdateIndex,

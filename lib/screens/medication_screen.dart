@@ -7,6 +7,7 @@ import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
 import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -72,20 +73,7 @@ class _MedicationsState extends State<Medications> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              enableDrag: false,
-              useSafeArea: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-              builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: CreateMedication(onSaveMedication: onSaveMedication),
-                  ));
+          showModal(context, CreateMedication(onSaveMedication: onSaveMedication));
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: const Icon(Icons.add),
@@ -233,23 +221,7 @@ class _CreateMedicationState extends State<CreateMedication> {
                   if (index == reminders.length) {
                     return ListTile(
                       onTap: () {
-                        showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            enableDrag: false,
-                            useSafeArea: true,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                            builder: (context) => Padding(
-                                  padding: EdgeInsets.only(
-                                    bottom: MediaQuery.of(context)
-                                        .viewInsets
-                                        .bottom,
-                                  ),
-                                  child: CreateReminderScreen(
-                                      onSaveReminder: onAddReminder),
-                                ));
+                        showModal(context, CreateReminderScreen(onSaveReminder: onAddReminder));
                       },
                       // leading: Icon(
                       //   null,

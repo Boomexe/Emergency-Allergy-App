@@ -1,5 +1,6 @@
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
+import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,8 @@ class _ReminderListTileState extends State<ReminderListTile> {
 
   @override
   void initState() {
-    titleText = ReminderUtils.timeOfDayToString(widget.reminder.time, usePeriod: true);
+    titleText =
+        ReminderUtils.timeOfDayToString(widget.reminder.time, usePeriod: true);
     subtitleText = ReminderUtils.getSelectedDayString(widget.reminder.days);
     trailingText = widget.reminder.active ? 'On' : 'Off';
 
@@ -40,26 +42,13 @@ class _ReminderListTileState extends State<ReminderListTile> {
       padding: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         onTap: () {
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              enableDrag: false,
-              useSafeArea: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-              builder: (context) => Padding(
-                    padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom,
-                    ),
-                    child: CreateReminderScreen(
-                      reminder: widget.reminder,
-                      onSaveReminder: (reminder) =>
-                          widget.onUpdateReminder(reminder, widget.index),
-                      onDeleteReminder: () =>
-                          widget.onDeleteReminder(widget.index),
-                    ),
-                  ));
+          showModal(
+              context,
+              CreateReminderScreen(
+                onSaveReminder: (reminder) =>
+                    widget.onUpdateReminder(reminder, widget.index),
+                onDeleteReminder: () => widget.onDeleteReminder(widget.index)
+              ));
         },
         title: Text(
           titleText,

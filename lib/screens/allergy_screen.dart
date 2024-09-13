@@ -1,6 +1,8 @@
 import 'package:emergency_allergy_app/models/medication.dart';
+import 'package:emergency_allergy_app/services/firestore.dart';
 import 'package:emergency_allergy_app/services/services.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
+import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -13,23 +15,13 @@ class Allergies extends StatefulWidget {
 
 class _AllergiesState extends State<Allergies> {
   void onFloatingActionButtonPressed() async {
-    List<Medication> medications = await Services.loadMedications();
+    List<Medication> medications = await FirestoreService.getMedications();
 
     showAllergyCreationScreen(medications);
   }
 
   void showAllergyCreationScreen(List<Medication> medications) {
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        useSafeArea: true,
-        builder: (context) => Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom,
-                  left: 20,
-                  right: 20),
-              child: CreateAllergy(medications: medications),
-            ));
+    showModal(context, CreateAllergy(medications: medications));
   }
 
   @override
