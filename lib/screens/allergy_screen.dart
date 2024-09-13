@@ -169,14 +169,14 @@ class _CreateAllergyState extends State<CreateAllergy> {
                 )),
             TextButton(
                 onPressed: () {
-                  print('${nameController.text} ${noteController.text} $allergyType $allergySeverity ${selectedMedications.map((e) => e.id).toList()}');
+                  // print('${nameController.text} ${noteController.text} $allergyType $allergySeverity ${selectedMedications.map((e) => e.id).toList()}');
                   Allergy allergy = Allergy(
                       name: nameController.text,
                       description: noteController.text,
                       type: allergyType!,
                       severity: allergySeverity!,
                       medicationIds:
-                          selectedMedications.map((e) => e.id).toList());
+                          selectedMedications.map((e) => e.userId).toList());
                   Services.saveAllergy(allergy);
                 },
                 child: const Text('Save')),

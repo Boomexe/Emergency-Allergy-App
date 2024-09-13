@@ -27,6 +27,7 @@ class _CreateReminderScreenState extends State<CreateReminderScreen> {
   late bool isReminderEnabled;
 
   void onSaveReminderButtonPressed() {
+    print(selectedTime);
     Reminder reminder = Reminder(
       days: selectedDays,
       time: selectedTime,

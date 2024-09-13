@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService {
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -13,6 +14,10 @@ class AuthService {
         email: email,
         password: password,
       );
+
+      print(userCredential.user!.uid);
+
+      // enrollMfa();
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
@@ -46,6 +51,18 @@ class AuthService {
     return await user!.sendEmailVerification();
   }
 
+  void enrollMfa() async {
+    final User? user = auth.currentUser;
+    MultiFactorSession multiFactorSession = await user!.multiFactor.getSession();
+    TotpSecret totpSecret = await TotpMultiFactorGenerator.generateSecret(multiFactorSession);
+    String url = await totpSecret.generateQrCodeUrl(accountName: user.uid, issuer: 'Emergency App');
+    print(url);
+  }
+
+  // void enterEnrollmentMfa() async {
+  //   MultiFactorAssertion multiFactorAssertion = await TotpMultiFactorGenerator.getAssertionForEnrollment(totpSecret, oneTimePassword)
+  // }
+
   Future<void> deleteUser() async {
     try {
       User? user = auth.currentUser;
@@ -57,6 +74,12 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
     }
+  }
+
+  User? getSignedInUser() {
+    User? user = auth.currentUser;
+
+    return user;
   }
 
   static List<String> getMessageFromErrorCode(String code) {

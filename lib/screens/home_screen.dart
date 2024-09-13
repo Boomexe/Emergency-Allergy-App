@@ -6,14 +6,15 @@ import 'package:emergency_allergy_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int selectedIndex;
+  const HomeScreen({super.key, required this.selectedIndex});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedIndex = 0;
+  late int selectedIndex;
 
   static List<Widget> screens = [
     const Dashboard(),
@@ -21,6 +22,12 @@ class _HomeScreenState extends State<HomeScreen> {
     const Allergies(),
     const Profile(),
   ];
+
+  @override
+  void initState() {
+    selectedIndex = widget.selectedIndex;
+    super.initState();
+  }
 
   void onUpdateIndex(int index) {
     setState(() {

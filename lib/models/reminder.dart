@@ -28,7 +28,7 @@ class Reminder {
   static Map<String, dynamic> toJson(Reminder reminder) {
     return {
       'days': reminder.days,
-      'time': ReminderUtils.timeOfDayToString(reminder.time),
+      'time': ReminderUtils.timeOfDayToString(reminder.time, usePeriod: false),
       'active': reminder.active,
     };
   }

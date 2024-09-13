@@ -1,9 +1,13 @@
+import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
+import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
+import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class Medications extends StatefulWidget {
@@ -49,8 +53,7 @@ class _MedicationsState extends State<Medications> {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                // print(
-                //     'snapshot.data: ${'${snapshot.data![index].name} ${snapshot.data![index].dosage} ${snapshot.data![index].note}'}');
+                // print(Medication.toJson(snapshot.data![index]));
                 return ListTile(
                   title: Text(snapshot.data![index].name),
                   subtitle: Text(
@@ -146,15 +149,25 @@ class _CreateMedicationState extends State<CreateMedication> {
     //   print('REMINDER: ${Reminder.toJson(reminder)}');
     // }
 
+    AuthService auth = AuthService();
+    User? user = auth.auth.currentUser;
+
     Medication medication = Medication(
       name: name.text,
       note: note.text,
       dosage: dosage.text,
       reminders: reminders,
+      userId: user!.uid,
     );
+
+    FirestoreService.addMedication(medication);
 
     // widget.onSaveMedication(medications);
     Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const HomeScreen(selectedIndex: 1)));
   }
 
   @override

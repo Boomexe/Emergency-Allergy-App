@@ -54,7 +54,7 @@ class ReminderUtils {
     if (usePeriod) {
       String period = time.hour > 12 ? 'PM' : 'AM';
       int hour = time.hour > 12 ? time.hour - 12 : time.hour;
-      hour = time.hour == 0 ? 12 : time.hour;
+      hour = hour == 0 ? 12 : hour;
       return '$hour:$minute $period';
     }
 
