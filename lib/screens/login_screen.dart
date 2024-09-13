@@ -43,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!emailController.text.contains('@')) {
       setState(() {
-        emailTextFieldError = 'Please format your email correctly.';
+        emailTextFieldError = 'Please enter a valid email.';
       });
       return;
     }
