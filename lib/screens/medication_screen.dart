@@ -4,7 +4,6 @@ import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
-import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/services/firestore.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
@@ -19,18 +18,6 @@ class Medications extends StatefulWidget {
 }
 
 class _MedicationsState extends State<Medications> {
-  // late Future<List<Medication>> medications;
-
-  // Future<List<Medication>> fetchMedications() async {
-  //   return await Services.loadMedications();
-  // }
-
-  void onSaveMedication(newMedications) {
-    // FirestoreService.addMedication(newMedications);
-    // setState(() {
-    //   medications = newMedications;
-    // });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +61,7 @@ class _MedicationsState extends State<Medications> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModal(
-              context, CreateMedication(onSaveMedication: onSaveMedication));
+              context, CreateMedication());
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: const Icon(Icons.add),
@@ -84,9 +71,7 @@ class _MedicationsState extends State<Medications> {
 }
 
 class CreateMedication extends StatefulWidget {
-  final Function(Future<List<Medication>>) onSaveMedication;
-
-  const CreateMedication({super.key, required this.onSaveMedication});
+  const CreateMedication({super.key});
 
   @override
   State<CreateMedication> createState() => _CreateMedicationState();
@@ -123,21 +108,6 @@ class _CreateMedicationState extends State<CreateMedication> {
   }
 
   void saveButtonPressed() async {
-    // List<Reminder> reminders = [];
-
-    // if (medicationHasReminderSwitch) {
-    //   // print(medicationReminderTime);
-    //   Reminder reminder = Reminder(
-    //     days: days
-    //         .where((day) => day.isSelected)
-    //         .map((day) => day.dayKey)
-    //         .toList(),
-    //     time: medicationReminderTime!,
-    //   );
-    //   reminders.add(reminder);
-    //   print('REMINDER: ${Reminder.toJson(reminder)}');
-    // }
-
     AuthService auth = AuthService();
     User? user = auth.auth.currentUser;
 
@@ -151,7 +121,6 @@ class _CreateMedicationState extends State<CreateMedication> {
 
     FirestoreService.addMedication(medication);
 
-    // widget.onSaveMedication(medications);
     Navigator.pop(context);
     Navigator.push(
         context,
