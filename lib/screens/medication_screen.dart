@@ -73,7 +73,8 @@ class _MedicationsState extends State<Medications> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModal(context, CreateMedication(onSaveMedication: onSaveMedication));
+          showModal(
+              context, CreateMedication(onSaveMedication: onSaveMedication));
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: const Icon(Icons.add),
@@ -221,7 +222,10 @@ class _CreateMedicationState extends State<CreateMedication> {
                   if (index == reminders.length) {
                     return ListTile(
                       onTap: () {
-                        showModal(context, CreateReminderScreen(onSaveReminder: onAddReminder));
+                        showModal(
+                            context,
+                            CreateReminderScreen(
+                                onSaveReminder: onAddReminder));
                       },
                       // leading: Icon(
                       //   null,

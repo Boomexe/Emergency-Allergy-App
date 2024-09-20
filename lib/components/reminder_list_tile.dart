@@ -47,6 +47,7 @@ class _ReminderListTileState extends State<ReminderListTile> {
               CreateReminderScreen(
                 onSaveReminder: (reminder) =>
                     widget.onUpdateReminder(reminder, widget.index),
+                reminder: widget.reminder,
                 onDeleteReminder: () => widget.onDeleteReminder(widget.index)
               ));
         },

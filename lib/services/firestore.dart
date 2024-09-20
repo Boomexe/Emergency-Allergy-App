@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final FirebaseFirestore db = FirebaseFirestore.instance;
 
@@ -12,13 +13,16 @@ class FirestoreService {
   }
 
   static Future<List<Medication>> getMedications() {
-    return medications.get().then(
+    User? user = FirebaseAuth.instance.currentUser;
+
+    return medications.where('userId', isEqualTo: user!.uid).get().then(
       (querySnapshot) {
         List<Medication> medicationsList = [];
         for (var docSnapshot in querySnapshot.docs) {
           Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
           medicationsList.add(medication);
         }
+
         return medicationsList;
       },
       onError: (e) {

@@ -16,6 +16,9 @@ Color surfaceContainer = const Color.fromRGBO(76, 181, 246, 1);
 Color surfaceContainerHighest = Colors.red.shade600;
 const Color onSurfaceVariant = Colors.white;
 
+// FOR CHOICE PROMPT THEME
+MaterialColor primarySwatch = Colors.red;
+
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
