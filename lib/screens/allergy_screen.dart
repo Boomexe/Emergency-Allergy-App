@@ -74,7 +74,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Add Medication',
+        title: Text('Add Allergy',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
