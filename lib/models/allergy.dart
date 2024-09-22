@@ -7,12 +7,13 @@ class Allergy {
 
   final List<String> medicationIds;
 
-  Allergy(
-      {required this.name,
-      required this.description,
-      required this.type,
-      required this.severity,
-      required this.medicationIds});
+  Allergy({
+    required this.name,
+    required this.description,
+    required this.type,
+    required this.severity,
+    required this.medicationIds,
+  });
 
   factory Allergy.fromJson(Map<String, dynamic> json) {
     return Allergy(
@@ -30,6 +31,16 @@ class Allergy {
     }
 
     return allergies;
+  }
+
+  static Map<String, dynamic> toJson(Allergy allergy) {
+    return {
+      'name': allergy.name,
+      'description': allergy.description,
+      'type': allergy.type.index,
+      'severity': allergy.severity.index,
+      'medications': allergy.medicationIds,
+    };
   }
 }
 

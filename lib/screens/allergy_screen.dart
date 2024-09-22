@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
 import 'package:emergency_allergy_app/components/single_choice_prompt.dart';
@@ -53,13 +55,38 @@ class CreateAllergy extends StatefulWidget {
 
 class _CreateAllergyState extends State<CreateAllergy> {
   TextEditingController name = TextEditingController();
-  TextEditingController note = TextEditingController();
+  TextEditingController description = TextEditingController();
 
   AllergyType? allergyType;
   AllergySeverity? allergySeverity;
 
   late List<MultiSelectItem<Medication>> medicationMultiSelectItems;
-  List<Medication> selectedMedications = [];
+  List<String> selectedMedicationIds = [];
+
+  void updateSelectedMedications(List<Medication> selected) {
+    selectedMedicationIds = selected.map((e) => e.id!).toList();
+  }
+
+  void updateSelectedAllergyType(AllergyType selected) {
+    allergyType = selected;
+  }
+
+  void updateSelectedAllergySeverity(AllergySeverity selected) {
+    allergySeverity = selected;
+  }
+
+  void saveButtonPressed() {
+    Allergy allergy = Allergy(
+      name: name.text,
+      description: description.text,
+      type: allergyType!,
+      severity: allergySeverity!,
+      medicationIds: selectedMedicationIds,
+    );
+
+    FirestoreService.addAllergy(allergy);
+    Navigator.pop(context);
+  }
 
   @override
   void initState() {
@@ -89,7 +116,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
         // ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () => saveButtonPressed(),
               icon: Icon(
                 Icons.add,
                 color: Theme.of(context).colorScheme.onPrimary,
@@ -113,29 +140,32 @@ class _CreateAllergyState extends State<CreateAllergy> {
             children: [
               FormTextField(hintText: 'Name', textController: name),
               const SizedBox(height: 10),
-              FormTextField(hintText: 'Note', textController: note),
+              FormTextField(hintText: 'Description', textController: description),
               const SizedBox(height: 25),
               Card(
                 color: Theme.of(context).colorScheme.secondary,
-                child: const SingleChoicePrompt<AllergyType>(
+                child: SingleChoicePrompt<AllergyType>(
                   title: 'Allergy Type',
                   choices: AllergyType.values,
+                  onSelected: (selected) => updateSelectedAllergyType(selected),
                 ),
               ),
               Card(
                 color: Theme.of(context).colorScheme.secondary,
-                child: const SingleChoicePrompt<AllergySeverity>(
+                child: SingleChoicePrompt<AllergySeverity>(
                   title: 'Allergy Severity',
                   choices: AllergySeverity.values,
+                  onSelected: (selected) => updateSelectedAllergySeverity(selected),
                 ),
               ),
               const SizedBox(height: 25),
               Card(
                 color: Theme.of(context).colorScheme.secondary,
-                child: MultiChoicePrompt(
+                child: MultiChoicePrompt<Medication>(
                   title: 'Medications',
                   choices: widget.medications,
                   choiceTitles: widget.medications.map((e) => e.name).toList(),
+                  onSelected: (selected) => updateSelectedMedications(selected),
                 ),
               ),
             ],

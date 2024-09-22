@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -10,6 +11,10 @@ class FirestoreService {
 
   static Future<DocumentReference<Object?>> addMedication(Medication medication) async {
     return medications.add(Medication.toJson(medication));
+  }
+
+  static Future<DocumentReference<Object?>> addAllergy(Allergy allergy) async {
+    return allergies.add(Allergy.toJson(allergy));
   }
 
   static Future<List<Medication>> getMedications() {

@@ -6,11 +6,13 @@ class MultiChoicePrompt<T> extends StatefulWidget {
   final List<T> choices;
   final List<String> choiceTitles;
   final String title;
+  final Function(List<T>) onSelected;
 
   const MultiChoicePrompt(
       {required this.title,
       required this.choices,
       required this.choiceTitles,
+      required this.onSelected,
       super.key});
 
   @override
@@ -18,19 +20,31 @@ class MultiChoicePrompt<T> extends StatefulWidget {
 }
 
 class _MultiChoicePromptState<T> extends State<MultiChoicePrompt<T>> {
-  late List<ChoiceData<T>> choiceData;
+  List<ChoiceData<T>> choiceData = [];
 
   List<ChoiceData<T>> selected = [];
 
   void setSelected(List<ChoiceData<T>> value) {
     setState(() => selected = value);
+    print(T);
+    print(value.runtimeType);
+    widget.onSelected(value.map<T>((e) => e.value).toList());
   }
 
   @override
   void initState() {
-    choiceData = widget.choices.asChoiceData(
+    print('hello ${widget.choices.runtimeType}');
+
+    // for (int i = 0; i < widget.choices.length; i++) {
+    //   choiceData.add(ChoiceData(value: widget.choices[i], title: widget.choiceTitles[i]));
+    // }
+
+    // choiceData not retaining type (List<ChoiceData<dynamic>> should be List<ChoiceData<T>>)
+    choiceData = widget.choices.asChoiceData<T>(
         value: (i, e) => widget.choices[i],
         title: (i, e) => widget.choiceTitles[i]);
+    
+    print('cD runtime type: ${choiceData.runtimeType}');
     super.initState();
   }
 
@@ -43,7 +57,10 @@ class _MultiChoicePromptState<T> extends State<MultiChoicePrompt<T>> {
         confirmation: true,
         searchable: true,
         value: selected,
-        onChanged: setSelected,
+        onChanged: (e) {
+          print(e.runtimeType);
+          setSelected(e);
+        },
         itemCount: choiceData.length,
         itemSkip: (state, i) =>
             !ChoiceSearch.match(choiceData[i].title, state.search?.value),
