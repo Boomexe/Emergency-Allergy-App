@@ -1,12 +1,16 @@
 import 'dart:math';
 
+import 'package:choice/choice.dart';
+import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
 import 'package:emergency_allergy_app/components/single_choice_prompt.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
+import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/services/firestore.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -21,6 +25,8 @@ class _AllergiesState extends State<Allergies> {
   void onFloatingActionButtonPressed() async {
     List<Medication> medications = await FirestoreService.getMedications();
 
+    // print('medication: ${medications.map((e) => e.id)}');
+
     showAllergyCreationScreen(medications);
   }
 
@@ -31,9 +37,41 @@ class _AllergiesState extends State<Allergies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const Center(
-        child: Text('Allergies'),
-      ),
+      body: FutureBuilder(
+          future: FirestoreService.getAllergies(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return Center(
+                  child: Text('Error retrieving data: ${snapshot.error}'));
+            }
+
+            if (!snapshot.hasData || snapshot.data!.isEmpty) {
+              return const Center(child: Text('No medications found'));
+            }
+
+            return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) {
+                  // print(Medication.toJson(snapshot.data![index]));
+                  return ListTile(
+                    title: Text(snapshot.data![index].name),
+                    subtitle: Text(
+                      snapshot.data![index].description,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary),
+                    ),
+                    trailing: Text(
+                      snapshot.data![index].severity.name,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary),
+                    ),
+                  );
+                });
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           onFloatingActionButtonPressed();
@@ -63,8 +101,11 @@ class _CreateAllergyState extends State<CreateAllergy> {
   late List<MultiSelectItem<Medication>> medicationMultiSelectItems;
   List<String> selectedMedicationIds = [];
 
-  void updateSelectedMedications(List<Medication> selected) {
-    selectedMedicationIds = selected.map((e) => e.id!).toList();
+  void updateSelectedMedications(List<ChoiceData<dynamic>> selected) {
+    selectedMedicationIds = selected.map((e) {
+      dynamic medication = e.value as Medication;
+      return medication.id as String;
+    }).toList();
   }
 
   void updateSelectedAllergyType(AllergyType selected) {
@@ -76,16 +117,24 @@ class _CreateAllergyState extends State<CreateAllergy> {
   }
 
   void saveButtonPressed() {
+    AuthService auth = AuthService();
+    User? user = auth.auth.currentUser;
+
     Allergy allergy = Allergy(
       name: name.text,
       description: description.text,
       type: allergyType!,
       severity: allergySeverity!,
       medicationIds: selectedMedicationIds,
+      userId: user!.uid,
     );
 
     FirestoreService.addAllergy(allergy);
     Navigator.pop(context);
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const HomeScreen(selectedIndex: 2)));
   }
 
   @override
@@ -140,7 +189,8 @@ class _CreateAllergyState extends State<CreateAllergy> {
             children: [
               FormTextField(hintText: 'Name', textController: name),
               const SizedBox(height: 10),
-              FormTextField(hintText: 'Description', textController: description),
+              FormTextField(
+                  hintText: 'Description', textController: description),
               const SizedBox(height: 25),
               Card(
                 color: Theme.of(context).colorScheme.secondary,
@@ -155,7 +205,8 @@ class _CreateAllergyState extends State<CreateAllergy> {
                 child: SingleChoicePrompt<AllergySeverity>(
                   title: 'Allergy Severity',
                   choices: AllergySeverity.values,
-                  onSelected: (selected) => updateSelectedAllergySeverity(selected),
+                  onSelected: (selected) =>
+                      updateSelectedAllergySeverity(selected),
                 ),
               ),
               const SizedBox(height: 25),
@@ -164,7 +215,8 @@ class _CreateAllergyState extends State<CreateAllergy> {
                 child: MultiChoicePrompt<Medication>(
                   title: 'Medications',
                   choices: widget.medications,
-                  choiceTitles: widget.medications.map((e) => e.name).toList(),
+                  choiceTitles:
+                      widget.medications.map<String>((e) => e.name).toList(),
                   onSelected: (selected) => updateSelectedMedications(selected),
                 ),
               ),

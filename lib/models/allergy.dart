@@ -1,4 +1,7 @@
 class Allergy {
+  final String userId;
+  final String? id;
+
   final String name;
   final String description;
 
@@ -7,21 +10,25 @@ class Allergy {
 
   final List<String> medicationIds;
 
-  Allergy({
-    required this.name,
-    required this.description,
-    required this.type,
-    required this.severity,
-    required this.medicationIds,
-  });
+  Allergy(
+      {required this.name,
+      required this.description,
+      required this.type,
+      required this.severity,
+      required this.medicationIds,
+      required this.userId,
+      this.id});
 
-  factory Allergy.fromJson(Map<String, dynamic> json) {
+  factory Allergy.fromJson(Map<String, dynamic> json, {String? id}) {
     return Allergy(
-        name: json['name'],
-        description: json['description'],
-        type: AllergyType.values[json['type']],
-        severity: AllergySeverity.values[json['severity']],
-        medicationIds: json['medications']);
+      name: json['name'],
+      description: json['description'],
+      type: AllergyType.values[json['type']],
+      severity: AllergySeverity.values[json['severity']],
+      medicationIds: List<String>.from(json['medications']),
+      userId: json['userId'],
+      id: id
+    );
   }
 
   static List<Allergy> fromJsonList(List<dynamic> jsonList) {
@@ -40,6 +47,7 @@ class Allergy {
       'type': allergy.type.index,
       'severity': allergy.severity.index,
       'medications': allergy.medicationIds,
+      'userId': allergy.userId,
     };
   }
 }

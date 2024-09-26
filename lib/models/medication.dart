@@ -43,11 +43,11 @@ class Medication {
 
   static Map<String, dynamic> toJson(Medication medication) {
     return {
-      'userId': medication.userId,
       'name': medication.name,
       'note': medication.note,
       'dosage': medication.dosage,
       'reminders': Reminder.toJsonList(medication.reminders),
+      'userId': medication.userId,
     };
   }
 

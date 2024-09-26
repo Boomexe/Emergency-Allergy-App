@@ -18,7 +18,6 @@ class Medications extends StatefulWidget {
 }
 
 class _MedicationsState extends State<Medications> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +60,9 @@ class _MedicationsState extends State<Medications> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModal(
-              context, CreateMedication());
+            context,
+            const CreateMedication(),
+          );
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: const Icon(Icons.add),
