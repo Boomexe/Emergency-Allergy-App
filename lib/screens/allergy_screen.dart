@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:choice/choice.dart';
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
