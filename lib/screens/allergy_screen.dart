@@ -23,8 +23,6 @@ class _AllergiesState extends State<Allergies> {
   void onFloatingActionButtonPressed() async {
     List<Medication> medications = await FirestoreService.getMedications();
 
-    // print('medication: ${medications.map((e) => e.id)}');
-
     showAllergyCreationScreen(medications);
   }
 
