@@ -1,5 +1,6 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
+import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -16,6 +17,10 @@ class _DashboardState extends State<Dashboard> {
     auth.signOut();
   }
 
+  void testingButton() {
+    showDraggableScrollableSheet(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     String? userName = AuthService().auth.currentUser?.email;
@@ -26,7 +31,8 @@ class _DashboardState extends State<Dashboard> {
         mainAxisAlignment: MainAxisAlignment.center, 
         children: [
           Text('Welcome to the Allergy Emergency App, $userName!'),
-          FormButton(onTap: logout, text: 'Sign Out')
+          FormButton(onTap: logout, text: 'Sign Out'),
+          FormButton(onTap: testingButton, text: 'Testing Button'),
         ],
       ),
     ));
