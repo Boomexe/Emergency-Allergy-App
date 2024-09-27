@@ -1,5 +1,6 @@
 import 'package:choice/choice.dart';
 import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/components/allergy_expansion_panel.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
 import 'package:emergency_allergy_app/components/single_choice_prompt.dart';
@@ -30,11 +31,20 @@ class _AllergiesState extends State<Allergies> {
     showModal(context, CreateAllergy(medications: medications));
   }
 
+  List<bool> _isOpen = [];
+  late Future<List<Allergy>> futureAllergies;
+  
+  @override
+  void initState() {
+    futureAllergies = FirestoreService.getAllergies();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-          future: FirestoreService.getAllergies(),
+          future: futureAllergies,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -49,24 +59,62 @@ class _AllergiesState extends State<Allergies> {
               return const Center(child: Text('No medications found'));
             }
 
-            return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  // print(Medication.toJson(snapshot.data![index]));
+            _isOpen = [];
+            List<ExpansionPanel> panels = snapshot.data!.asMap().entries.map((e) {
+              _isOpen.add(false);
+
+              return ExpansionPanel(
+                headerBuilder: (context, isOpen) {
                   return ListTile(
-                    title: Text(snapshot.data![index].name),
+                    title: Text(e.value.name),
                     subtitle: Text(
-                      snapshot.data![index].description,
+                      e.value.description,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondary),
                     ),
                     trailing: Text(
-                      snapshot.data![index].severity.name,
+                      e.value.severity.name,
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondary),
                     ),
                   );
-                });
+                },
+                body: Text('open'),
+                isExpanded: _isOpen[e.key],
+              );
+            }).toList();
+
+            return SingleChildScrollView(
+              child: ExpansionPanelList(
+                expansionCallback: (int index, bool isExpanded) {
+                  print('index: $index, isExpanded: $isExpanded');
+                  setState(() {
+                    _isOpen[index] = !isExpanded;
+                    print(_isOpen);
+                  });
+                },
+                children: panels,
+              ),
+            );
+
+            // return ListView.builder(
+            //     itemCount: snapshot.data!.length,
+            //     itemBuilder: (context, index) {
+            //       // print(Medication.toJson(snapshot.data![index]));
+            //       return ListTile(
+            //         title: Text(snapshot.data![index].name),
+            //         subtitle: Text(
+            //           snapshot.data![index].description,
+            //           style: TextStyle(
+            //               color: Theme.of(context).colorScheme.onSecondary),
+            //         ),
+            //         trailing: Text(
+            //           snapshot.data![index].severity.name,
+            //           style: TextStyle(
+            //               color: Theme.of(context).colorScheme.onSecondary),
+            //         ),
+            //       );
+            //     });
           }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
