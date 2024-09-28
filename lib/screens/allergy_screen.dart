@@ -30,6 +30,11 @@ class _AllergiesState extends State<Allergies> {
     showModal(context, CreateAllergy(medications: medications));
   }
 
+  void showAllergyInformation(Allergy allergy) {
+    showAllergyInformationSheet(
+        context, allergy); //, AllergyInformation(allergy: allergy));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,17 +58,20 @@ class _AllergiesState extends State<Allergies> {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   // print(Medication.toJson(snapshot.data![index]));
-                  return ListTile(
-                    title: Text(snapshot.data![index].name),
-                    subtitle: Text(
-                      snapshot.data![index].description,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary),
-                    ),
-                    trailing: Text(
-                      snapshot.data![index].severity.name,
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary),
+                  return InkWell(
+                    onTap: () => showAllergyInformation(snapshot.data![index]),
+                    child: ListTile(
+                      title: Text(snapshot.data![index].name),
+                      subtitle: Text(
+                        snapshot.data![index].description,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary),
+                      ),
+                      trailing: Text(
+                        snapshot.data![index].severity.name,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary),
+                      ),
                     ),
                   );
                 });
@@ -81,7 +89,9 @@ class _AllergiesState extends State<Allergies> {
 
 class CreateAllergy extends StatefulWidget {
   final List<Medication> medications;
-  const CreateAllergy({super.key, required this.medications});
+  final Allergy? allergyToEdit;
+  const CreateAllergy(
+      {super.key, required this.medications, this.allergyToEdit});
 
   @override
   State<CreateAllergy> createState() => _CreateAllergyState();
@@ -96,6 +106,8 @@ class _CreateAllergyState extends State<CreateAllergy> {
 
   late List<MultiSelectItem<Medication>> medicationMultiSelectItems;
   List<String> selectedMedicationIds = [];
+  List<Medication> selectedMedications =
+      []; // ONLY USED WHEN EDITING MEDICATIONS
 
   void updateSelectedMedications(List<ChoiceData<dynamic>> selected) {
     selectedMedicationIds = selected.map((e) {
@@ -133,11 +145,26 @@ class _CreateAllergyState extends State<CreateAllergy> {
             builder: (context) => const HomeScreen(selectedIndex: 2)));
   }
 
+  void editAllergy() {
+    name.text = widget.allergyToEdit!.name;
+    description.text = widget.allergyToEdit!.description;
+    allergyType = widget.allergyToEdit!.type;
+    allergySeverity = widget.allergyToEdit!.severity;
+    selectedMedicationIds = widget.allergyToEdit!.medicationIds;
+    selectedMedications = widget.medications
+        .where((element) => selectedMedicationIds.contains(element.id))
+        .toList();
+  }
+
   @override
   void initState() {
-    super.initState();
+    if (widget.allergyToEdit != null) {
+      editAllergy();
+    }
+
     medicationMultiSelectItems =
         widget.medications.map((e) => MultiSelectItem(e, e.name)).toList();
+    super.initState();
   }
 
   @override
@@ -146,11 +173,13 @@ class _CreateAllergyState extends State<CreateAllergy> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Add Allergy',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.onPrimary)),
+        title: Text(
+          'Add Allergy',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.onPrimary),
+        ),
         // leading: TextButton(
         //   onPressed: () {
         //     Navigator.pop(context);
@@ -214,6 +243,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
                   choiceTitles:
                       widget.medications.map<String>((e) => e.name).toList(),
                   onSelected: (selected) => updateSelectedMedications(selected),
+                  initialValues: selectedMedications,
                 ),
               ),
             ],

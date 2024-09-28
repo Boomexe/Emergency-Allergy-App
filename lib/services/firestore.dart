@@ -37,6 +37,37 @@ class FirestoreService {
     );
   }
 
+  static Future<Medication>? getMedication(String id) {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    return medications.doc(id).get().then(
+      (docSnapshot) {
+        Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
+        return medication;
+      },
+      onError: (e) {
+        print('Error completing: $e');
+        return null;
+      },
+    );
+
+    // return medications.where('userId', isEqualTo: user!.uid).get().then(
+    //   (querySnapshot) {
+    //     List<Medication> medicationsList = [];
+    //     for (var docSnapshot in querySnapshot.docs) {
+    //       Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
+    //       medicationsList.add(medication);
+    //     }
+
+    //     return medicationsList;
+    //   },
+    //   onError: (e) {
+    //     print('Error completing: $e');
+    //     return [];
+    //   },
+    // );
+  }
+
   static Future<List<Allergy>> getAllergies() {
     User? user = FirebaseAuth.instance.currentUser;
 

@@ -6,6 +6,7 @@ class MultiChoicePrompt<T> extends StatefulWidget {
   final List<T> choices;
   final List<String> choiceTitles;
   final String title;
+  final List<T>? initialValues;
   final Function(List<ChoiceData<dynamic>>) onSelected;
 
   const MultiChoicePrompt(
@@ -13,6 +14,7 @@ class MultiChoicePrompt<T> extends StatefulWidget {
       required this.choices,
       required this.choiceTitles,
       required this.onSelected,
+      this.initialValues,
       super.key});
 
   @override
@@ -34,6 +36,14 @@ class _MultiChoicePromptState<T> extends State<MultiChoicePrompt<T>> {
     choiceData = widget.choices.asChoiceData<T>(
         value: (i, e) => widget.choices[i],
         title: (i, e) => widget.choiceTitles[i]);
+
+    List<ChoiceData<T>> initialChoices = choiceData.where((e) {
+      // print('${e.value}, ${widget.initialValues}');
+      print(e.value == widget.initialValues);
+      return e.value == widget.initialValues;
+    }).toList();
+    // print(widget.initialValues, choiceData);
+    setSelected(initialChoices);
 
     super.initState();
   }
