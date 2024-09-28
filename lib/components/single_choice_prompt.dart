@@ -6,11 +6,13 @@ class SingleChoicePrompt<T> extends StatefulWidget {
   final List<T> choices;
   final String title;
   final Function(dynamic) onSelected;
+  final T? initialValue;
 
   const SingleChoicePrompt({
     required this.title,
     required this.choices,
     required this.onSelected,
+    this.initialValue,
     super.key,
   });
 
@@ -23,9 +25,15 @@ class _SingleChoicePromptState<T> extends State<SingleChoicePrompt<T>> {
 
   ChoiceData<T>? selected;
 
-  void setSingleSelected(ChoiceData<T>? value) {
+  void setSelected(ChoiceData<T>? value) {
     setState(() => selected = value);
     widget.onSelected(value!.value);
+  }
+
+  void setInitialChoice() {
+    ChoiceData<T> initialChoice = choiceData[widget.choices.indexOf(widget.initialValue as T)];
+
+    setSelected(initialChoice);
   }
 
   @override
@@ -34,6 +42,11 @@ class _SingleChoicePromptState<T> extends State<SingleChoicePrompt<T>> {
         value: (i, e) => widget.choices[i],
         title: (i, e) =>
             (e as Enum).name[0].toUpperCase() + (e as Enum).name.substring(1));
+    
+    if (widget.initialValue != null) {
+      setInitialChoice();
+    }
+    
     super.initState();
   }
 
@@ -44,7 +57,7 @@ class _SingleChoicePromptState<T> extends State<SingleChoicePrompt<T>> {
         title: widget.title,
         confirmation: false,
         value: selected,
-        onChanged: setSingleSelected,
+        onChanged: setSelected,
         itemCount: choiceData.length,
         itemBuilder: (state, i) {
           return RadioListTile(

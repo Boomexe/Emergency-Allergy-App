@@ -31,19 +31,23 @@ class _MultiChoicePromptState<T> extends State<MultiChoicePrompt<T>> {
     widget.onSelected(value);
   }
 
+  void setInitialChoices() {
+    List<ChoiceData<T>> initialChoices = choiceData.where((e) {
+      return widget.initialValues!.contains(e.value);
+    }).toList();
+
+    setSelected(initialChoices);
+  }
+
   @override
   void initState() {
     choiceData = widget.choices.asChoiceData<T>(
         value: (i, e) => widget.choices[i],
         title: (i, e) => widget.choiceTitles[i]);
 
-    List<ChoiceData<T>> initialChoices = choiceData.where((e) {
-      // print('${e.value}, ${widget.initialValues}');
-      print(e.value == widget.initialValues);
-      return e.value == widget.initialValues;
-    }).toList();
-    // print(widget.initialValues, choiceData);
-    setSelected(initialChoices);
+    if (widget.initialValues != null) {
+      setInitialChoices();
+    }
 
     super.initState();
   }

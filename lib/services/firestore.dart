@@ -9,14 +9,6 @@ class FirestoreService {
   static final CollectionReference allergies = db.collection('allergies');
   static final CollectionReference medications = db.collection('medications');
 
-  static Future<DocumentReference<Object?>> addMedication(Medication medication) async {
-    return medications.add(Medication.toJson(medication));
-  }
-
-  static Future<DocumentReference<Object?>> addAllergy(Allergy allergy) async {
-    return allergies.add(Allergy.toJson(allergy));
-  }
-
   static Future<List<Medication>> getMedications() {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -50,22 +42,18 @@ class FirestoreService {
         return null;
       },
     );
+  }
 
-    // return medications.where('userId', isEqualTo: user!.uid).get().then(
-    //   (querySnapshot) {
-    //     List<Medication> medicationsList = [];
-    //     for (var docSnapshot in querySnapshot.docs) {
-    //       Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
-    //       medicationsList.add(medication);
-    //     }
+  static Future<DocumentReference<Object?>> addMedication(Medication medication) async {
+    return medications.add(Medication.toJson(medication));
+  }
 
-    //     return medicationsList;
-    //   },
-    //   onError: (e) {
-    //     print('Error completing: $e');
-    //     return [];
-    //   },
-    // );
+  static Future<void> updateMedication(Medication medication) async {
+    return medications.doc(medication.id).update(Medication.toJson(medication));
+  }
+
+  static Future<void> deleteMedication(String id) async {
+    return medications.doc(id).delete();
   }
 
   static Future<List<Allergy>> getAllergies() {
@@ -88,11 +76,11 @@ class FirestoreService {
     );
   }
 
-  // Future<void> updateMedication(Medication medication) async {
-  //   return medications.doc(medication.id).update(Medication.toJson(medication));
-  // }
+  static Future<DocumentReference<Object?>> addAllergy(Allergy allergy) async {
+    return allergies.add(Allergy.toJson(allergy));
+  }
 
-  Future<void> deleteMedication(String id) async {
-    return medications.doc(id).delete();
+  static Future<void> updateAllergy(Allergy allergy) async {
+    return allergies.doc(allergy.id).update(Allergy.toJson(allergy));
   }
 }

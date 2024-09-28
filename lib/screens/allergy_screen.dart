@@ -109,6 +109,8 @@ class _CreateAllergyState extends State<CreateAllergy> {
   List<Medication> selectedMedications =
       []; // ONLY USED WHEN EDITING MEDICATIONS
 
+  bool isEditing = false;
+
   void updateSelectedMedications(List<ChoiceData<dynamic>> selected) {
     selectedMedicationIds = selected.map((e) {
       dynamic medication = e.value as Medication;
@@ -128,16 +130,31 @@ class _CreateAllergyState extends State<CreateAllergy> {
     AuthService auth = AuthService();
     User? user = auth.auth.currentUser;
 
-    Allergy allergy = Allergy(
-      name: name.text,
-      description: description.text,
-      type: allergyType!,
-      severity: allergySeverity!,
-      medicationIds: selectedMedicationIds,
-      userId: user!.uid,
-    );
+    if (isEditing) {
+      Allergy allergy = Allergy(
+        name: name.text,
+        description: description.text,
+        type: allergyType!,
+        severity: allergySeverity!,
+        medicationIds: selectedMedicationIds,
+        userId: user!.uid,
+        id: widget.allergyToEdit!.id,
+      );
+      print(allergy.id);
+      FirestoreService.updateAllergy(allergy);
+    } else {
+      Allergy allergy = Allergy(
+        name: name.text,
+        description: description.text,
+        type: allergyType!,
+        severity: allergySeverity!,
+        medicationIds: selectedMedicationIds,
+        userId: user!.uid,
+      );
 
-    FirestoreService.addAllergy(allergy);
+      FirestoreService.addAllergy(allergy);
+    }
+
     Navigator.pop(context);
     Navigator.push(
         context,
@@ -146,6 +163,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
   }
 
   void editAllergy() {
+    isEditing = true;
     name.text = widget.allergyToEdit!.name;
     description.text = widget.allergyToEdit!.description;
     allergyType = widget.allergyToEdit!.type;
@@ -174,35 +192,25 @@ class _CreateAllergyState extends State<CreateAllergy> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Add Allergy',
+          isEditing ? 'Edit Allergy' : 'Add Allergy',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
               color: Theme.of(context).colorScheme.onPrimary),
         ),
-        // leading: TextButton(
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        //   child: Text('Cancel',
-        //       style: TextStyle(
-        //           color: Theme.of(context).colorScheme.surfaceContainerLow)),
-        // ),
         actions: [
           IconButton(
-              onPressed: () => saveButtonPressed(),
-              icon: Icon(
-                Icons.add,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ))
-          // TextButton(
-          //     onPressed: () {
-          //       saveButtonPressed();
-          //     },
-          //     child: Text('Add',
-          //         style: TextStyle(
-          //             color:
-          //                 Theme.of(context).colorScheme.surfaceContainerLow))),
+            onPressed: () => saveButtonPressed(),
+            icon: isEditing
+                ? Icon(
+                    Icons.edit,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  )
+                : Icon(
+                    Icons.add,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+          )
         ],
       ),
       body: SingleChildScrollView(
@@ -223,6 +231,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
                   title: 'Allergy Type',
                   choices: AllergyType.values,
                   onSelected: (selected) => updateSelectedAllergyType(selected),
+                  initialValue: allergyType,
                 ),
               ),
               Card(
@@ -232,6 +241,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
                   choices: AllergySeverity.values,
                   onSelected: (selected) =>
                       updateSelectedAllergySeverity(selected),
+                  initialValue: allergySeverity,
                 ),
               ),
               const SizedBox(height: 25),
