@@ -1,4 +1,5 @@
 import 'package:emergency_allergy_app/themes/choice_prompt_theme.dart';
+import 'package:emergency_allergy_app/utils/create_scrollable_wrapped.dart';
 import 'package:flutter/material.dart';
 import 'package:choice/choice.dart';
 
@@ -77,7 +78,7 @@ class _MultiChoicePromptState<T> extends State<MultiChoicePrompt<T>> {
             ),
           );
         },
-        listBuilder: ChoiceList.createWrapped(
+        listBuilder: createScrollableWrapped(
           padding: const EdgeInsets.all(20),
           spacing: 10,
           runSpacing: 10,
@@ -91,7 +92,7 @@ class _MultiChoicePromptState<T> extends State<MultiChoicePrompt<T>> {
         ),
         promptDelegate: ChoicePrompt.delegatePopupDialog(
           constraints: const BoxConstraints(maxWidth: 400),
-          maxHeightFactor: .3,
+          maxHeightFactor: .5,
         ),
         anchorBuilder: ChoiceAnchor.create(valueTruncate: 1),
       ),
