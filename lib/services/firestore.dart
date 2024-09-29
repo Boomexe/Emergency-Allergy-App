@@ -30,8 +30,6 @@ class FirestoreService {
   }
 
   static Future<Medication>? getMedication(String id) {
-    User? user = FirebaseAuth.instance.currentUser;
-
     return medications.doc(id).get().then(
       (docSnapshot) {
         Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
@@ -48,8 +46,8 @@ class FirestoreService {
     return medications.add(Medication.toJson(medication));
   }
 
-  static Future<void> updateMedication(Medication medication) async {
-    return medications.doc(medication.id).update(Medication.toJson(medication));
+  static Future<void> updateMedication(String id, Medication medication) async {
+    return medications.doc(id).update(Medication.toJson(medication));
   }
 
   static Future<void> deleteMedication(String id) async {
@@ -80,7 +78,11 @@ class FirestoreService {
     return allergies.add(Allergy.toJson(allergy));
   }
 
-  static Future<void> updateAllergy(Allergy allergy) async {
-    return allergies.doc(allergy.id).update(Allergy.toJson(allergy));
+  static Future<void> updateAllergy(String id, Allergy allergy) async {
+    return allergies.doc(id).update(Allergy.toJson(allergy));
+  }
+
+  static Future<void> deleteAllergy(String id) async {
+    return allergies.doc(id).delete();
   }
 }

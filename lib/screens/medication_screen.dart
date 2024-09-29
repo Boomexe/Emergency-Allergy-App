@@ -9,6 +9,7 @@ import 'package:emergency_allergy_app/services/firestore.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class Medications extends StatefulWidget {
   const Medications({super.key});
@@ -18,6 +19,23 @@ class Medications extends StatefulWidget {
 }
 
 class _MedicationsState extends State<Medications> {
+  void showMedicationInformation(Medication medication) {
+    showMedicationInformationSheet(
+        context, medication); //, MedicationInformation(allergy: allergy));
+  }
+
+  void deleteMedication(Medication medication) {
+    FirestoreService.deleteMedication(medication.id!);
+
+    setState(() {});
+  }
+
+  void editMedication(Medication medication) async {
+    List<Medication> medications = await FirestoreService.getMedications();
+
+    showModal(context, CreateMedication(medicationToEdit: medication));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,18 +58,47 @@ class _MedicationsState extends State<Medications> {
           return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                // print(Medication.toJson(snapshot.data![index]));
-                return ListTile(
-                  title: Text(snapshot.data![index].name),
-                  subtitle: Text(
-                    snapshot.data![index].note,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary),
-                  ),
-                  trailing: Text(
-                    snapshot.data![index].dosage,
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSecondary),
+                return InkWell(
+                  onTap: () => showMedicationInformation(snapshot.data![index]),
+                  child: Slidable(
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      children: [
+                        SlidableAction(
+                          flex: 2,
+                          onPressed: (context) =>
+                              editMedication(snapshot.data![index]),
+                          icon: Icons.edit,
+                          label: 'Edit',
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHigh,
+                        ),
+                        SlidableAction(
+                          flex: 2,
+                          onPressed: (context) =>
+                              deleteMedication(snapshot.data![index]),
+                          icon: Icons.delete,
+                          label: 'Delete',
+                          backgroundColor: Theme.of(context)
+                              .colorScheme
+                              .surfaceContainerHighest,
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      title: Text(snapshot.data![index].name),
+                      subtitle: Text(
+                        snapshot.data![index].note,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary),
+                      ),
+                      trailing: Text(
+                        snapshot.data![index].dosage,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary),
+                      ),
+                    ),
                   ),
                 );
               });
@@ -72,7 +119,8 @@ class _MedicationsState extends State<Medications> {
 }
 
 class CreateMedication extends StatefulWidget {
-  const CreateMedication({super.key});
+  final Medication? medicationToEdit;
+  const CreateMedication({super.key, this.medicationToEdit});
 
   @override
   State<CreateMedication> createState() => _CreateMedicationState();
@@ -86,6 +134,8 @@ class _CreateMedicationState extends State<CreateMedication> {
   TimeOfDay? medicationReminderTime;
 
   List<Reminder> reminders = [];
+
+  bool isEditing = false;
 
   void onAddReminder(Reminder reminder) {
     setState(() {
@@ -108,6 +158,14 @@ class _CreateMedicationState extends State<CreateMedication> {
     Navigator.pop(context);
   }
 
+  void editMedication() {
+    isEditing = true;
+    name.text = widget.medicationToEdit!.name;
+    note.text = widget.medicationToEdit!.note;
+    dosage.text = widget.medicationToEdit!.dosage;
+    reminders = widget.medicationToEdit!.reminders;
+  }
+
   void saveButtonPressed() async {
     AuthService auth = AuthService();
     User? user = auth.auth.currentUser;
@@ -120,7 +178,11 @@ class _CreateMedicationState extends State<CreateMedication> {
       userId: user!.uid,
     );
 
-    FirestoreService.addMedication(medication);
+    if (isEditing) {
+      FirestoreService.updateMedication(widget.medicationToEdit!.id!, medication);
+    } else {
+      FirestoreService.addMedication(medication);
+    }
 
     Navigator.pop(context);
     Navigator.push(
@@ -130,11 +192,22 @@ class _CreateMedicationState extends State<CreateMedication> {
   }
 
   @override
+  void initState() {
+    if (widget.medicationToEdit != null) {
+      editMedication();
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text('Add Medication',
+        title: Text(
+            isEditing
+                ? 'Edit ${widget.medicationToEdit!.name}'
+                : 'Add Medication',
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
@@ -149,11 +222,9 @@ class _CreateMedicationState extends State<CreateMedication> {
         // ),
         actions: [
           IconButton(
-              onPressed: () {
-                saveButtonPressed();
-              },
+              onPressed: () => saveButtonPressed(),
               icon: Icon(
-                Icons.add,
+                isEditing ? Icons.edit : Icons.add,
                 color: Theme.of(context).colorScheme.onPrimary,
               ))
           // TextButton(

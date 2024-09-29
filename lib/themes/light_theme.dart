@@ -13,6 +13,7 @@ const Color error = Colors.red;
 const Color onError = Colors.white;
 Color surfaceContainerLow = const Color.fromARGB(255, 51, 142, 199);
 Color surfaceContainer = const Color.fromRGBO(76, 181, 246, 1);
+Color surfaceContainerHigh = Colors.amber.shade400;
 Color surfaceContainerHighest = Colors.red.shade600;
 const Color onSurfaceVariant = Colors.white;
 
@@ -38,6 +39,7 @@ ThemeData lightTheme = ThemeData(
     onError: onError,
     surfaceContainerLow: surfaceContainerLow,
     surfaceContainer: surfaceContainer,
+    surfaceContainerHigh: surfaceContainerHigh,
     surfaceContainerHighest: surfaceContainerHighest,
     onSurfaceVariant: onSurfaceVariant,
   ),

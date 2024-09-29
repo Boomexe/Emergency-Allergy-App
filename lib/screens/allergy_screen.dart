@@ -1,4 +1,5 @@
 import 'package:choice/choice.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
@@ -10,6 +11,7 @@ import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class Allergies extends StatefulWidget {
@@ -33,6 +35,19 @@ class _AllergiesState extends State<Allergies> {
   void showAllergyInformation(Allergy allergy) {
     showAllergyInformationSheet(
         context, allergy); //, AllergyInformation(allergy: allergy));
+  }
+
+  void deleteAllergy(Allergy allergy) {
+    FirestoreService.deleteAllergy(allergy.id!);
+
+    setState(() {});
+  }
+
+  void editAllergy(Allergy allergy) async {
+    List<Medication> medications = await FirestoreService.getMedications();
+
+    showModal(context,
+        CreateAllergy(medications: medications, allergyToEdit: allergy));
   }
 
   @override
@@ -60,17 +75,44 @@ class _AllergiesState extends State<Allergies> {
                   // print(Medication.toJson(snapshot.data![index]));
                   return InkWell(
                     onTap: () => showAllergyInformation(snapshot.data![index]),
-                    child: ListTile(
-                      title: Text(snapshot.data![index].name),
-                      subtitle: Text(
-                        snapshot.data![index].description,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary),
+                    child: Slidable(
+                      endActionPane: ActionPane(
+                        motion: const DrawerMotion(),
+                        children: [
+                          SlidableAction(
+                            flex: 2,
+                            onPressed: (context) =>
+                                editAllergy(snapshot.data![index]),
+                            icon: Icons.edit,
+                            label: 'Edit',
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHigh,
+                          ),
+                          SlidableAction(
+                            flex: 2,
+                            onPressed: (context) =>
+                                deleteAllergy(snapshot.data![index]),
+                            icon: Icons.delete,
+                            label: 'Delete',
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .surfaceContainerHighest,
+                          ),
+                        ],
                       ),
-                      trailing: Text(
-                        snapshot.data![index].severity.name,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary),
+                      child: ListTile(
+                        title: Text(snapshot.data![index].name),
+                        subtitle: Text(
+                          snapshot.data![index].description,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary),
+                        ),
+                        trailing: Text(
+                          snapshot.data![index].severity.name,
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondary),
+                        ),
                       ),
                     ),
                   );
@@ -130,28 +172,18 @@ class _CreateAllergyState extends State<CreateAllergy> {
     AuthService auth = AuthService();
     User? user = auth.auth.currentUser;
 
-    if (isEditing) {
-      Allergy allergy = Allergy(
-        name: name.text,
-        description: description.text,
-        type: allergyType!,
-        severity: allergySeverity!,
-        medicationIds: selectedMedicationIds,
-        userId: user!.uid,
-        id: widget.allergyToEdit!.id,
-      );
-      print(allergy.id);
-      FirestoreService.updateAllergy(allergy);
-    } else {
-      Allergy allergy = Allergy(
-        name: name.text,
-        description: description.text,
-        type: allergyType!,
-        severity: allergySeverity!,
-        medicationIds: selectedMedicationIds,
-        userId: user!.uid,
-      );
+    Allergy allergy = Allergy(
+      name: name.text,
+      description: description.text,
+      type: allergyType!,
+      severity: allergySeverity!,
+      medicationIds: selectedMedicationIds,
+      userId: user!.uid,
+    );
 
+    if (isEditing) {
+      FirestoreService.updateAllergy(widget.allergyToEdit!.id!, allergy);
+    } else {
       FirestoreService.addAllergy(allergy);
     }
 
@@ -192,7 +224,9 @@ class _CreateAllergyState extends State<CreateAllergy> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          isEditing ? 'Edit Allergy' : 'Add Allergy',
+          isEditing
+              ? 'Edit ${widget.allergyToEdit!.name} Allergy'
+              : 'Add Allergy',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -201,15 +235,10 @@ class _CreateAllergyState extends State<CreateAllergy> {
         actions: [
           IconButton(
             onPressed: () => saveButtonPressed(),
-            icon: isEditing
-                ? Icon(
-                    Icons.edit,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  )
-                : Icon(
-                    Icons.add,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
+            icon: Icon(
+              isEditing ? Icons.edit : Icons.add,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
           )
         ],
       ),
