@@ -12,6 +12,7 @@ class FirestoreService {
   static Future<List<Medication>> getMedications() {
     User? user = FirebaseAuth.instance.currentUser;
 
+    // TODO: FIX ERROR THAT USER ISN'T SIGNED IN
     return medications.where('userId', isEqualTo: user!.uid).get().then(
       (querySnapshot) {
         List<Medication> medicationsList = [];

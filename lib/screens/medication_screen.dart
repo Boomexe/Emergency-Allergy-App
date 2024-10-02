@@ -125,6 +125,10 @@ class _CreateMedicationState extends State<CreateMedication> {
   TextEditingController note = TextEditingController();
   TextEditingController dosage = TextEditingController();
 
+  String? nameError;
+  String? noteError;
+  String? dosageError;
+
   TimeOfDay? medicationReminderTime;
 
   List<Reminder> reminders = [];
@@ -163,6 +167,26 @@ class _CreateMedicationState extends State<CreateMedication> {
   }
 
   void saveButtonPressed() async {
+    setState(() {
+      nameError = null;
+      noteError = null;
+      dosageError = null;
+    });
+
+    if (name.text.isEmpty) {
+      setState(() {
+        nameError = 'Please enter a name.';
+      });
+      return;
+    }
+
+    if (dosage.text.isEmpty) {
+      setState(() {
+        dosageError = 'Please enter a dosage.';
+      });
+      return;
+    }
+
     AuthService auth = AuthService();
     User? user = auth.auth.currentUser;
 
@@ -251,16 +275,19 @@ class _CreateMedicationState extends State<CreateMedication> {
               FormTextField(
                 hintText: 'Name',
                 textController: name,
+                errorMsg: nameError,
               ),
               const SizedBox(height: 10),
               FormTextField(
                 hintText: 'Note',
                 textController: note,
+                errorMsg: noteError,
               ),
               const SizedBox(height: 10),
               FormTextField(
                 hintText: 'Dosage',
                 textController: dosage,
+                errorMsg: dosageError,
               ),
               const SizedBox(height: 25),
               Text(

@@ -22,6 +22,10 @@ Future<void> showModal(BuildContext context, Widget content) {
   );
 }
 
+void showSnackBar(BuildContext context, String text) {
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+}
+
 void showMedicationInformationSheet(
     BuildContext context, Medication medication) {
   showModalBottomSheet(

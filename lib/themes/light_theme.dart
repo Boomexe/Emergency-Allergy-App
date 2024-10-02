@@ -26,7 +26,6 @@ ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
   colorScheme: ColorScheme(
-    // seedColor: Colors.red.shade800,
     brightness: Brightness.light,
     primaryContainer: primaryContainer,
     primary: primary,

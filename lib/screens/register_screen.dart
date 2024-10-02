@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
@@ -19,6 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController confirmPasswordController =
       TextEditingController();
 
+  String? nameTextFieldError;
   String? emailTextFieldError;
   String? passwordTextFieldError;
   String? confirmPasswordTextFieldError;
@@ -36,9 +39,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   void register(BuildContext context) async {
     final auth = AuthService();
 
-    emailTextFieldError = null;
-    passwordTextFieldError = null;
-    confirmPasswordTextFieldError = null;
+    setState(() {
+      nameTextFieldError = null;
+      emailTextFieldError = null;
+      passwordTextFieldError = null;
+      confirmPasswordTextFieldError = null;
+    });
+
+    if (nameController.text.isEmpty) {
+      setState(() {
+        nameTextFieldError = 'Please enter your name.';
+      });
+      return;
+    }
 
     if (emailController.text.isEmpty) {
       setState(() {
@@ -84,11 +97,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     try {
       await auth.signUpWithEmailAndPassword(
-          emailController.text, passwordController.text);
+          emailController.text, passwordController.text, nameController.text);
+      showSnackBar(context, 'Successfully registered.');
     } catch (e) {
       List<String> errorMessage =
           AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
-      showAlertDialog(context, errorMessage[0], errorMessage[1]);
+      showSnackBar(context, '${errorMessage[0]}: ${errorMessage[1]}');
+      // showAlertDialog(context, errorMessage[0], errorMessage[1]);
     }
   }
 
@@ -103,6 +118,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               const Icon(Icons.medical_services, size: 100),
               const SizedBox(height: 25),
+              FormTextField(
+                hintText: 'Name',
+                textController: nameController,
+                errorMsg: nameTextFieldError,
+                keyboardType: TextInputType.name,
+              ),
+              const SizedBox(height: 10),
               FormTextField(
                 hintText: 'Email',
                 textController: emailController,

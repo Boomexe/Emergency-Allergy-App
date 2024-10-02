@@ -19,7 +19,7 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    String? userName = AuthService().auth.currentUser?.email;
+    String? userName = AuthService().auth.currentUser?.displayName;
 
     return Scaffold(
       body: Center(

@@ -143,6 +143,9 @@ class _CreateAllergyState extends State<CreateAllergy> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
 
+  String? nameError;
+  String? descriptionError;
+
   AllergyType? allergyType;
   AllergySeverity? allergySeverity;
 
@@ -169,6 +172,32 @@ class _CreateAllergyState extends State<CreateAllergy> {
   }
 
   void saveButtonPressed() {
+    setState(() {
+      nameError = null;
+      descriptionError = null;
+    });
+
+    if (name.text.isEmpty) {
+      setState(() {
+        nameError = 'Name cannot be empty';
+      });
+      return;
+    }
+
+    if (allergyType == null) {
+      setState(() {
+        showSnackBar(context, 'Please select an allergy type.');
+      });
+      return;
+    }
+
+    if (allergySeverity == null) {
+      setState(() {
+        showSnackBar(context, 'Please select an allergy severity.');
+      });
+      return;
+    }
+
     AuthService auth = AuthService();
     User? user = auth.auth.currentUser;
 
@@ -183,15 +212,19 @@ class _CreateAllergyState extends State<CreateAllergy> {
 
     if (isEditing) {
       FirestoreService.updateAllergy(widget.allergyToEdit!.id!, allergy);
+      showSnackBar(context, 'Updated ${allergy.name.toLowerCase()}');
     } else {
       FirestoreService.addAllergy(allergy);
+      showSnackBar(context, 'Added ${allergy.name.toLowerCase()}');
     }
 
     Navigator.pop(context);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const HomeScreen(selectedIndex: 2)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(selectedIndex: 2),
+      ),
+    );
   }
 
   void editAllergy() {
@@ -249,10 +282,17 @@ class _CreateAllergyState extends State<CreateAllergy> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              FormTextField(hintText: 'Name', textController: name),
+              FormTextField(
+                hintText: 'Name',
+                textController: name,
+                errorMsg: nameError,
+              ),
               const SizedBox(height: 10),
               FormTextField(
-                  hintText: 'Description', textController: description),
+                hintText: 'Description',
+                textController: description,
+                errorMsg: descriptionError,
+              ),
               const SizedBox(height: 25),
               Card(
                 color: Theme.of(context).colorScheme.secondary,

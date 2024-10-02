@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -31,8 +32,10 @@ class _LoginScreenState extends State<LoginScreen> {
   void login(BuildContext context) async {
     final auth = AuthService();
 
-    emailTextFieldError = null;
-    passwordTextFieldError = null;
+    setState(() {
+      emailTextFieldError = null;
+      passwordTextFieldError = null;
+    });
 
     if (emailController.text.isEmpty) {
       setState(() {
@@ -58,10 +61,12 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await auth.signInWithEmailAndPassword(
           emailController.text, passwordController.text);
+      showSnackBar(context, 'Successfully signed in.');
     } catch (e) {
       List<String> errorMessage =
           AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
-      showAlertDialog(context, errorMessage[0], errorMessage[1]);
+      // showAlertDialog(context, errorMessage[0], errorMessage[1]);
+      showSnackBar(context, '${errorMessage[0]}: ${errorMessage[1]}');
     }
   }
 

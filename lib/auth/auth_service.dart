@@ -14,9 +14,6 @@ class AuthService {
         password: password,
       );
 
-      print(userCredential.user!.uid);
-
-      // enrollMfa();
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);
@@ -24,13 +21,16 @@ class AuthService {
   }
 
   Future<User?> signUpWithEmailAndPassword(
-      String email, String password) async {
+      String email, String password, String name) async {
     try {
       final UserCredential userCredential =
           await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
+      userCredential.user?.updateDisplayName(name);
+
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.code);

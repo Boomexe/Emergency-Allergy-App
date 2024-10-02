@@ -71,7 +71,7 @@ class _AllergyDetailsState extends State<AllergyDetails> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             DetailCard(
-              width: 150,
+              width: 175,
               color: Theme.of(context).colorScheme.surfaceContainer,
               textColor: Theme.of(context).colorScheme.onPrimary,
               title:
@@ -79,7 +79,7 @@ class _AllergyDetailsState extends State<AllergyDetails> {
               icon: Icons.medical_information,
             ),
             DetailCard(
-              width: 150,
+              width: 175,
               color: Theme.of(context).colorScheme.tertiary,
               textColor: Theme.of(context).colorScheme.onTertiary,
               title:
