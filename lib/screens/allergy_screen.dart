@@ -1,6 +1,6 @@
 import 'package:choice/choice.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/components/custom_list_tile.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
 import 'package:emergency_allergy_app/components/single_choice_prompt.dart';
@@ -46,6 +46,8 @@ class _AllergiesState extends State<Allergies> {
   void editAllergy(Allergy allergy) async {
     List<Medication> medications = await FirestoreService.getMedications();
 
+    if (!mounted) return;
+
     showModal(context,
         CreateAllergy(medications: medications, allergyToEdit: allergy));
   }
@@ -66,7 +68,7 @@ class _AllergiesState extends State<Allergies> {
             }
 
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('No medications found'));
+              return const Center(child: Text('Created allergies will appear here'));
             }
 
             return ListView.builder(
@@ -101,18 +103,10 @@ class _AllergiesState extends State<Allergies> {
                           ),
                         ],
                       ),
-                      child: ListTile(
-                        title: Text(snapshot.data![index].name),
-                        subtitle: Text(
-                          snapshot.data![index].description,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondary),
-                        ),
-                        trailing: Text(
-                          snapshot.data![index].severity.name,
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.onSecondary),
-                        ),
+                      child: CustomListTile(
+                        title: snapshot.data![index].name,
+                        subtitle: snapshot.data![index].description,
+                        trailing: snapshot.data![index].severity.name,
                       ),
                     ),
                   );

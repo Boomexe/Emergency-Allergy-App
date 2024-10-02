@@ -1,4 +1,5 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/components/custom_list_tile.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
@@ -30,9 +31,7 @@ class _MedicationsState extends State<Medications> {
     setState(() {});
   }
 
-  void editMedication(Medication medication) async {
-    List<Medication> medications = await FirestoreService.getMedications();
-
+  void editMedication(Medication medication) {
     showModal(context, CreateMedication(medicationToEdit: medication));
   }
 
@@ -52,7 +51,7 @@ class _MedicationsState extends State<Medications> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No medications found'));
+            return const Center(child: Text('Created medications will appear here'));
           }
 
           return ListView.builder(
@@ -86,18 +85,10 @@ class _MedicationsState extends State<Medications> {
                         ),
                       ],
                     ),
-                    child: ListTile(
-                      title: Text(snapshot.data![index].name),
-                      subtitle: Text(
-                        snapshot.data![index].note,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary),
-                      ),
-                      trailing: Text(
-                        snapshot.data![index].dosage,
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary),
-                      ),
+                    child: CustomListTile(
+                      title: snapshot.data![index].name,
+                      subtitle: snapshot.data![index].note,
+                      trailing: snapshot.data![index].dosage,
                     ),
                   ),
                 );
@@ -179,7 +170,8 @@ class _CreateMedicationState extends State<CreateMedication> {
     );
 
     if (isEditing) {
-      FirestoreService.updateMedication(widget.medicationToEdit!.id!, medication);
+      FirestoreService.updateMedication(
+          widget.medicationToEdit!.id!, medication);
     } else {
       FirestoreService.addMedication(medication);
     }

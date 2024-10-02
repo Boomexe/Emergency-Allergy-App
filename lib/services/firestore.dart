@@ -16,7 +16,9 @@ class FirestoreService {
       (querySnapshot) {
         List<Medication> medicationsList = [];
         for (var docSnapshot in querySnapshot.docs) {
-          Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
+          Medication medication = Medication.fromJson(
+              docSnapshot.data() as Map<String, dynamic>,
+              id: docSnapshot.id);
           medicationsList.add(medication);
         }
 
@@ -29,10 +31,50 @@ class FirestoreService {
     );
   }
 
+  static Future<List<Medication>> getMedicationsFromIds(
+      List<String> ids) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      print('No user logged in');
+      return [];
+    }
+
+    List<Medication> medicationsList = [];
+    try {
+      // Break the IDs into chunks of 10
+      for (int i = 0; i < ids.length; i += 10) {
+        List<String> idsChunk =
+            ids.sublist(i, i + 10 > ids.length ? ids.length : i + 10);
+
+        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+            .collection('medications')
+            .where(FieldPath.documentId, whereIn: idsChunk)
+            .where('userId', isEqualTo: user.uid)
+            .get();
+
+        List<Medication> chunkMedicationsList =
+            querySnapshot.docs.map((docSnapshot) {
+          return Medication.fromJson(docSnapshot.data() as Map<String, dynamic>,
+              id: docSnapshot.id);
+        }).toList();
+
+        medicationsList.addAll(chunkMedicationsList);
+      }
+
+      return medicationsList;
+    } catch (e) {
+      print('Error completing: $e');
+      return [];
+    }
+  }
+
   static Future<Medication>? getMedication(String id) {
     return medications.doc(id).get().then(
       (docSnapshot) {
-        Medication medication = Medication.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
+        Medication medication = Medication.fromJson(
+            docSnapshot.data() as Map<String, dynamic>,
+            id: docSnapshot.id);
         return medication;
       },
       onError: (e) {
@@ -42,7 +84,8 @@ class FirestoreService {
     );
   }
 
-  static Future<DocumentReference<Object?>> addMedication(Medication medication) async {
+  static Future<DocumentReference<Object?>> addMedication(
+      Medication medication) async {
     return medications.add(Medication.toJson(medication));
   }
 
@@ -61,10 +104,12 @@ class FirestoreService {
       (querySnapshot) {
         List<Allergy> allergiesList = [];
         for (var docSnapshot in querySnapshot.docs) {
-          Allergy allergy = Allergy.fromJson(docSnapshot.data() as Map<String, dynamic>, id: docSnapshot.id);
+          Allergy allergy = Allergy.fromJson(
+              docSnapshot.data() as Map<String, dynamic>,
+              id: docSnapshot.id);
           allergiesList.add(allergy);
         }
-        
+
         return allergiesList;
       },
       onError: (e) {

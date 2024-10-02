@@ -17,6 +17,8 @@ Color surfaceContainerHigh = Colors.amber.shade400;
 Color surfaceContainerHighest = Colors.red.shade600;
 const Color onSurfaceVariant = Colors.white;
 
+// const Color accentBlue = Color.fromARGB(255, 159, 235, 235);
+
 // FOR CHOICE PROMPT THEME
 MaterialColor primarySwatch = Colors.red;
 
