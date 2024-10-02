@@ -6,15 +6,17 @@ import 'package:flutter/material.dart';
 
 class ReminderListTile extends StatefulWidget {
   final Reminder reminder;
-  final int index;
-  final Function(Reminder, int) onUpdateReminder;
-  final Function(int) onDeleteReminder;
+  final int? index;
+  final Function(Reminder, int)? onUpdateReminder;
+  final Function(int)? onDeleteReminder;
+  final bool isInteractable;
   const ReminderListTile({
     super.key,
     required this.reminder,
-    required this.index,
-    required this.onUpdateReminder,
-    required this.onDeleteReminder,
+    required this.isInteractable,
+    this.index,
+    this.onUpdateReminder,
+    this.onDeleteReminder,
   });
 
   @override
@@ -42,14 +44,19 @@ class _ReminderListTileState extends State<ReminderListTile> {
       padding: const EdgeInsets.only(bottom: 10),
       child: ListTile(
         onTap: () {
-          showModal(
+          if (widget.isInteractable &&
+              widget.index != null &&
+              widget.index != null) {
+            showModal(
               context,
               CreateReminderScreen(
                 onSaveReminder: (reminder) =>
-                    widget.onUpdateReminder(reminder, widget.index),
+                    widget.onUpdateReminder!(reminder, widget.index!),
                 reminder: widget.reminder,
-                onDeleteReminder: () => widget.onDeleteReminder(widget.index)
-              ));
+                onDeleteReminder: () => widget.onDeleteReminder!(widget.index!),
+              ),
+            );
+          }
         },
         title: Text(
           titleText,
@@ -69,11 +76,12 @@ class _ReminderListTileState extends State<ReminderListTile> {
                   color: Theme.of(context).colorScheme.onSecondary),
             ),
             const SizedBox(width: 3),
-            Icon(
-              Icons.arrow_forward,
-              size: 20,
-              color: Theme.of(context).colorScheme.onSecondary,
-            )
+            if (widget.isInteractable)
+              Icon(
+                Icons.arrow_forward,
+                size: 20,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
           ],
         ),
       ),

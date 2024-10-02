@@ -1,7 +1,7 @@
 import 'package:emergency_allergy_app/components/allergy_details.dart';
+import 'package:emergency_allergy_app/components/medication_details.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
-import 'package:emergency_allergy_app/screens/medication_screen.dart';
 import 'package:flutter/material.dart';
 
 Future<void> showModal(BuildContext context, Widget content) {
@@ -38,41 +38,17 @@ void showMedicationInformationSheet(
                 child: Container(
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
-                    // borderRadius: BorderRadius.vertical(
-                    //   top: Radius.circular(20.0),
-                    // ),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(20.0),
+                    ),
                   ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(top: 15, left: 15, right: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Medication Details',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary),
-                            ),
-                            TextButton(
-                              onPressed: () async => showModal(
-                                  context,
-                                  CreateMedication(
-                                      medicationToEdit: medication)),
-                              child: Text('Edit',
-                                  style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .surfaceContainerLow)),
-                            ),
-                          ],
-                        ),
-                      ],
+                  // width: double.infinity,
+                  child: SingleChildScrollView(
+                    controller: scrollController,
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.only(top: 15, left: 15, right: 15),
+                      child: MedicationDetails(medication: medication),
                     ),
                   ),
                 ),

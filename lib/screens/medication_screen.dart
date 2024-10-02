@@ -277,6 +277,7 @@ class _CreateMedicationState extends State<CreateMedication> {
 
                   return ReminderListTile(
                       key: ValueKey(reminders[index]),
+                      isInteractable: true,
                       index: index,
                       reminder: reminders[index],
                       onUpdateReminder: onUpdateReminder,
