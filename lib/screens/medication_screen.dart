@@ -47,12 +47,14 @@ class _MedicationsState extends State<Medications> {
 
           if (snapshot.hasError) {
             return Center(
-                child: Text('Error retrieving data: ${snapshot.error}'));
+              child: Text('Error retrieving data: ${snapshot.error}'),
+            );
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
-                child: Text('Created medications will appear here'));
+              child: Text('Created medications will appear here'),
+            );
           }
 
           return ListView.builder(
@@ -133,7 +135,7 @@ class _CreateMedicationState extends State<CreateMedication> {
     setState(() {
       reminders.add(reminder);
     });
-    
+
     Navigator.pop(context);
   }
 

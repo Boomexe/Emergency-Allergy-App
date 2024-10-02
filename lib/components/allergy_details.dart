@@ -42,14 +42,18 @@ class _AllergyDetailsState extends State<AllergyDetails> {
             ),
             TextButton(
               onPressed: () async => showModal(
-                  context,
-                  CreateAllergy(
-                      medications: await FirestoreService.getMedications(),
-                      allergyToEdit: widget.allergy)),
-              child: Text('Edit',
-                  style: TextStyle(
-                      color:
-                          Theme.of(context).colorScheme.surfaceContainerLow)),
+                context,
+                CreateAllergy(
+                  medications: await FirestoreService.getMedications(),
+                  allergyToEdit: widget.allergy,
+                ),
+              ),
+              child: Text(
+                'Edit',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.surfaceContainerLow,
+                ),
+              ),
             ),
           ],
         ),

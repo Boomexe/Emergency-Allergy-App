@@ -33,8 +33,7 @@ class _AllergiesState extends State<Allergies> {
   }
 
   void showAllergyInformation(Allergy allergy) {
-    showAllergyInformationSheet(
-        context, allergy); //, AllergyInformation(allergy: allergy));
+    showAllergyInformationSheet(context, allergy);
   }
 
   void deleteAllergy(Allergy allergy) {
@@ -48,8 +47,13 @@ class _AllergiesState extends State<Allergies> {
 
     if (!mounted) return;
 
-    showModal(context,
-        CreateAllergy(medications: medications, allergyToEdit: allergy));
+    showModal(
+      context,
+      CreateAllergy(
+        medications: medications,
+        allergyToEdit: allergy,
+      ),
+    );
   }
 
   @override
@@ -64,17 +68,19 @@ class _AllergiesState extends State<Allergies> {
 
             if (snapshot.hasError) {
               return Center(
-                  child: Text('Error retrieving data: ${snapshot.error}'));
+                child: Text('Error retrieving data: ${snapshot.error}'),
+              );
             }
 
             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return const Center(child: Text('Created allergies will appear here'));
+              return const Center(
+                child: Text('Created allergies will appear here'),
+              );
             }
 
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  // print(Medication.toJson(snapshot.data![index]));
                   return InkWell(
                     onTap: () => showAllergyInformation(snapshot.data![index]),
                     child: Slidable(
