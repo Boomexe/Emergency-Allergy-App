@@ -31,7 +31,8 @@ class _SingleChoicePromptState<T> extends State<SingleChoicePrompt<T>> {
   }
 
   void setInitialChoice() {
-    ChoiceData<T> initialChoice = choiceData[widget.choices.indexOf(widget.initialValue as T)];
+    ChoiceData<T> initialChoice =
+        choiceData[widget.choices.indexOf(widget.initialValue as T)];
 
     setSelected(initialChoice);
   }
@@ -39,14 +40,15 @@ class _SingleChoicePromptState<T> extends State<SingleChoicePrompt<T>> {
   @override
   void initState() {
     choiceData = widget.choices.asChoiceData(
-        value: (i, e) => widget.choices[i],
-        title: (i, e) =>
-            (e as Enum).name[0].toUpperCase() + (e as Enum).name.substring(1));
-    
+      value: (i, e) => widget.choices[i],
+      title: (i, e) =>
+          (e as Enum).name[0].toUpperCase() + (e as Enum).name.substring(1),
+    );
+
     if (widget.initialValue != null) {
       setInitialChoice();
     }
-    
+
     super.initState();
   }
 

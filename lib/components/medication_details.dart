@@ -72,7 +72,7 @@ class _MedicationDetailsState extends State<MedicationDetails> {
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
-              color: Theme.of(context).colorScheme.onPrimary),
+              color: Theme.of(context).colorScheme.onPrimary,),
         ),
         ListView.builder(
           physics: const NeverScrollableScrollPhysics(),

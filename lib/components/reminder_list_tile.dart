@@ -60,11 +60,15 @@ class _ReminderListTileState extends State<ReminderListTile> {
         },
         title: Text(
           titleText,
-          style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
         subtitle: Text(
           subtitleText,
-          style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onSecondary,
+          ),
         ),
         // isThreeLine: true,
         trailing: Wrap(
@@ -72,8 +76,9 @@ class _ReminderListTileState extends State<ReminderListTile> {
             Text(
               trailingText,
               style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).colorScheme.onSecondary),
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSecondary,
+              ),
             ),
             const SizedBox(width: 3),
             if (widget.isInteractable)

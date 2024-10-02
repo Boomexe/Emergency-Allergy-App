@@ -10,30 +10,28 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-
   void logout() async {
     final auth = AuthService();
     auth.signOut();
   }
 
-  void testingButton() {
-    
-  }
+  void testingButton() {}
 
   @override
   Widget build(BuildContext context) {
     String? userName = AuthService().auth.currentUser?.email;
 
     return Scaffold(
-        body: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, 
-        children: [
-          Text('Welcome to the Allergy Emergency App, $userName!'),
-          FormButton(onTap: logout, text: 'Sign Out'),
-          FormButton(onTap: testingButton, text: 'Testing Button'),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Welcome to the Allergy Emergency App, $userName!'),
+            FormButton(onTap: logout, text: 'Sign Out'),
+            FormButton(onTap: testingButton, text: 'Testing Button'),
+          ],
+        ),
       ),
-    ));
+    );
   }
 }

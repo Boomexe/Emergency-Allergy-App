@@ -53,13 +53,15 @@ class _AllergyDetailsState extends State<AllergyDetails> {
             ),
           ],
         ),
-        widget.allergy.description.isNotEmpty ? Text(
-          widget.allergy.description,
-          style: TextStyle(
-            fontSize: 16,
-            color: Theme.of(context).colorScheme.onSecondary,
-          ),
-        ) : Container(),
+        widget.allergy.description.isNotEmpty
+            ? Text(
+                widget.allergy.description,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onSecondary,
+                ),
+              )
+            : Container(),
         const SizedBox(height: 25),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -84,24 +86,25 @@ class _AllergyDetailsState extends State<AllergyDetails> {
         ),
         const SizedBox(height: 25),
         FutureBuilder(
-            future: medicationsFuture,
-            builder: (c, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Container();
-              }
+          future: medicationsFuture,
+          builder: (c, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Container();
+            }
 
-              if (snapshot.hasError) {
-                return Container();
-              }
+            if (snapshot.hasError) {
+              return Container();
+            }
 
-              return Text(
-                snapshot.data!.isNotEmpty ? 'Medications' : 'No Medications',
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Theme.of(context).colorScheme.onPrimary),
-              );
-            }),
+            return Text(
+              snapshot.data!.isNotEmpty ? 'Medications' : 'No Medications',
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.onPrimary),
+            );
+          },
+        ),
         FutureBuilder(
           future: medicationsFuture,
           builder: (c, snapshot) {
