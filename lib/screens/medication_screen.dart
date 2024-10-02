@@ -51,7 +51,8 @@ class _MedicationsState extends State<Medications> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Created medications will appear here'));
+            return const Center(
+                child: Text('Created medications will appear here'));
           }
 
           return ListView.builder(
@@ -132,6 +133,7 @@ class _CreateMedicationState extends State<CreateMedication> {
     setState(() {
       reminders.add(reminder);
     });
+    
     Navigator.pop(context);
   }
 
@@ -139,6 +141,7 @@ class _CreateMedicationState extends State<CreateMedication> {
     setState(() {
       reminders[index] = reminder;
     });
+
     Navigator.pop(context);
   }
 
@@ -178,9 +181,11 @@ class _CreateMedicationState extends State<CreateMedication> {
 
     Navigator.pop(context);
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const HomeScreen(selectedIndex: 1)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(selectedIndex: 1),
+      ),
+    );
   }
 
   @override
@@ -188,6 +193,7 @@ class _CreateMedicationState extends State<CreateMedication> {
     if (widget.medicationToEdit != null) {
       editMedication();
     }
+
     super.initState();
   }
 
@@ -197,13 +203,15 @@ class _CreateMedicationState extends State<CreateMedication> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-            isEditing
-                ? 'Edit ${widget.medicationToEdit!.name}'
-                : 'Add Medication',
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-                color: Theme.of(context).colorScheme.onPrimary)),
+          isEditing
+              ? 'Edit ${widget.medicationToEdit!.name}'
+              : 'Add Medication',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
         // leading: TextButton(
         //   onPressed: () {
         //     Navigator.pop(context);
@@ -214,11 +222,12 @@ class _CreateMedicationState extends State<CreateMedication> {
         // ),
         actions: [
           IconButton(
-              onPressed: () => saveButtonPressed(),
-              icon: Icon(
-                isEditing ? Icons.edit : Icons.add,
-                color: Theme.of(context).colorScheme.onPrimary,
-              ))
+            onPressed: () => saveButtonPressed(),
+            icon: Icon(
+              isEditing ? Icons.edit : Icons.add,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
           // TextButton(
           //     onPressed: () {
           //       saveButtonPressed();
@@ -234,20 +243,32 @@ class _CreateMedicationState extends State<CreateMedication> {
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            FormTextField(hintText: 'Name', textController: name),
-            const SizedBox(height: 10),
-            FormTextField(hintText: 'Note', textController: note),
-            const SizedBox(height: 10),
-            FormTextField(hintText: 'Dosage', textController: dosage),
-            const SizedBox(height: 25),
-            Text(
-              'Reminders',
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary, fontSize: 16),
-            ),
-            ListView.builder(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              FormTextField(
+                hintText: 'Name',
+                textController: name,
+              ),
+              const SizedBox(height: 10),
+              FormTextField(
+                hintText: 'Note',
+                textController: note,
+              ),
+              const SizedBox(height: 10),
+              FormTextField(
+                hintText: 'Dosage',
+                textController: dosage,
+              ),
+              const SizedBox(height: 25),
+              Text(
+                'Reminders',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: 16,
+                ),
+              ),
+              ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: reminders.length + 1,
@@ -256,9 +277,9 @@ class _CreateMedicationState extends State<CreateMedication> {
                     return ListTile(
                       onTap: () {
                         showModal(
-                            context,
-                            CreateReminderScreen(
-                                onSaveReminder: onAddReminder));
+                          context,
+                          CreateReminderScreen(onSaveReminder: onAddReminder),
+                        );
                       },
                       // leading: Icon(
                       //   null,
@@ -269,21 +290,24 @@ class _CreateMedicationState extends State<CreateMedication> {
                       title: Text(
                         'Add Reminder',
                         style: TextStyle(
-                            color:
-                                Theme.of(context).colorScheme.surfaceContainer),
+                          color: Theme.of(context).colorScheme.surfaceContainer,
+                        ),
                       ),
                     );
                   }
 
                   return ReminderListTile(
-                      key: ValueKey(reminders[index]),
-                      isInteractable: true,
-                      index: index,
-                      reminder: reminders[index],
-                      onUpdateReminder: onUpdateReminder,
-                      onDeleteReminder: onDeleteReminder);
-                }),
-          ]),
+                    key: ValueKey(reminders[index]),
+                    isInteractable: true,
+                    index: index,
+                    reminder: reminders[index],
+                    onUpdateReminder: onUpdateReminder,
+                    onDeleteReminder: onDeleteReminder,
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
