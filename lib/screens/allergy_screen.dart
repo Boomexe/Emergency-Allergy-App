@@ -29,7 +29,7 @@ class _AllergiesState extends State<Allergies> {
   }
 
   void showAllergyCreationScreen(List<Medication> medications) {
-    showButtomSheet(context, CreateAllergy(medications: medications));
+    showBottomSheet(context, CreateAllergy(medications: medications));
   }
 
   void showAllergyInformation(Allergy allergy) {
@@ -47,7 +47,7 @@ class _AllergiesState extends State<Allergies> {
 
     if (!mounted) return;
 
-    showButtomSheet(
+    showBottomSheet(
       context,
       CreateAllergy(
         medications: medications,

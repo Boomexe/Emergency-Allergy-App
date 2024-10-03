@@ -41,7 +41,7 @@ class _AllergyDetailsState extends State<AllergyDetails> {
                   color: Theme.of(context).colorScheme.onPrimary),
             ),
             TextButton(
-              onPressed: () async => showButtomSheet(
+              onPressed: () async => showBottomSheet(
                 context,
                 CreateAllergy(
                   medications: await FirestoreService.getMedications(),
