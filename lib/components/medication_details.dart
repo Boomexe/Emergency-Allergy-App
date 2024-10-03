@@ -30,7 +30,7 @@ class _MedicationDetailsState extends State<MedicationDetails> {
                   color: Theme.of(context).colorScheme.onPrimary),
             ),
             TextButton(
-              onPressed: () async => showBottomSheet(
+              onPressed: () async => showCustomBottomSheet(
                 context,
                 CreateMedication(
                   medicationToEdit: widget.medication,

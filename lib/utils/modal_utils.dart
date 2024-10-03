@@ -5,7 +5,7 @@ import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showBottomSheet(BuildContext context, Widget content) {
+Future<void> showCustomBottomSheet(BuildContext context, Widget content) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,

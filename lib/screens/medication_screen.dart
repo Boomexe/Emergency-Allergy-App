@@ -32,7 +32,7 @@ class _MedicationsState extends State<Medications> {
   }
 
   void editMedication(Medication medication) {
-    showBottomSheet(context, CreateMedication(medicationToEdit: medication));
+    showCustomBottomSheet(context, CreateMedication(medicationToEdit: medication));
   }
 
   @override
@@ -103,7 +103,7 @@ class _MedicationsState extends State<Medications> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showBottomSheet(
+          showCustomBottomSheet(
             context,
             const CreateMedication(),
           );
@@ -308,7 +308,7 @@ class _CreateMedicationState extends State<CreateMedication> {
                   if (index == reminders.length) {
                     return ListTile(
                       onTap: () {
-                        showBottomSheet(
+                        showCustomBottomSheet(
                           context,
                           CreateReminderScreen(onSaveReminder: onAddReminder),
                         );

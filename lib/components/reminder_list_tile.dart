@@ -47,7 +47,7 @@ class _ReminderListTileState extends State<ReminderListTile> {
           if (widget.isInteractable &&
               widget.index != null &&
               widget.index != null) {
-            showBottomSheet(
+            showCustomBottomSheet(
               context,
               CreateReminderScreen(
                 onSaveReminder: (reminder) =>
