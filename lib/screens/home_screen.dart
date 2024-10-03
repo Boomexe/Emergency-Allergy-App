@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
 import 'package:emergency_allergy_app/screens/allergy_screen.dart';
 import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
+import 'package:emergency_allergy_app/screens/friend_screen.dart';
 import 'package:emergency_allergy_app/screens/medication_screen.dart';
 import 'package:emergency_allergy_app/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const Dashboard(),
     const Medications(),
     const Allergies(),
-    const Profile(),
+    // const Profile(),
+    const FriendScreen(),
   ];
 
   @override

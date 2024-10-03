@@ -1,10 +1,11 @@
+import 'package:emergency_allergy_app/components/add_friend_modal.dart';
 import 'package:emergency_allergy_app/components/allergy_details.dart';
 import 'package:emergency_allergy_app/components/medication_details.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:flutter/material.dart';
 
-Future<void> showModal(BuildContext context, Widget content) {
+Future<void> showButtomSheet(BuildContext context, Widget content) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: true,
@@ -24,6 +25,27 @@ Future<void> showModal(BuildContext context, Widget content) {
 
 void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
+}
+
+void showAlertDialog({required BuildContext context, required Widget title, required Widget content}) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: title,
+      content: Padding(
+        padding: const EdgeInsets.all(0.0),
+        child: content,
+      ),
+    ),
+  );
+}
+
+void showAddFriendModal(BuildContext context, Function(String) onAdd) {
+  showAlertDialog(
+    context: context,
+    title: const Text('Add Friend'),
+    content: AddFriendModal(onAdd: onAdd),
+  );
 }
 
 void showMedicationInformationSheet(

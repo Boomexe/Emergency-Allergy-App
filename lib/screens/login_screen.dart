@@ -20,15 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String? emailTextFieldError;
   String? passwordTextFieldError;
 
-  void showAlertDialog(BuildContext context, String title, String message) {
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text(title),
-              content: Text(message),
-            ));
-  }
-
   void login(BuildContext context) async {
     final auth = AuthService();
 

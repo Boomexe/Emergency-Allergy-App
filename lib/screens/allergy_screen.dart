@@ -29,7 +29,7 @@ class _AllergiesState extends State<Allergies> {
   }
 
   void showAllergyCreationScreen(List<Medication> medications) {
-    showModal(context, CreateAllergy(medications: medications));
+    showButtomSheet(context, CreateAllergy(medications: medications));
   }
 
   void showAllergyInformation(Allergy allergy) {
@@ -47,7 +47,7 @@ class _AllergiesState extends State<Allergies> {
 
     if (!mounted) return;
 
-    showModal(
+    showButtomSheet(
       context,
       CreateAllergy(
         medications: medications,
@@ -59,6 +59,9 @@ class _AllergiesState extends State<Allergies> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Allergies'),
+      ),
       body: FutureBuilder(
           future: FirestoreService.getAllergies(),
           builder: (context, snapshot) {

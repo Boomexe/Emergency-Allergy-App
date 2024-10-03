@@ -32,12 +32,15 @@ class _MedicationsState extends State<Medications> {
   }
 
   void editMedication(Medication medication) {
-    showModal(context, CreateMedication(medicationToEdit: medication));
+    showButtomSheet(context, CreateMedication(medicationToEdit: medication));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Medications'),
+      ),
       body: FutureBuilder(
         future: FirestoreService.getMedications(),
         builder: (context, snapshot) {
@@ -100,7 +103,7 @@ class _MedicationsState extends State<Medications> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showModal(
+          showButtomSheet(
             context,
             const CreateMedication(),
           );
@@ -305,7 +308,7 @@ class _CreateMedicationState extends State<CreateMedication> {
                   if (index == reminders.length) {
                     return ListTile(
                       onTap: () {
-                        showModal(
+                        showButtomSheet(
                           context,
                           CreateReminderScreen(onSaveReminder: onAddReminder),
                         );
