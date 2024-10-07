@@ -97,6 +97,8 @@ class AuthService {
         return ['Weak password', 'The password you provided is too weak.'];
       case 'user-disabled':
         return ['Account disabled', 'This account has been disabled.'];
+      case 'network-request-failed':
+        return ['Network Error', 'The network request failed.'];
       default:
         return ['Error', 'An error occurred. Code: $code'];
     }

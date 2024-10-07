@@ -43,7 +43,7 @@ void showAlertDialog({required BuildContext context, required Widget title, requ
 void showAddFriendModal(BuildContext context, Function(String) onAdd) {
   showAlertDialog(
     context: context,
-    title: const Text('Add Friend'),
+    title: const Text('Add Emergency Contact'),
     content: AddFriendModal(onAdd: onAdd),
   );
 }

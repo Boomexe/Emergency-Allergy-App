@@ -27,20 +27,20 @@ class _AddFriendModalState extends State<AddFriendModal> {
 
     if (friendId.text.isEmpty) {
       setState(() {
-        friendTextFieldError = 'Please enter a friend ID';
+        friendTextFieldError = 'Please enter an emergency contact ID';
       });
       return;
     }
 
     if (friendId.text == userId) {
       setState(() {
-        friendTextFieldError = 'You cannot add yourself as a friend...';
+        friendTextFieldError = 'You cannot add yourself as an emergency contact...';
       });
       return;
     }
 
     widget.onAdd(friendId.text);
-    showSnackBar(context, 'Added friend');
+    showSnackBar(context, 'Added emergency contact');
     Navigator.pop(context);
   }
 
@@ -83,8 +83,8 @@ class _AddFriendModalState extends State<AddFriendModal> {
             onTap: copyUserIdToClipboard,
             child: Column(
               children: [
-                Text('Give your ID to a friend:', style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
-                Text(userId ?? 'No user logged in', style: const TextStyle(fontSize: 16),),
+                Text('Give your ID to a friend/family member:', style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
+                Text(userId ?? 'ERROR - No user logged in', style: const TextStyle(fontSize: 16),),
                 Text('(click to copy)', style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
               ],
             ),
@@ -114,9 +114,9 @@ class _AddFriendModalState extends State<AddFriendModal> {
             ],
           ),
           const SizedBox(height: 10),
-          FormTextField(hintText: 'Enter friend ID', textController: friendId, errorMsg: friendTextFieldError),
+          FormTextField(hintText: 'Enter emergency contact ID', textController: friendId, errorMsg: friendTextFieldError),
           const SizedBox(height: 10),
-          FormButton(onTap: () => onAddFriendButtonPressed(), text: 'Add Friend')
+          FormButton(onTap: () => onAddFriendButtonPressed(), text: 'Add Emergency Contact')
         ],
       ),
     );
