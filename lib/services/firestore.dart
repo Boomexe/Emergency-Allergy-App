@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
+import 'package:emergency_allergy_app/models/emergency_contact.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -8,6 +9,12 @@ final FirebaseFirestore db = FirebaseFirestore.instance;
 class FirestoreService {
   static final CollectionReference allergies = db.collection('allergies');
   static final CollectionReference medications = db.collection('medications');
+  static final CollectionReference emergencyContacts = db.collection('emergencyContacts');
+
+  static Future<DocumentReference<Object?>> addEmergencyContact(
+      EmergencyContact emergencyContact) async {
+    return emergencyContacts.add(EmergencyContact.toJson(emergencyContact));
+  }
 
   static Future<List<Medication>> getMedications() {
     User? user = FirebaseAuth.instance.currentUser;

@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -15,6 +16,10 @@ class _DashboardState extends State<Dashboard> {
     auth.signOut();
   }
 
+  void emergency() async {
+    launchUrlString('tel:1234567890');
+  }
+
   void testingButton() {}
 
   @override
@@ -27,8 +32,9 @@ class _DashboardState extends State<Dashboard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text('Welcome to the Allergy Emergency App, $userName!'),
-            FormButton(onTap: logout, text: 'Sign Out'),
-            FormButton(onTap: testingButton, text: 'Testing Button'),
+            FormButton(onTap: () => emergency(), text: 'Emergency'),
+            FormButton(onTap: () => logout(), text: 'Sign Out'),
+            FormButton(onTap: () => testingButton(), text: 'Testing Button'),
           ],
         ),
       ),

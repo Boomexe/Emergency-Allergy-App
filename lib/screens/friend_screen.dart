@@ -38,11 +38,11 @@ class _FriendScreenState extends State<FriendScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showAddFriendModal(
+          showAddEmergencyContactModal(
             context,
-            (String friendId) {
-              print('Adding emergency contact with ID: $friendId');
-            },
+            // (String friendId) {
+            //   print('Adding emergency contact with ID: $friendId');
+            // },
           );
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
