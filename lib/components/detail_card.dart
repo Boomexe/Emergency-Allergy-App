@@ -23,7 +23,7 @@ class DetailCard extends StatelessWidget {
       child: Card(
         color: color,
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8),
           child: Column(
             children: [
               Icon(
@@ -33,6 +33,7 @@ class DetailCard extends StatelessWidget {
               ),
               Text(
                 title,
+                softWrap: false,
                 style: TextStyle(
                   color: textColor,
                   fontSize: 16,
