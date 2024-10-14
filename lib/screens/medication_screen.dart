@@ -6,7 +6,7 @@ import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
-import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,14 +32,21 @@ class _MedicationsState extends State<Medications> {
   }
 
   void editMedication(Medication medication) {
-    showCustomBottomSheet(context, CreateMedication(medicationToEdit: medication));
+    showCustomBottomSheet(
+        context, CreateMedication(medicationToEdit: medication));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Medications'),
+        title: const Text(
+          'Medications',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
         future: FirestoreService.getMedications(),
@@ -47,21 +54,29 @@ class _MedicationsState extends State<Medications> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-
+    
           if (snapshot.hasError) {
             return Center(
               child: Text('Error retrieving data: ${snapshot.error}'),
             );
           }
-
+    
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text('Created medications will appear here'),
             );
           }
-
-          return ListView.builder(
+    
+          return ListView.separated(
               itemCount: snapshot.data!.length,
+              separatorBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.primary,
+                      thickness: 1,
+                      height: 1,
+                    ),
+                  ),
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () => showMedicationInformation(snapshot.data![index]),
@@ -279,18 +294,21 @@ class _CreateMedicationState extends State<CreateMedication> {
                 hintText: 'Name',
                 textController: name,
                 errorMsg: nameError,
+                maxLength: 25,
               ),
               const SizedBox(height: 10),
               FormTextField(
                 hintText: 'Note',
                 textController: note,
                 errorMsg: noteError,
+                maxLength: 300,
               ),
               const SizedBox(height: 10),
               FormTextField(
                 hintText: 'Dosage',
                 textController: dosage,
                 errorMsg: dosageError,
+                maxLength: 25,
               ),
               const SizedBox(height: 25),
               Text(
@@ -300,10 +318,18 @@ class _CreateMedicationState extends State<CreateMedication> {
                   fontSize: 16,
                 ),
               ),
-              ListView.builder(
+              ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: reminders.length + 1,
+                separatorBuilder: (context, index) => Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Divider(
+                    color: Theme.of(context).colorScheme.primary,
+                    thickness: 1,
+                    height: 1,
+                  ),
+                ),
                 itemBuilder: (context, index) {
                   if (index == reminders.length) {
                     return ListTile(

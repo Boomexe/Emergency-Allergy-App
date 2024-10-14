@@ -6,7 +6,7 @@ import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
 import 'package:emergency_allergy_app/components/single_choice_prompt.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
-import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,7 +60,13 @@ class _AllergiesState extends State<Allergies> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Allergies'),
+        title: const Text(
+          'Allergies',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        automaticallyImplyLeading: false,
       ),
       body: FutureBuilder(
           future: FirestoreService.getAllergies(),
@@ -81,8 +87,16 @@ class _AllergiesState extends State<Allergies> {
               );
             }
 
-            return ListView.builder(
+            return ListView.separated(
                 itemCount: snapshot.data!.length,
+                separatorBuilder: (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Divider(
+                        color: Theme.of(context).colorScheme.primary,
+                        thickness: 1,
+                        height: 1,
+                      ),
+                    ),
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () => showAllergyInformation(snapshot.data![index]),
@@ -289,12 +303,14 @@ class _CreateAllergyState extends State<CreateAllergy> {
                 hintText: 'Name',
                 textController: name,
                 errorMsg: nameError,
+                maxLength: 25,
               ),
               const SizedBox(height: 10),
               FormTextField(
                 hintText: 'Description',
                 textController: description,
                 errorMsg: descriptionError,
+                maxLength: 250,
               ),
               const SizedBox(height: 25),
               Card(

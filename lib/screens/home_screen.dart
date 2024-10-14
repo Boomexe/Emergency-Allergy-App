@@ -39,17 +39,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 100),
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        child: screens[selectedIndex],
-      ),
-      bottomNavigationBar: CustomNavigationBar(
-        currentIndex: selectedIndex,
-        onUpdateIndex: onUpdateIndex,
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 100),
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(opacity: animation, child: child);
+          },
+          child: screens[selectedIndex],
+        ),
+        bottomNavigationBar: CustomNavigationBar(
+          currentIndex: selectedIndex,
+          onUpdateIndex: onUpdateIndex,
+        ),
       ),
     );
   }

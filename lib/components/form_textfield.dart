@@ -7,14 +7,17 @@ class FormTextField extends StatelessWidget {
   final String Function(String)? validator;
   final String? errorMsg;
   final TextInputType? keyboardType;
-  const FormTextField(
-      {super.key,
-      required this.hintText,
-      this.obscureText = false,
-      required this.textController,
-      this.validator,
-      this.errorMsg,
-      this.keyboardType});
+  final int? maxLength;
+  const FormTextField({
+    super.key,
+    required this.hintText,
+    this.obscureText = false,
+    required this.textController,
+    this.validator,
+    this.errorMsg,
+    this.keyboardType,
+    this.maxLength,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +25,7 @@ class FormTextField extends StatelessWidget {
       // padding: const EdgeInsets.symmetric(horizontal: 25),
       padding: const EdgeInsets.all(0),
       child: TextFormField(
+        maxLength: maxLength,
         keyboardType: keyboardType ?? TextInputType.text,
         cursorColor: Theme.of(context).colorScheme.surfaceContainerLow,
         controller: textController,

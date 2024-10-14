@@ -51,12 +51,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
     try {
       await auth.signInWithEmailAndPassword(
-          emailController.text, passwordController.text);
-      showSnackBar(context, 'Successfully signed in.');
+          emailController.text, passwordController.text).then((value) {
+            showSnackBar(context, 'Successfully signed in.');
+          });
     } catch (e) {
       List<String> errorMessage =
           AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
-      // showAlertDialog(context, errorMessage[0], errorMessage[1]);
       showSnackBar(context, '${errorMessage[0]}: ${errorMessage[1]}');
     }
   }

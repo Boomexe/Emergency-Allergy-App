@@ -86,9 +86,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     try {
-      await auth.signUpWithEmailAndPassword(
-          emailController.text, passwordController.text, nameController.text);
-      showSnackBar(context, 'Successfully registered.');
+      await auth
+          .signUpWithEmailAndPassword(emailController.text,
+              passwordController.text, nameController.text)
+          .then((value) {
+        showSnackBar(context, 'Successfully registered.');
+      });
     } catch (e) {
       List<String> errorMessage =
           AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
@@ -113,6 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textController: nameController,
                 errorMsg: nameTextFieldError,
                 keyboardType: TextInputType.name,
+                maxLength: 50,
               ),
               const SizedBox(height: 10),
               FormTextField(

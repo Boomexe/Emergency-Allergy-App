@@ -81,6 +81,11 @@ class AuthService {
     return user;
   }
 
+  void updateDisplayName(String name) {
+    User? user = auth.currentUser;
+    user?.updateDisplayName(name);
+  }
+
   static List<String> getMessageFromErrorCode(String code) {
     switch (code) {
       case 'invalid-credential':

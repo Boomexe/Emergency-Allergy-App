@@ -70,15 +70,24 @@ class _MedicationDetailsState extends State<MedicationDetails> {
         Text(
           widget.medication.reminders.isNotEmpty ? 'Reminders' : 'No Remnders',
           style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.onPrimary,),
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
         ),
-        ListView.builder(
+        ListView.separated(
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: widget.medication.reminders.length,
-          itemBuilder: (c, index) {
+          separatorBuilder: (context, index) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Divider(
+              color: Theme.of(context).colorScheme.primary,
+              thickness: 1,
+              height: 1,
+            ),
+          ),
+          itemBuilder: (context, index) {
             return ReminderListTile(
               reminder: widget.medication.reminders[index],
               isInteractable: false,

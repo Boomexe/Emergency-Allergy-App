@@ -1,7 +1,7 @@
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/models/emergency_contact.dart';
-import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

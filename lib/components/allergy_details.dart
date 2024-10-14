@@ -3,7 +3,7 @@ import 'package:emergency_allergy_app/components/detail_card.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/screens/allergy_screen.dart';
-import 'package:emergency_allergy_app/services/firestore.dart';
+import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -120,11 +120,19 @@ class _AllergyDetailsState extends State<AllergyDetails> {
               return Text('Error: ${snapshot.error}');
             }
 
-            return ListView.builder(
+            return ListView.separated(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: snapshot.data!.length,
-              itemBuilder: (c, index) {
+              separatorBuilder: (context, index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Divider(
+                  color: Theme.of(context).colorScheme.primary,
+                  thickness: 1,
+                  height: 1,
+                ),
+              ),
+              itemBuilder: (context, index) {
                 Medication medication = snapshot.data![index];
                 return CustomListTile(
                   title: medication.name,

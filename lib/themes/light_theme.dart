@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 Color primaryContainer = Colors.black;
 Color primary = Colors.grey.shade300;
@@ -25,6 +26,7 @@ MaterialColor primarySwatch = Colors.red;
 ThemeData lightTheme = ThemeData(
   brightness: Brightness.light,
   useMaterial3: true,
+  fontFamily: GoogleFonts.montserrat().fontFamily, // 'Nunito Sans', 'Montserrat', 'Poppins', 'Plus Jakarta Sans', 'Inter'
   colorScheme: ColorScheme(
     brightness: Brightness.light,
     primaryContainer: primaryContainer,
