@@ -78,7 +78,7 @@ class _AddFriendModalState extends State<AddFriendModal> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 25),
+          // const SizedBox(height: 25),
           InkWell(
             onTap: copyUserIdToClipboard,
             child: Column(

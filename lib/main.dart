@@ -27,8 +27,8 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  await PushNotifications.init();
-  await PushNotifications.localNotificationInit();
+  await NotificationService.init();
+  await NotificationService.localNotificationInit();
 
   FirebaseMessaging.onBackgroundMessage(firebaseBackgroundMessage);
 
@@ -47,7 +47,7 @@ Future<void> main() async {
       print('Recieved message in foreground');
 
       if (message.notification != null) {
-        PushNotifications.showSimpleNotificaiton(
+        NotificationService.showSimpleNotificaiton(
           title: message.notification!.title!,
           body: message.notification!.body!,
           payload: payloadData,

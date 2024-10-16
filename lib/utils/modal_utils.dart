@@ -1,7 +1,8 @@
-import 'package:emergency_allergy_app/components/add_emergency_contact_modal.dart';
+import 'package:emergency_allergy_app/components/add_emergency_number_modal.dart';
 import 'package:emergency_allergy_app/components/add_friend_modal.dart';
 import 'package:emergency_allergy_app/components/allergy_details.dart';
 import 'package:emergency_allergy_app/components/medication_details.dart';
+import 'package:emergency_allergy_app/components/update_display_name_modal.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +42,7 @@ void showAlertDialog({required BuildContext context, required Widget title, requ
   );
 }
 
-void showAddFriendModal(BuildContext context, Function(String) onAdd) {
+void showAddEmergencyContactModal(BuildContext context, Function(String) onAdd) {
   showAlertDialog(
     context: context,
     title: const Text('Add Emergency Contact'),
@@ -49,11 +50,19 @@ void showAddFriendModal(BuildContext context, Function(String) onAdd) {
   );
 }
 
-void showAddEmergencyContactModal(BuildContext context) {
+void showAddEmergencyNumberModal(BuildContext context) {
   showAlertDialog(
     context: context,
-    title: const Text('Add Emergency Contact'),
-    content: const AddEmergencyContactModal(),
+    title: const Text('Add Emergency Number'),
+    content: const AddEmergencyNumberModal(),
+  );
+}
+
+void showChangeDisplayNameModal(BuildContext context) {
+  showAlertDialog(
+    context: context,
+    title: const Text('Update Name'),
+    content: const UpdateDisplayNameModal(),
   );
 }
 

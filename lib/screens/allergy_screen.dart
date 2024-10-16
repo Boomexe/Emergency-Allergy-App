@@ -2,6 +2,7 @@ import 'package:choice/choice.dart';
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/custom_list_tile.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/components/list_view_seperator.dart';
 import 'package:emergency_allergy_app/components/multi_choice_prompt.dart';
 import 'package:emergency_allergy_app/components/single_choice_prompt.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
@@ -89,14 +90,7 @@ class _AllergiesState extends State<Allergies> {
 
             return ListView.separated(
                 itemCount: snapshot.data!.length,
-                separatorBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Divider(
-                        color: Theme.of(context).colorScheme.primary,
-                        thickness: 1,
-                        height: 1,
-                      ),
-                    ),
+                separatorBuilder: (context, index) => const ListViewSeperator(),
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () => showAllergyInformation(snapshot.data![index]),

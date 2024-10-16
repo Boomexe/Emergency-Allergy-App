@@ -1,19 +1,18 @@
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
-import 'package:emergency_allergy_app/models/emergency_contact.dart';
-import 'package:emergency_allergy_app/services/firestore_service.dart';
+import 'package:emergency_allergy_app/models/emergency_number.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class AddEmergencyContactModal extends StatefulWidget {
-  const AddEmergencyContactModal({super.key});
+class AddEmergencyNumberModal extends StatefulWidget {
+  const AddEmergencyNumberModal({super.key});
 
   @override
-  State<AddEmergencyContactModal> createState() =>
-      _AddEmergencyContactModalState();
+  State<AddEmergencyNumberModal> createState() =>
+      _AddEmergencyNumberModalState();
 }
 
-class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
+class _AddEmergencyNumberModalState extends State<AddEmergencyNumberModal> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
 
@@ -61,7 +60,7 @@ class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
       phoneNumber: validatedPhoneNumberText,
     );
 
-    FirestoreService.addEmergencyContact(contact);
+    // FirestoreService.addEmergencyContact(contact);
   }
 
   @override

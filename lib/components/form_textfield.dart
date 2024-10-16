@@ -21,31 +21,27 @@ class FormTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      // padding: const EdgeInsets.symmetric(horizontal: 25),
-      padding: const EdgeInsets.all(0),
-      child: TextFormField(
-        maxLength: maxLength,
-        keyboardType: keyboardType ?? TextInputType.text,
-        cursorColor: Theme.of(context).colorScheme.surfaceContainerLow,
-        controller: textController,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).colorScheme.primary)),
-          focusedBorder: OutlineInputBorder(
-              borderSide:
-                  BorderSide(color: Theme.of(context).colorScheme.secondary)),
-          hintText: hintText,
-          hintStyle:
-              TextStyle(color: Theme.of(context).colorScheme.onSecondary),
-          errorText: errorMsg,
-          filled: true,
-          fillColor: Theme.of(context).colorScheme.secondary,
-        ),
-        obscureText: obscureText,
-        validator: (value) => validator!(value!),
+    return TextFormField(
+      maxLength: maxLength,
+      keyboardType: keyboardType ?? TextInputType.text,
+      cursorColor: Theme.of(context).colorScheme.surfaceContainerLow,
+      controller: textController,
+      decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.primary)),
+        focusedBorder: OutlineInputBorder(
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.secondary)),
+        hintText: hintText,
+        hintStyle:
+            TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+        errorText: errorMsg,
+        filled: true,
+        fillColor: Theme.of(context).colorScheme.secondary,
       ),
+      obscureText: obscureText,
+      validator: (value) => validator!(value!),
     );
   }
 }

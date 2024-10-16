@@ -1,25 +1,42 @@
 import 'package:emergency_allergy_app/main.dart';
+import 'package:emergency_allergy_app/services/firestore_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:emergency_allergy_app/screens/message_screen.dart';
 
-class PushNotifications {
+class NotificationService {
   static final firebaseMessaging = FirebaseMessaging.instance;
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   static Future init() async {
     await firebaseMessaging.requestPermission(
-        alert: true,
-        announcement: true,
-        badge: true,
-        provisional: false,
-        sound: true,
-        criticalAlert: true);
+      alert: true,
+      announcement: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+      criticalAlert: true,
+    );
+  }
 
-    final String? token = await firebaseMessaging.getToken();
-    print('FirebaseMessaging token: $token');
+  static Future getDeviceToken() async {
+    final String? token =  await firebaseMessaging.getToken();
+
+    final User? user = FirebaseAuth.instance.currentUser;
+
+
+    if (user != null) {
+      await FirestoreService.saveUserToken(token!);
+    }
+
+    firebaseMessaging.onTokenRefresh.listen((token) async {
+      if (user != null) {
+        await FirestoreService.saveUserToken(token);
+      }
+    });
   }
 
   static Future localNotificationInit() async {
@@ -29,7 +46,7 @@ class PushNotifications {
     );
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) => null,
+      onDidReceiveLocalNotification: (id, title, body, payload) {},
     );
     const LinuxInitializationSettings initializationSettingsLinux =
         LinuxInitializationSettings(

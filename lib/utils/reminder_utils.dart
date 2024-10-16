@@ -2,6 +2,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ReminderUtils {
+  static const daysBeginningWithMonday = [
+    'monday',
+    'tuesday',
+    'wednesday',
+    'thursday',
+    'friday',
+    'saturday',
+    'sunday',
+  ];
+
   static const days = [
     'sunday',
     'monday',

@@ -1,4 +1,5 @@
 import 'package:emergency_allergy_app/components/detail_card.dart';
+import 'package:emergency_allergy_app/components/list_view_seperator.dart';
 import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/screens/medication_screen.dart';
@@ -68,7 +69,7 @@ class _MedicationDetailsState extends State<MedicationDetails> {
           ],
         ),
         Text(
-          widget.medication.reminders.isNotEmpty ? 'Reminders' : 'No Remnders',
+          widget.medication.reminders.isNotEmpty ? 'Reminders' : 'No Reminders',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 16,
@@ -79,14 +80,7 @@ class _MedicationDetailsState extends State<MedicationDetails> {
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: widget.medication.reminders.length,
-          separatorBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Divider(
-              color: Theme.of(context).colorScheme.primary,
-              thickness: 1,
-              height: 1,
-            ),
-          ),
+          separatorBuilder: (context, index) => const ListViewSeperator(),
           itemBuilder: (context, index) {
             return ReminderListTile(
               reminder: widget.medication.reminders[index],

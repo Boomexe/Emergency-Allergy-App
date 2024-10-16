@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/custom_list_tile.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/components/list_view_seperator.dart';
 import 'package:emergency_allergy_app/components/reminder_list_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
@@ -54,29 +55,22 @@ class _MedicationsState extends State<Medications> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-    
+
           if (snapshot.hasError) {
             return Center(
               child: Text('Error retrieving data: ${snapshot.error}'),
             );
           }
-    
+
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
               child: Text('Created medications will appear here'),
             );
           }
-    
+
           return ListView.separated(
               itemCount: snapshot.data!.length,
-              separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Divider(
-                      color: Theme.of(context).colorScheme.primary,
-                      thickness: 1,
-                      height: 1,
-                    ),
-                  ),
+              separatorBuilder: (context, index) => const ListViewSeperator(),
               itemBuilder: (context, index) {
                 return InkWell(
                   onTap: () => showMedicationInformation(snapshot.data![index]),
@@ -321,39 +315,9 @@ class _CreateMedicationState extends State<CreateMedication> {
               ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemCount: reminders.length + 1,
-                separatorBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Divider(
-                    color: Theme.of(context).colorScheme.primary,
-                    thickness: 1,
-                    height: 1,
-                  ),
-                ),
+                itemCount: reminders.length,
+                separatorBuilder: (context, index) => const ListViewSeperator(),
                 itemBuilder: (context, index) {
-                  if (index == reminders.length) {
-                    return ListTile(
-                      onTap: () {
-                        showCustomBottomSheet(
-                          context,
-                          CreateReminderScreen(onSaveReminder: onAddReminder),
-                        );
-                      },
-                      // leading: Icon(
-                      //   null,
-                      //   color: Theme.of(context)
-                      //       .colorScheme
-                      //       .surfaceContainerHighest,
-                      // ),
-                      title: Text(
-                        'Add Reminder',
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.surfaceContainer,
-                        ),
-                      ),
-                    );
-                  }
-
                   return ReminderListTile(
                     key: ValueKey(reminders[index]),
                     isInteractable: true,
@@ -363,6 +327,26 @@ class _CreateMedicationState extends State<CreateMedication> {
                     onDeleteReminder: onDeleteReminder,
                   );
                 },
+              ),
+              ListTile(
+                onTap: () {
+                  showCustomBottomSheet(
+                    context,
+                    CreateReminderScreen(onSaveReminder: onAddReminder),
+                  );
+                },
+                // leading: Icon(
+                //   null,
+                //   color: Theme.of(context)
+                //       .colorScheme
+                //       .surfaceContainerHighest,
+                // ),
+                title: Text(
+                  'Add Reminder',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.surfaceContainer,
+                  ),
+                ),
               ),
             ],
           ),

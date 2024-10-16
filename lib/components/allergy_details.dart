@@ -1,5 +1,6 @@
 import 'package:emergency_allergy_app/components/custom_list_tile.dart';
 import 'package:emergency_allergy_app/components/detail_card.dart';
+import 'package:emergency_allergy_app/components/list_view_seperator.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/screens/allergy_screen.dart';
@@ -124,14 +125,7 @@ class _AllergyDetailsState extends State<AllergyDetails> {
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: snapshot.data!.length,
-              separatorBuilder: (context, index) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(
-                  color: Theme.of(context).colorScheme.primary,
-                  thickness: 1,
-                  height: 1,
-                ),
-              ),
+              separatorBuilder: (context, index) => const ListViewSeperator(),
               itemBuilder: (context, index) {
                 Medication medication = snapshot.data![index];
                 return CustomListTile(

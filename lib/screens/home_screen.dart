@@ -1,9 +1,9 @@
 import 'package:emergency_allergy_app/components/custom_navigation_bar.dart';
 import 'package:emergency_allergy_app/screens/allergy_screen.dart';
 import 'package:emergency_allergy_app/screens/dashboard_screen.dart';
-import 'package:emergency_allergy_app/screens/friend_screen.dart';
+import 'package:emergency_allergy_app/screens/emergency_contacts_screen.dart';
 import 'package:emergency_allergy_app/screens/medication_screen.dart';
-import 'package:emergency_allergy_app/screens/profile_screen.dart';
+import 'package:emergency_allergy_app/services/notification_service.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,12 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
     const Medications(),
     const Allergies(),
     // const Profile(),
-    const FriendScreen(),
+    const EmergencyContactsScreen(),
   ];
 
   @override
   void initState() {
     selectedIndex = widget.selectedIndex;
+    NotificationService.getDeviceToken();
     super.initState();
   }
 

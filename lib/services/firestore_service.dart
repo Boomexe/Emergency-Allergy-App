@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
-import 'package:emergency_allergy_app/models/emergency_contact.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,11 +8,95 @@ final FirebaseFirestore db = FirebaseFirestore.instance;
 class FirestoreService {
   static final CollectionReference allergies = db.collection('allergies');
   static final CollectionReference medications = db.collection('medications');
-  static final CollectionReference emergencyContacts = db.collection('emergencyContacts');
+  static final CollectionReference emergencyContacts =
+      db.collection('emergencyContacts');
+  static final CollectionReference userTokens = db.collection('userTokens');
+  static final CollectionReference users = db.collection('users');
+  static final CollectionReference userStatuses = db.collection('userStatuses');
 
-  static Future<DocumentReference<Object?>> addEmergencyContact(
-      EmergencyContact emergencyContact) async {
-    return emergencyContacts.add(EmergencyContact.toJson(emergencyContact));
+  static Future<bool> getUserStatus() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print('No user logged in');
+      return false;
+    }
+
+    return userStatuses.doc(FirebaseAuth.instance.currentUser!.uid).get().then(
+      (docSnapshot) {
+        return (docSnapshot.data()! as Map<String, dynamic>)['isHavingEmergency'];
+      },
+      onError: (e) {
+        print('Error getting user status: $e');
+        return false;
+      },
+    );
+  }
+
+  static void setUserStatus(bool status) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    Map<String, dynamic> data = {
+      'isHavingEmergency': status,
+    };
+
+    try {
+      await userStatuses.doc(user!.uid).set(data);
+    } catch (e) {
+      print('Error saving user token: $e');
+    }
+  }
+
+  static void saveUser(String displayName) async {
+    if (FirebaseAuth.instance.currentUser == null) {
+      print('No user logged in');
+      return;
+    }
+
+    setUserStatus(false);
+
+    return users.doc(FirebaseAuth.instance.currentUser!.uid).set({
+      'displayName': displayName,
+    });
+  }
+
+  static void updateUser(Map<String, dynamic> thingsToUpdate) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      print('No user logged in');
+      return;
+    }
+
+    return users.doc(user.uid).update(thingsToUpdate);
+  }
+
+  static Future saveUserToken(String token) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    Map<String, dynamic> data = {
+      'deviceToken': token,
+    };
+
+    try {
+      await userTokens.doc(user!.uid).set(data);
+    } catch (e) {
+      print('Error saving user token: $e');
+    }
+  }
+
+  // TODO: make it so i can add emergency contacts and emergency phone numbers
+  static void addEmergencyContact(
+      String contactId) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print('No user logged in');
+      return;
+    }
+
+    emergencyContacts.add({
+      'userId': user.uid,
+      'contactId': contactId,
+    });
   }
 
   static Future<List<Medication>> getMedications() {
@@ -24,7 +107,6 @@ class FirestoreService {
       return Future.value([]);
     }
 
-    // TODO: FIX ERROR THAT USER ISN'T SIGNED IN
     return medications.where('userId', isEqualTo: user.uid).get().then(
       (querySnapshot) {
         List<Medication> medicationsList = [];
@@ -60,8 +142,7 @@ class FirestoreService {
         List<String> idsChunk =
             ids.sublist(i, i + 10 > ids.length ? ids.length : i + 10);
 
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection('medications')
+        QuerySnapshot querySnapshot = await medications
             .where(FieldPath.documentId, whereIn: idsChunk)
             .where('userId', isEqualTo: user.uid)
             .get();
@@ -113,7 +194,12 @@ class FirestoreService {
   static Future<List<Allergy>> getAllergies() {
     User? user = FirebaseAuth.instance.currentUser;
 
-    return allergies.where('userId', isEqualTo: user!.uid).get().then(
+    if (user == null) {
+      print('No user logged in');
+      return Future.value([]);
+    }
+
+    return allergies.where('userId', isEqualTo: user.uid).get().then(
       (querySnapshot) {
         List<Allergy> allergiesList = [];
         for (var docSnapshot in querySnapshot.docs) {

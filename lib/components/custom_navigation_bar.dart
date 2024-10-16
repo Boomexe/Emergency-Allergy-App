@@ -20,7 +20,7 @@ class CustomNavigationBar extends StatelessWidget {
           labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
           destinations: [
             NavigationDestination(icon: Icon(Icons.home, color: Theme.of(context).colorScheme.onSurface), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.medication, color: Theme.of(context).colorScheme.onSurface), label: 'Medication'),
+            NavigationDestination(icon: Icon(Icons.medication, color: Theme.of(context).colorScheme.onSurface), label: 'Medications'),
             NavigationDestination(icon: Icon(Icons.health_and_safety, color: Theme.of(context).colorScheme.onSurface), label: 'Allergies'),
             NavigationDestination(icon: Icon(Icons.person, color: Theme.of(context).colorScheme.onSurface), label: 'Profile'),
           ],

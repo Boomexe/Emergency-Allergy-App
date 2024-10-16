@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -30,6 +31,7 @@ class AuthService {
       );
 
       userCredential.user?.updateDisplayName(name);
+      FirestoreService.saveUser(name);
 
       return userCredential.user;
     } on FirebaseAuthException catch (e) {
@@ -75,15 +77,11 @@ class AuthService {
     }
   }
 
-  User? getSignedInUser() {
+  void updateDisplayName(String name) async{
     User? user = auth.currentUser;
+    await user?.updateDisplayName(name);
 
-    return user;
-  }
-
-  void updateDisplayName(String name) {
-    User? user = auth.currentUser;
-    user?.updateDisplayName(name);
+    FirestoreService.updateUser({'displayName': name});
   }
 
   static List<String> getMessageFromErrorCode(String code) {
