@@ -23,12 +23,17 @@ class _MedicationDetailsState extends State<MedicationDetails> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              '${widget.medication.name} Details',
-              style: TextStyle(
+            SizedBox(
+              width: 200,
+              child: Text(
+                '${widget.medication.name} Details',
+                softWrap: false,
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
-                  color: Theme.of(context).colorScheme.onPrimary),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () async => showCustomBottomSheet(

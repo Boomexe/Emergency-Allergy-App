@@ -62,7 +62,7 @@ class ReminderUtils {
     String minute = time.minute.toString().length > 1 ? time.minute.toString() : '0${time.minute}';
 
     if (usePeriod) {
-      String period = time.hour > 12 ? 'PM' : 'AM';
+      String period = time.hour >= 12 ? 'PM' : 'AM';
       int hour = time.hour > 12 ? time.hour - 12 : time.hour;
       hour = hour == 0 ? 12 : hour;
       return '$hour:$minute $period';
@@ -73,7 +73,7 @@ class ReminderUtils {
   }
 
   static String timeOfDayPeriodOnly(TimeOfDay time) {
-    return time.hour > 12 ? 'PM' : 'AM';
+    return time.hour >= 12 ? 'PM' : 'AM';
   }
 
   static String timeOfDayPeriodString(TimeOfDay time) {

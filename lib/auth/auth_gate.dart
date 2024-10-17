@@ -24,3 +24,40 @@ class AuthGate extends StatelessWidget {
     );
   }
 }
+
+// TODO: Biometric login
+// class AuthGate extends StatelessWidget {
+//   const AuthGate({super.key});
+
+//   static LocalAuthentication auth = LocalAuthentication();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: StreamBuilder(
+//         stream: FirebaseAuth.instance.authStateChanges(),
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             return FutureBuilder(
+//               future: auth.authenticate(
+//                   localizedReason: 'Please authenticate to show app.'),
+//               builder: (context, snapshot) {
+//                 if (!snapshot.hasData) {
+//                   return const Text('loading');
+//                 }
+
+//                 if (snapshot.hasError) {
+//                   return Text(snapshot.error!.toString());
+//                 }
+
+//                 return const HomeScreen(selectedIndex: 0);
+//               },
+//             );
+//           } else {
+//             return const LoginOrRegister();
+//           }
+//         },
+//       ),
+//     );
+//   }
+// }

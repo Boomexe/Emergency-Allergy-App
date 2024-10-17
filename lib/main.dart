@@ -35,9 +35,12 @@ Future<void> main() async {
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
     if (message.notification != null) {
       print('Bg notification tapped');
-      navigatorKey.currentState!.push(MaterialPageRoute(
+      navigatorKey.currentState!.push(
+        MaterialPageRoute(
           builder: (context) => const MessageScreen(),
-          settings: RouteSettings(arguments: message)));
+          settings: RouteSettings(arguments: message),
+        ),
+      );
     }
   });
 
