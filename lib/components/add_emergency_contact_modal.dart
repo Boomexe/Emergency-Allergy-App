@@ -1,17 +1,18 @@
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
+import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AddEmergencyContactModal extends StatefulWidget {
-  final Function(String) onAdd;
-  const AddEmergencyContactModal({super.key, required this.onAdd});
+  const AddEmergencyContactModal({super.key});
 
   @override
-  State<AddEmergencyContactModal> createState() => _AddEmergencyContactModalState();
+  State<AddEmergencyContactModal> createState() =>
+      _AddEmergencyContactModalState();
 }
 
 class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
@@ -21,7 +22,7 @@ class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
 
   TextEditingController friendId = TextEditingController();
 
-  void onAddFriendButtonPressed() {
+  void onAddFriendButtonPressed() async {
     setState(() {
       friendTextFieldError = null;
     });
@@ -35,12 +36,20 @@ class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
 
     if (friendId.text == userId) {
       setState(() {
-        friendTextFieldError = 'You cannot add yourself as an emergency contact...';
+        friendTextFieldError =
+            'You cannot add yourself as an emergency contact...';
       });
       return;
     }
+    if (await FirestoreService.getNameFromUserId(friendId.text) == null) {
+      setState(() {
+        friendTextFieldError = 'Incorrect ID - user does not exist';
+      });
 
-    widget.onAdd(friendId.text);
+      return;
+    }
+
+    FirestoreService.addEmergencyContact(friendId.text);
     showSnackBar(context, 'Added emergency contact');
     Navigator.pop(context);
     // Navigator.pop(context);
@@ -50,6 +59,11 @@ class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
         builder: (context) => const HomeScreen(selectedIndex: 3),
       ),
     );
+  }
+
+  void switchAddEmergencyNumberModal() {
+    Navigator.pop(context);
+    showAddEmergencyNumberModal(context);
   }
 
   String? getUserId() {
@@ -81,51 +95,80 @@ class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 265,
+      height: MediaQuery.sizeOf(context).height * 0.35,
       width: 500,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // const SizedBox(height: 25),
-          InkWell(
-            onTap: copyUserIdToClipboard,
-            child: Column(
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: copyUserIdToClipboard,
+              child: Column(
+                children: [
+                  Text('Give your ID to a friend/family member:',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary)),
+                  Text(
+                    userId ?? 'ERROR - No user logged in',
+                    style: const TextStyle(fontSize: 16),
+                    softWrap: false,
+                  ),
+                  Text('(click to copy)',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onSecondary)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
               children: [
-                Text('Give your ID to a friend/family member:', style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
-                Text(userId ?? 'ERROR - No user logged in', style: const TextStyle(fontSize: 16),),
-                Text('(click to copy)', style: TextStyle(color: Theme.of(context).colorScheme.onSecondary)),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 5, right: 20),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      height: 36,
+                    ),
+                  ),
+                ),
+                const Text('OR'),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20, right: 5),
+                    child: Divider(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      height: 36,
+                    ),
+                  ),
+                ),
               ],
             ),
-          ),
-          const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 5, right: 20),
-                  child: Divider(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    height: 36,
+            const SizedBox(height: 10),
+            FormTextField(
+                hintText: 'Enter emergency contact ID',
+                textController: friendId,
+                errorMsg: friendTextFieldError),
+            const SizedBox(height: 10),
+            FormButton(
+              onTap: () => onAddFriendButtonPressed(),
+              text: 'Add Emergency Contact',
+            ),
+            const SizedBox(height: 10),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text('Adding someone without the app? '),
+                GestureDetector(
+                  onTap: () => switchAddEmergencyNumberModal(),
+                  child: const Text(
+                    'Add Phone Number',
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ),
-              ),
-              const Text('OR'),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 20, right: 5),
-                  child: Divider(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    height: 36,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          FormTextField(hintText: 'Enter emergency contact ID', textController: friendId, errorMsg: friendTextFieldError),
-          const SizedBox(height: 10),
-          FormButton(onTap: () => onAddFriendButtonPressed(), text: 'Add Emergency Contact')
-        ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -29,11 +29,14 @@ void showSnackBar(BuildContext context, String text) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 }
 
-void showAlertDialog({required BuildContext context, required Widget title, required Widget content}) {
+void showAlertDialog(
+    {required BuildContext context,
+    required Widget title,
+    required Widget content}) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: title,
+      title: Center(child: title),
       content: Padding(
         padding: const EdgeInsets.all(0.0),
         child: content,
@@ -42,18 +45,22 @@ void showAlertDialog({required BuildContext context, required Widget title, requ
   );
 }
 
-void showAddEmergencyContactModal(BuildContext context, Function(String) onAdd) {
+void showAddEmergencyContactModal(BuildContext context) {
   showAlertDialog(
     context: context,
-    title: const Text('Add Emergency Contact'),
-    content: AddEmergencyContactModal(onAdd: onAdd),
+    title: const Text(
+      'Add Emergency Contact',
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+    ),
+    content: const AddEmergencyContactModal(),
   );
 }
 
 void showAddEmergencyNumberModal(BuildContext context) {
   showAlertDialog(
     context: context,
-    title: const Text('Add Emergency Number'),
+    title: const Text('Add Emergency Number',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
     content: const AddEmergencyNumberModal(),
   );
 }
@@ -61,7 +68,8 @@ void showAddEmergencyNumberModal(BuildContext context) {
 void showChangeDisplayNameModal(BuildContext context) {
   showAlertDialog(
     context: context,
-    title: const Text('Update Name'),
+    title: const Text('Update Name',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
     content: const UpdateDisplayNameModal(),
   );
 }

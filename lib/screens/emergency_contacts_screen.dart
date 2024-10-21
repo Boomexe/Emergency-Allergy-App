@@ -15,10 +15,6 @@ class EmergencyContactsScreen extends StatefulWidget {
 }
 
 class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
-  void onAddEmergencyContact(String emergencyContactId) {
-    FirestoreService.addEmergencyContact(emergencyContactId);
-  }
-
   void deleteContact(EmergencyContact contact) {
     setState(() {});
 
@@ -78,27 +74,22 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                   ],
                 ),
                 child: FutureBuilder(
-                  future: FirestoreService.getNameFromUserId(snapshot.data![index].contactId),
-                  builder: (context, s) {
-                    return CustomListTile(
-                      title: s.data ?? 'Could not find user',
-                      subtitle: snapshot.data![index].contactId,
-                      trailing: '',
-                    );
-                  }
-                ),
+                    future: FirestoreService.getNameFromUserId(
+                        snapshot.data![index].contactId),
+                    builder: (context, s) {
+                      return CustomListTile(
+                        title: s.data ?? 'Could not find user',
+                        subtitle: snapshot.data![index].contactId,
+                        trailing: '',
+                      );
+                    }),
               );
             },
           );
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showAddEmergencyContactModal(
-            context,
-            (id) => onAddEmergencyContact(id),
-          );
-        },
+        onPressed: () => showAddEmergencyContactModal(context),
         backgroundColor: Theme.of(context).colorScheme.secondary,
         child: const Icon(Icons.add),
       ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
 import 'package:emergency_allergy_app/models/emergency_contact.dart';
+import 'package:emergency_allergy_app/models/emergency_number.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -11,6 +12,8 @@ class FirestoreService {
   static final CollectionReference medications = db.collection('medications');
   static final CollectionReference emergencyContacts =
       db.collection('emergencyContacts');
+  static final CollectionReference emergencyNumbers =
+      db.collection('emergencyNumbers');
   static final CollectionReference userTokens = db.collection('userTokens');
   static final CollectionReference users = db.collection('users');
   static final CollectionReference userStatuses = db.collection('userStatuses');
@@ -48,13 +51,13 @@ class FirestoreService {
     }
   }
 
-  static Future<String>? getNameFromUserId(String id) {
+  static Future<String?> getNameFromUserId(String id) {
     return users.doc(id).get().then(
       (docSnapshot) {
-        // Medication medication = Medication.fromJson(
-        //     docSnapshot.data() as Map<String, dynamic>,
-        //     id: docSnapshot.id);
-        // return medication;
+        if (!docSnapshot.exists) {
+          return null;
+        }
+
         return (docSnapshot.data() as Map<String, dynamic>)['displayName'];
       },
       onError: (e) {
@@ -139,7 +142,16 @@ class FirestoreService {
     return emergencyContacts.doc(id).delete();
   }
 
-  // TODO: make it so i can add emergency contacts and emergency phone numbers
+  static void addEmergencyNumber(EmergencyNumber emergencyNumber) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      print('No user logged in');
+      return;
+    }
+
+    emergencyNumbers.add(EmergencyNumber.toJson(emergencyNumber));
+  }
+
   static void addEmergencyContact(String contactId) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
