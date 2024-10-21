@@ -1,19 +1,20 @@
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class AddFriendModal extends StatefulWidget {
+class AddEmergencyContactModal extends StatefulWidget {
   final Function(String) onAdd;
-  const AddFriendModal({super.key, required this.onAdd});
+  const AddEmergencyContactModal({super.key, required this.onAdd});
 
   @override
-  State<AddFriendModal> createState() => _AddFriendModalState();
+  State<AddEmergencyContactModal> createState() => _AddEmergencyContactModalState();
 }
 
-class _AddFriendModalState extends State<AddFriendModal> {
+class _AddEmergencyContactModalState extends State<AddEmergencyContactModal> {
   String? userId;
 
   String? friendTextFieldError;
@@ -42,6 +43,13 @@ class _AddFriendModalState extends State<AddFriendModal> {
     widget.onAdd(friendId.text);
     showSnackBar(context, 'Added emergency contact');
     Navigator.pop(context);
+    // Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(selectedIndex: 3),
+      ),
+    );
   }
 
   String? getUserId() {

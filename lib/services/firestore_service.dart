@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
+import 'package:emergency_allergy_app/models/emergency_contact.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -23,7 +24,8 @@ class FirestoreService {
 
     return userStatuses.doc(FirebaseAuth.instance.currentUser!.uid).get().then(
       (docSnapshot) {
-        return (docSnapshot.data()! as Map<String, dynamic>)['isHavingEmergency'];
+        return (docSnapshot.data()!
+            as Map<String, dynamic>)['isHavingEmergency'];
       },
       onError: (e) {
         print('Error getting user status: $e');
@@ -44,6 +46,22 @@ class FirestoreService {
     } catch (e) {
       print('Error saving user token: $e');
     }
+  }
+
+  static Future<String>? getNameFromUserId(String id) {
+    return users.doc(id).get().then(
+      (docSnapshot) {
+        // Medication medication = Medication.fromJson(
+        //     docSnapshot.data() as Map<String, dynamic>,
+        //     id: docSnapshot.id);
+        // return medication;
+        return (docSnapshot.data() as Map<String, dynamic>)['displayName'];
+      },
+      onError: (e) {
+        print('Error completing: $e');
+        return null;
+      },
+    );
   }
 
   static void saveUser(String displayName) async {
@@ -67,7 +85,11 @@ class FirestoreService {
       return;
     }
 
-    return users.doc(user.uid).update(thingsToUpdate);
+    try {
+      return users.doc(user.uid).update(thingsToUpdate);
+    } catch (e) {
+      return users.doc(user.uid).set(thingsToUpdate);
+    }
   }
 
   static Future saveUserToken(String token) async {
@@ -84,9 +106,41 @@ class FirestoreService {
     }
   }
 
+  static Future<List<EmergencyContact>> getEmergencyContacts() {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      print('No user logged in');
+      return Future.value([]);
+    }
+
+    return emergencyContacts.where('userId', isEqualTo: user.uid).get().then(
+      (querySnapshot) {
+        List<EmergencyContact> emergencyContactsList = [];
+        for (var docSnapshot in querySnapshot.docs) {
+          EmergencyContact emergencyContact = EmergencyContact.fromJson(
+            docSnapshot.data() as Map<String, dynamic>,
+            id: docSnapshot.id,
+          );
+
+          emergencyContactsList.add(emergencyContact);
+        }
+
+        return emergencyContactsList;
+      },
+      onError: (e) {
+        print('Error completing: $e');
+        return [];
+      },
+    );
+  }
+
+  static Future<void> deleteEmergencyContact(String id) async {
+    return emergencyContacts.doc(id).delete();
+  }
+
   // TODO: make it so i can add emergency contacts and emergency phone numbers
-  static void addEmergencyContact(
-      String contactId) async {
+  static void addEmergencyContact(String contactId) async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user == null) {
       print('No user logged in');

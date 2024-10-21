@@ -1,20 +1,20 @@
-class EmergencyContact {
+class EmergencyNumber {
   final String userId;
   final String name;
   final String phoneNumber;
 
-  EmergencyContact(
+  EmergencyNumber(
       {required this.userId, required this.name, required this.phoneNumber});
 
-  factory EmergencyContact.fromJson(Map<String, dynamic> json) {
-    return EmergencyContact(
+  factory EmergencyNumber.fromJson(Map<String, dynamic> json, {String? id}) {
+    return EmergencyNumber(
       name: json['name'],
       phoneNumber: json['phone'],
       userId: json['userId'],
     );
   }
 
-  static Map<String, dynamic> toJson(EmergencyContact contact) {
+  static Map<String, dynamic> toJson(EmergencyNumber contact) {
     return {
       'name': contact.name,
       'phone': contact.phoneNumber,

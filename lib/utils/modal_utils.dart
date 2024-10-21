@@ -1,5 +1,5 @@
 import 'package:emergency_allergy_app/components/add_emergency_number_modal.dart';
-import 'package:emergency_allergy_app/components/add_friend_modal.dart';
+import 'package:emergency_allergy_app/components/add_emergency_contact_modal.dart';
 import 'package:emergency_allergy_app/components/allergy_details.dart';
 import 'package:emergency_allergy_app/components/medication_details.dart';
 import 'package:emergency_allergy_app/components/update_display_name_modal.dart';
@@ -46,7 +46,7 @@ void showAddEmergencyContactModal(BuildContext context, Function(String) onAdd) 
   showAlertDialog(
     context: context,
     title: const Text('Add Emergency Contact'),
-    content: AddFriendModal(onAdd: onAdd),
+    content: AddEmergencyContactModal(onAdd: onAdd),
   );
 }
 

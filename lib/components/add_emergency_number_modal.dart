@@ -54,7 +54,7 @@ class _AddEmergencyNumberModalState extends State<AddEmergencyNumberModal> {
       return;
     }
 
-    EmergencyContact contact = EmergencyContact(
+    EmergencyNumber contact = EmergencyNumber(
       userId: user.uid,
       name: nameController.text,
       phoneNumber: validatedPhoneNumberText,
