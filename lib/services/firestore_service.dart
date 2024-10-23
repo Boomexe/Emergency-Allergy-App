@@ -37,6 +37,35 @@ class FirestoreService {
     );
   }
 
+  static Future<List<EmergencyNumber>> getEmergencyNumbers() {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      print('No user logged in');
+      return Future.value([]);
+    }
+
+    return emergencyNumbers.where('userId', isEqualTo: user.uid).get().then(
+      (querySnapshot) {
+        List<EmergencyNumber> emergencyNumbersList = [];
+        for (var docSnapshot in querySnapshot.docs) {
+          EmergencyNumber emergencyNumber = EmergencyNumber.fromJson(
+            docSnapshot.data() as Map<String, dynamic>,
+            id: docSnapshot.id,
+          );
+
+          emergencyNumbersList.add(emergencyNumber);
+        }
+
+        return emergencyNumbersList;
+      },
+      onError: (e) {
+        print('Error completing: $e');
+        return [];
+      },
+    );
+  }
+
   static void setUserStatus(bool status) async {
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -140,6 +169,10 @@ class FirestoreService {
 
   static Future<void> deleteEmergencyContact(String id) async {
     return emergencyContacts.doc(id).delete();
+  }
+
+  static Future<void> deleteEmergencyNumber(String id) async {
+    return emergencyNumbers.doc(id).delete();
   }
 
   static void addEmergencyNumber(EmergencyNumber emergencyNumber) async {

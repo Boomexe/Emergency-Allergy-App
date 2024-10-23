@@ -30,6 +30,7 @@ class DetailCard extends StatelessWidget {
                 icon,
                 color: textColor,
                 size: 48,
+                // fill: 1,
               ),
               Text(
                 title,

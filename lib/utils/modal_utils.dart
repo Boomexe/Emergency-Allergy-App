@@ -118,9 +118,9 @@ void showAllergyInformationSheet(BuildContext context, Allergy allergy) {
     builder: (_) {
       return DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.4,
-        minChildSize: 0.1,
-        maxChildSize: 0.6,
+        initialChildSize: 0.5,
+        minChildSize: 0.25,
+        maxChildSize: 0.8,
         builder: (_, ScrollController scrollController) {
           return SizedBox(
             width: double.infinity,

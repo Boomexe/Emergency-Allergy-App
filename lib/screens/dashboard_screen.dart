@@ -7,7 +7,6 @@ import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -18,7 +17,6 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   void emergency() async {
-    // launchUrlString('tel:1234567890');
     setState(() {
       FirestoreService.setUserStatus(true);
     });
@@ -154,11 +152,28 @@ class _DashboardState extends State<Dashboard> {
                           return List.generate(medication.reminders.length,
                               (index) => {medication: index});
                         })
-                        .where((e) => e
-                            .keys.first.reminders[e.values.first].days
-                            .contains(ReminderUtils.daysBeginningWithMonday[
-                                DateTime.now().weekday - 1]))
-                        .toList();
+                        .where(
+                          (e) => e.keys.first.reminders[e.values.first].days
+                              .contains(
+                            ReminderUtils.daysBeginningWithMonday[
+                                DateTime.now().weekday - 1],
+                          ),
+                        )
+                        .where(
+                          (e) => ReminderUtils.isAfterNow(
+                            e.keys.first.reminders[e.values.first].time,
+                          ),
+                        )
+                        .toList()
+                      ..sort(
+                        (a, b) => ReminderUtils.minutesSinceMidnight(
+                          a.keys.first.reminders[a.values.first].time,
+                        ).compareTo(
+                          ReminderUtils.minutesSinceMidnight(
+                            b.keys.first.reminders[b.values.first].time,
+                          ),
+                        ),
+                      );
 
                 if (filteredMedicationsWithReminderIndex.isEmpty) {
                   return const SizedBox(

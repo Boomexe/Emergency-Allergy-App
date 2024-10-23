@@ -59,7 +59,9 @@ class ReminderUtils {
   }
 
   static String timeOfDayToString(TimeOfDay time, {bool usePeriod = true}) {
-    String minute = time.minute.toString().length > 1 ? time.minute.toString() : '0${time.minute}';
+    String minute = time.minute.toString().length > 1
+        ? time.minute.toString()
+        : '0${time.minute}';
 
     if (usePeriod) {
       String period = time.hour >= 12 ? 'PM' : 'AM';
@@ -77,7 +79,9 @@ class ReminderUtils {
   }
 
   static String timeOfDayPeriodString(TimeOfDay time) {
-    String minute = time.minute.toString().length > 1 ? time.minute.toString() : '0${time.minute}';
+    String minute = time.minute.toString().length > 1
+        ? time.minute.toString()
+        : '0${time.minute}';
     int hour = time.hour > 12 ? time.hour - 12 : time.hour;
     hour = time.hour == 0 ? 12 : hour;
     return '$hour:$minute';
@@ -85,13 +89,41 @@ class ReminderUtils {
 
   static TimeOfDay parseTimeOfDay(String time) {
     List<String> timeParts = time.split(':');
-    return TimeOfDay(hour: int.parse(timeParts[0]), minute: int.parse(timeParts[1]));
+    return TimeOfDay(
+        hour: int.parse(timeParts[0]), minute: int.parse(timeParts[1]));
   }
 
-  static String getSelectedDayString(List<String> days) {    
-    List<String> selectedDayAbbreviaitons = days
-        .map((e) => ReminderUtils.getAbbreviatedDayName(e))
-        .toList();
+  static bool isBeforeNow(TimeOfDay time) {
+    final TimeOfDay now = TimeOfDay.now();
+
+    if (time.hour < now.hour) {
+      return true;
+    } else if (time.hour == now.hour) {
+      return time.minute < now.minute;
+    } else {
+      return false;
+    }
+  }
+
+  static bool isAfterNow(TimeOfDay time) {
+    final TimeOfDay now = TimeOfDay.now();
+
+    if (time.hour > now.hour) {
+      return true;
+    } else if (time.hour == now.hour) {
+      return time.minute > now.minute;
+    } else {
+      return false;
+    }
+  }
+
+  static int minutesSinceMidnight(TimeOfDay time) {
+    return time.hour * 60 + time.minute;
+  }
+
+  static String getSelectedDayString(List<String> days) {
+    List<String> selectedDayAbbreviaitons =
+        days.map((e) => ReminderUtils.getAbbreviatedDayName(e)).toList();
 
     List<String> orderedSelectedDays = days;
     List<String> orderedWeekends = ReminderUtils.getWeekends();

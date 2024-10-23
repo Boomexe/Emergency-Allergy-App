@@ -7,6 +7,7 @@ import 'package:emergency_allergy_app/screens/allergy_screen.dart';
 import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class AllergyDetails extends StatefulWidget {
   final Allergy allergy;
@@ -34,12 +35,15 @@ class _AllergyDetailsState extends State<AllergyDetails> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              '${widget.allergy.name} Allergy Details',
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
-                  color: Theme.of(context).colorScheme.onPrimary),
+            SizedBox(
+              width: 300,
+              child: Text(
+                '${widget.allergy.name} Allergy Details',
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                    color: Theme.of(context).colorScheme.onPrimary),
+              ),
             ),
             TextButton(
               onPressed: () async => showCustomBottomSheet(
@@ -77,7 +81,7 @@ class _AllergyDetailsState extends State<AllergyDetails> {
               textColor: Theme.of(context).colorScheme.onPrimary,
               title:
                   'Type: ${widget.allergy.type.name[0].toUpperCase()}${widget.allergy.type.name.substring(1)}',
-              icon: Icons.medical_information,
+              icon: Symbols.allergy,
             ),
             DetailCard(
               width: 175,
@@ -85,7 +89,7 @@ class _AllergyDetailsState extends State<AllergyDetails> {
               textColor: Theme.of(context).colorScheme.onTertiary,
               title:
                   'Severity: ${widget.allergy.severity.name[0].toUpperCase()}${widget.allergy.severity.name.substring(1)}',
-              icon: Icons.priority_high,
+              icon: Symbols.priority_high_sharp,
             ),
           ],
         ),

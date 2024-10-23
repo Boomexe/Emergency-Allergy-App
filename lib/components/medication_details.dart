@@ -5,6 +5,7 @@ import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/screens/medication_screen.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class MedicationDetails extends StatefulWidget {
   final Medication medication;
@@ -24,10 +25,10 @@ class _MedicationDetailsState extends State<MedicationDetails> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width: 200,
+              width: 300,
               child: Text(
                 '${widget.medication.name} Details',
-                softWrap: false,
+                // softWrap: false,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
@@ -69,7 +70,7 @@ class _MedicationDetailsState extends State<MedicationDetails> {
               color: Theme.of(context).colorScheme.surfaceContainer,
               textColor: Theme.of(context).colorScheme.onPrimary,
               title: 'Dosage: ${widget.medication.dosage}',
-              icon: Icons.medication,
+              icon: Symbols.medication,
             ),
           ],
         ),

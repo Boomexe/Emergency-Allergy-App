@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class CustomNavigationBar extends StatelessWidget {
   final Function(int) onUpdateIndex;
   final int currentIndex;
-  const CustomNavigationBar({super.key, required this.currentIndex, required this.onUpdateIndex});
+  const CustomNavigationBar(
+      {super.key, required this.currentIndex, required this.onUpdateIndex});
+
+  bool isCurrentIndex(int index) {
+    return currentIndex == index;
+  }
+
+  double fillAtIndex(int index) {
+    return isCurrentIndex(index) ? 1 : 0;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,13 +26,45 @@ class CustomNavigationBar extends StatelessWidget {
           selectedIndex: currentIndex,
           height: 64,
           backgroundColor: Theme.of(context).colorScheme.secondary,
-          indicatorColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          // indicatorColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
           destinations: [
-            NavigationDestination(icon: Icon(Icons.home, color: Theme.of(context).colorScheme.onSurface), label: 'Home'),
-            NavigationDestination(icon: Icon(Icons.medication, color: Theme.of(context).colorScheme.onSurface), label: 'Medications'),
-            NavigationDestination(icon: Icon(Icons.health_and_safety, color: Theme.of(context).colorScheme.onSurface), label: 'Allergies'),
-            NavigationDestination(icon: Icon(Icons.person, color: Theme.of(context).colorScheme.onSurface), label: 'Profile'),
+            NavigationDestination(
+              icon: Icon(
+                Symbols.home,
+                size: 32,
+                fill: fillAtIndex(0),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              label: 'Home',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Symbols.medication,
+                size: 32,
+                fill: fillAtIndex(1),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              label: 'Medications',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Symbols.allergies,
+                size: 32,
+                fill: fillAtIndex(2),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              label: 'Allergies',
+            ),
+            NavigationDestination(
+              icon: Icon(
+                Symbols.contacts,
+                size: 32,
+                fill: fillAtIndex(3),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              label: 'Profile',
+            ),
           ],
           onDestinationSelected: (value) {
             onUpdateIndex(value);
