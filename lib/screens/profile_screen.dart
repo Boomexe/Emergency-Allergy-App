@@ -1,5 +1,6 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 // import 'package:flutter/services.dart';
 // import 'package:flutter/widgets.dart';
 
@@ -73,7 +74,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 const Text('Allergies'),
                 IconButton(
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(Symbols.add),
                   onPressed: () {
                     
                   },

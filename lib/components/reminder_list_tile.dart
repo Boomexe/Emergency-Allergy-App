@@ -3,6 +3,7 @@ import 'package:emergency_allergy_app/screens/create_reminder_screen.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class ReminderListTile extends StatefulWidget {
   final Reminder reminder;
@@ -83,7 +84,7 @@ class _ReminderListTileState extends State<ReminderListTile> {
             const SizedBox(width: 3),
             if (widget.isInteractable)
               Icon(
-                Icons.arrow_forward,
+                Symbols.arrow_forward,
                 size: 20,
                 color: Theme.of(context).colorScheme.onSecondary,
               ),

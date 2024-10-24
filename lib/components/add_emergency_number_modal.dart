@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/models/emergency_number.dart';
+import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/services/firestore_service.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,6 +67,15 @@ class _AddEmergencyNumberModalState extends State<AddEmergencyNumberModal> {
     FirestoreService.addEmergencyNumber(contact);
     showSnackBar(context, 'Added emergency number');
     Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(
+          selectedIndex: 3,
+          selectedEmergencyContactIndex: 1,
+        ),
+      ),
+    );
   }
 
   void switchAddEmergencyContactModal() {

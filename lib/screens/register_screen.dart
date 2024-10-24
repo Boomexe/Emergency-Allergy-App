@@ -109,7 +109,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.medical_services, size: 100),
+              // const Icon(Symbols.medical_services, size: 100),
+              Image.asset('assets/images/app_icon.png', width: 100),
               const SizedBox(height: 25),
               FormTextField(
                 hintText: 'Name',
@@ -140,7 +141,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 errorMsg: confirmPasswordTextFieldError,
               ),
               const SizedBox(height: 25),
-              FormButton(onTap: () => register(context), text: 'Register'),
+              FormButton(onTap: () => register(context), text: 'Sign Up'),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

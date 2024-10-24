@@ -1,6 +1,7 @@
 import 'package:emergency_allergy_app/components/add_emergency_number_modal.dart';
 import 'package:emergency_allergy_app/components/add_emergency_contact_modal.dart';
 import 'package:emergency_allergy_app/components/allergy_details.dart';
+import 'package:emergency_allergy_app/components/call_emergency_number_modal.dart';
 import 'package:emergency_allergy_app/components/medication_details.dart';
 import 'package:emergency_allergy_app/components/update_display_name_modal.dart';
 import 'package:emergency_allergy_app/models/allergy.dart';
@@ -62,6 +63,15 @@ void showAddEmergencyNumberModal(BuildContext context) {
     title: const Text('Add Emergency Number',
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
     content: const AddEmergencyNumberModal(),
+  );
+}
+
+void showContactEmergencyContactsModal(BuildContext context) {
+  showAlertDialog(
+    context: context,
+    title: const Text('Call Emergency Numbers',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+    content: const CallEmergencyNumberModal(),
   );
 }
 

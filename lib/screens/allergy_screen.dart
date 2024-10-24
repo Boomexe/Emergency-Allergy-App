@@ -13,6 +13,7 @@ import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class Allergies extends StatefulWidget {
@@ -102,7 +103,7 @@ class _AllergiesState extends State<Allergies> {
                             flex: 2,
                             onPressed: (context) =>
                                 editAllergy(snapshot.data![index]),
-                            icon: Icons.edit,
+                            icon: Symbols.edit,
                             label: 'Edit',
                             backgroundColor: Theme.of(context)
                                 .colorScheme
@@ -112,7 +113,7 @@ class _AllergiesState extends State<Allergies> {
                             flex: 2,
                             onPressed: (context) =>
                                 deleteAllergy(snapshot.data![index]),
-                            icon: Icons.delete,
+                            icon: Symbols.delete,
                             label: 'Delete',
                             backgroundColor: Theme.of(context)
                                 .colorScheme
@@ -134,7 +135,7 @@ class _AllergiesState extends State<Allergies> {
           onFloatingActionButtonPressed();
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        child: const Icon(Icons.add),
+        child: const Icon(Symbols.add),
       ),
     );
   }
@@ -280,7 +281,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
           IconButton(
             onPressed: () => saveButtonPressed(),
             icon: Icon(
-              isEditing ? Icons.edit : Icons.add,
+              isEditing ? Symbols.edit : Symbols.add,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           )

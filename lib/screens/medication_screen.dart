@@ -12,6 +12,7 @@ import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class Medications extends StatefulWidget {
   const Medications({super.key});
@@ -82,7 +83,7 @@ class _MedicationsState extends State<Medications> {
                           flex: 2,
                           onPressed: (context) =>
                               editMedication(snapshot.data![index]),
-                          icon: Icons.edit,
+                          icon: Symbols.edit,
                           label: 'Edit',
                           backgroundColor: Theme.of(context)
                               .colorScheme
@@ -92,7 +93,7 @@ class _MedicationsState extends State<Medications> {
                           flex: 2,
                           onPressed: (context) =>
                               deleteMedication(snapshot.data![index]),
-                          icon: Icons.delete,
+                          icon: Symbols.delete,
                           label: 'Delete',
                           backgroundColor: Theme.of(context)
                               .colorScheme
@@ -118,7 +119,7 @@ class _MedicationsState extends State<Medications> {
           );
         },
         backgroundColor: Theme.of(context).colorScheme.secondary,
-        child: const Icon(Icons.add),
+        child: const Icon(Symbols.add),
       ),
     );
   }
@@ -262,7 +263,7 @@ class _CreateMedicationState extends State<CreateMedication> {
           IconButton(
             onPressed: () => saveButtonPressed(),
             icon: Icon(
-              isEditing ? Icons.edit : Icons.add,
+              isEditing ? Symbols.edit : Symbols.add,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),

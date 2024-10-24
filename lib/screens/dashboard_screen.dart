@@ -1,5 +1,6 @@
 import 'package:emergency_allergy_app/components/form_button.dart';
-import 'package:emergency_allergy_app/components/medication_reminder_tile.dart';
+import 'package:emergency_allergy_app/components/list_view_seperator.dart';
+import 'package:emergency_allergy_app/components/medications_reminder_tile.dart';
 import 'package:emergency_allergy_app/models/medication.dart';
 import 'package:emergency_allergy_app/screens/settings_screen.dart';
 import 'package:emergency_allergy_app/services/firestore_service.dart';
@@ -7,6 +8,7 @@ import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({super.key});
@@ -17,9 +19,13 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   void emergency() async {
+    showSnackBar(context, 'Sent emergency alert to emergency contacts');
+
     setState(() {
       FirestoreService.setUserStatus(true);
     });
+
+    showContactEmergencyContactsModal(context);
   }
 
   void cancelEmergency() {
@@ -66,7 +72,8 @@ class _DashboardState extends State<Dashboard> {
               ),
             ),
             icon: Icon(
-              Icons.settings,
+              Symbols.settings,
+              fill: 1,
               color: Theme.of(context).colorScheme.onSecondary,
             ),
           ),
@@ -114,8 +121,11 @@ class _DashboardState extends State<Dashboard> {
               },
             ),
             const SizedBox(height: 50),
-            const Text('Upcoming Medications',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const Text(
+              'Upcoming Medications',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
             FutureBuilder(
               future: FirestoreService.getMedications(),
               builder: (context, snapshot) {
@@ -153,6 +163,9 @@ class _DashboardState extends State<Dashboard> {
                               (index) => {medication: index});
                         })
                         .where(
+                          (e) => e.keys.first.reminders[e.values.first].active,
+                        )
+                        .where(
                           (e) => e.keys.first.reminders[e.values.first].days
                               .contains(
                             ReminderUtils.daysBeginningWithMonday[
@@ -184,33 +197,61 @@ class _DashboardState extends State<Dashboard> {
                   );
                 }
 
-                return SizedBox(
-                  height: 150,
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
+                print(filteredMedicationsWithReminderIndex);
+
+                return Expanded(
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: filteredMedicationsWithReminderIndex.length,
+                    separatorBuilder: (context, index) {
+                      if (index == 0) {
+                        return const ListViewSeperator(height: 50);
+                      }
+
+                      return const SizedBox(height: 10);
+                    },
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => showMedicationInformationSheet(
-                            context,
+                      return MedicationReminderTile(
+                        medication: filteredMedicationsWithReminderIndex[index]
+                            .keys
+                            .first,
+                        reminderIndex:
                             filteredMedicationsWithReminderIndex[index]
-                                .keys
-                                .first),
-                        child: MedicationReminderTile(
-                          medication:
-                              filteredMedicationsWithReminderIndex[index]
-                                  .keys
-                                  .first,
-                          reminderIndex:
-                              filteredMedicationsWithReminderIndex[index]
-                                  .values
-                                  .first,
-                        ),
+                                .values
+                                .first,
+                        isFirstMedication: index == 0,
                       );
                     },
                   ),
                 );
+
+                // return SizedBox(
+                //   height: 150,
+                //   child: ListView.builder(
+                //     physics: const BouncingScrollPhysics(),
+                //     scrollDirection: Axis.horizontal,
+                //     itemCount: filteredMedicationsWithReminderIndex.length,
+                //     itemBuilder: (context, index) {
+                //       return InkWell(
+                //         onTap: () => showMedicationInformationSheet(
+                //             context,
+                //             filteredMedicationsWithReminderIndex[index]
+                //                 .keys
+                //                 .first),
+                // child: MedicationReminderTile(
+                //           medication:
+                //               filteredMedicationsWithReminderIndex[index]
+                //                   .keys
+                //                   .first,
+                //           reminderIndex:
+                //               filteredMedicationsWithReminderIndex[index]
+                //                   .values
+                //                   .first,
+                //         ),
+                //       );
+                //     },
+                //   ),
+                // );
               },
             ),
           ],

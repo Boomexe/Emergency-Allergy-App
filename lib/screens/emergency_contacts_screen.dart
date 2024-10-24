@@ -7,9 +7,13 @@ import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:emergency_allergy_app/utils/phone_number_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class EmergencyContactsScreen extends StatefulWidget {
-  const EmergencyContactsScreen({super.key});
+  final int openIndex;
+  final bool openedDirectly;
+  const EmergencyContactsScreen(
+      {super.key, this.openIndex = 0, this.openedDirectly = false});
 
   @override
   State<EmergencyContactsScreen> createState() =>
@@ -33,13 +37,14 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
+      initialIndex: widget.openIndex,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(
             'Emergency Contacts',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: widget.openedDirectly,
           bottom: TabBar(
             labelColor: Theme.of(context).colorScheme.onPrimary,
             unselectedLabelColor: Theme.of(context).colorScheme.onSecondary,
@@ -87,7 +92,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                         extentRatio: .25,
                         children: [
                           SlidableAction(
-                            icon: Icons.delete,
+                            icon: Symbols.delete,
                             label: 'Delete',
                             backgroundColor:
                                 Theme.of(context).colorScheme.tertiary,
@@ -142,7 +147,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                         extentRatio: .25,
                         children: [
                           SlidableAction(
-                            icon: Icons.call,
+                            icon: Symbols.call,
                             label: 'Call',
                             backgroundColor: Theme.of(context)
                                 .colorScheme
@@ -159,7 +164,7 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                         extentRatio: .25,
                         children: [
                           SlidableAction(
-                            icon: Icons.delete,
+                            icon: Symbols.delete,
                             label: 'Delete',
                             backgroundColor:
                                 Theme.of(context).colorScheme.tertiary,
@@ -169,11 +174,16 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
                           )
                         ],
                       ),
-                      child: CustomListTile(
-                        title: snapshot.data![index].name,
-                        subtitle:
-                            '(${snapshot.data![index].phoneNumber.substring(0, 3)}) ${snapshot.data![index].phoneNumber.substring(3, 6)}-${snapshot.data![index].phoneNumber.substring(6, 10)}',
-                        trailing: '',
+                      child: InkWell(
+                        onTap: () => PhoneNumberUtils.callPhoneNumber(
+                          snapshot.data![index].phoneNumber,
+                        ),
+                        child: CustomListTile(
+                          title: snapshot.data![index].name,
+                          subtitle:
+                              '(${snapshot.data![index].phoneNumber.substring(0, 3)}) ${snapshot.data![index].phoneNumber.substring(3, 6)}-${snapshot.data![index].phoneNumber.substring(6, 10)}',
+                          trailing: '',
+                        ),
                       ),
                     );
                   },
@@ -182,20 +192,22 @@ class _EmergencyContactsScreenState extends State<EmergencyContactsScreen> {
             ),
           ],
         ),
-        floatingActionButton: Builder(builder: (context) {
-          // index = DefaultTabController.of(context).index;
-          return FloatingActionButton(
-            onPressed: () {
-              final index = DefaultTabController.of(context).index;
+        floatingActionButton: !widget.openedDirectly ? Builder(
+          builder: (context) {
+            // index = DefaultTabController.of(context).index;
+            return FloatingActionButton(
+              onPressed: () {
+                final index = DefaultTabController.of(context).index;
 
-              index == 0
-                  ? showAddEmergencyContactModal(context)
-                  : showAddEmergencyNumberModal(context);
-            },
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            child: const Icon(Icons.add),
-          );
-        }),
+                index == 0
+                    ? showAddEmergencyContactModal(context)
+                    : showAddEmergencyNumberModal(context);
+              },
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              child: const Icon(Symbols.add),
+            );
+          },
+        ) : null,
       ),
     );
   }

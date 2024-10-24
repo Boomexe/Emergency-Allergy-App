@@ -1,8 +1,10 @@
+import 'package:emergency_allergy_app/auth/auth_gate.dart';
 import 'package:emergency_allergy_app/auth/auth_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -17,6 +19,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
     auth.signOut();
 
     Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const AuthGate(),
+      ),
+    );
+    showSnackBar(context, 'Successfully signed out');
   }
 
   void exitSettingsScreen() {
@@ -38,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         automaticallyImplyLeading: false,
-        leading: IconButton(onPressed: () => exitSettingsScreen(), icon: const Icon(Icons.arrow_back)),
+        leading: IconButton(onPressed: () => exitSettingsScreen(), icon: const Icon(Symbols.arrow_back)),
       ),
       body: ListView(
         children: [

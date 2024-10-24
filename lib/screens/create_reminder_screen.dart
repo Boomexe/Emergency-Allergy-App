@@ -3,6 +3,7 @@ import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/models/reminder.dart';
 import 'package:emergency_allergy_app/utils/reminder_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 
 class CreateReminderScreen extends StatefulWidget {
   final Reminder? reminder;
@@ -85,7 +86,7 @@ class _CreateReminderScreenState extends State<CreateReminderScreen> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.done,
+              Symbols.done,
               color: Theme.of(context).colorScheme.onPrimary,
             ),
             onPressed: () {

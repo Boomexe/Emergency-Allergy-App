@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       await auth.signInWithEmailAndPassword(
           emailController.text, passwordController.text).then((value) {
-            showSnackBar(context, 'Successfully signed in.');
+            showSnackBar(context, 'Successfully signed in');
           });
     } catch (e) {
       List<String> errorMessage =
@@ -70,7 +70,8 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.medical_services, size: 100),
+              Image.asset('assets/images/app_icon.png', width: 100),
+              // const Icon(Symbols.medical_services, size: 100),
               const SizedBox(height: 25),
               FormTextField(
                 hintText: 'Email',

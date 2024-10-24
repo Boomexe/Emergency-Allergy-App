@@ -8,7 +8,11 @@ import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
   final int selectedIndex;
-  const HomeScreen({super.key, required this.selectedIndex});
+  final int selectedEmergencyContactIndex;
+  const HomeScreen(
+      {super.key,
+      required this.selectedIndex,
+      this.selectedEmergencyContactIndex = 0});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -17,17 +21,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late int selectedIndex;
 
-  final List<Widget> screens = [
-    const Dashboard(),
-    const Medications(),
-    const Allergies(),
-    // const Profile(),
-    const EmergencyContactsScreen(),
-  ];
+  late List<Widget> screens = [];
 
   @override
   void initState() {
     selectedIndex = widget.selectedIndex;
+    screens = [
+      const Dashboard(),
+      const Medications(),
+      const Allergies(),
+      EmergencyContactsScreen(
+        openIndex: widget.selectedEmergencyContactIndex,
+      ),
+    ];
     NotificationService.getDeviceToken();
     super.initState();
   }
