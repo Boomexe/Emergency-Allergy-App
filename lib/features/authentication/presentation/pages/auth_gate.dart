@@ -1,4 +1,4 @@
-import 'package:emergency_allergy_app/auth/login_or_register_screen.dart';
+import 'package:emergency_allergy_app/features/authentication/presentation/pages/login_or_register_page.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

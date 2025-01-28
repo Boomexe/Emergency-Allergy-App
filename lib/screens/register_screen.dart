@@ -1,8 +1,10 @@
-import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/features/authentication/domain/usecases/signup.dart';
+import 'package:emergency_allergy_app/service_locator.dart';
+import 'package:flutter/material.dart';
+import 'package:emergency_allergy_app/features/authentication/data/models/create_user_req.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
-import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatefulWidget {
   final void Function() onTap;
@@ -27,8 +29,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String? confirmPasswordTextFieldError;
 
   void register(BuildContext context) async {
-    final auth = AuthService();
-
     setState(() {
       nameTextFieldError = null;
       emailTextFieldError = null;
@@ -85,19 +85,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
       return;
     }
 
-    try {
-      await auth
-          .signUpWithEmailAndPassword(emailController.text,
-              passwordController.text, nameController.text)
-          .then((value) {
-        showSnackBar(context, 'Successfully registered.');
-      });
-    } catch (e) {
-      List<String> errorMessage =
-          AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
-      showSnackBar(context, '${errorMessage[0]}: ${errorMessage[1]}');
-      // showAlertDialog(context, errorMessage[0], errorMessage[1]);
-    }
+    var result = await sl<SignupUseCase>().call(
+      params: CreateUserReq(
+        displayName: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      ),
+    );
+
+    result.fold(
+      (l) => showSnackBar(context, l),
+      (r) => showSnackBar(context, r),
+    );
   }
 
   @override

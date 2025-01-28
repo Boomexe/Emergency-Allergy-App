@@ -1,4 +1,4 @@
-import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/features/authentication/data/sources/auth_firebase_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
@@ -35,7 +35,7 @@ class _UpdateDisplayNameModalState extends State<UpdateDisplayNameModal> {
       return;
     }
 
-    AuthService auth = AuthService();
+    AuthFirebaseServiceImpl auth = AuthFirebaseServiceImpl();
     auth.updateDisplayName(displayNameController.text);
     showSnackBar(context, 'Updated display name');
     Navigator.of(context).pop();

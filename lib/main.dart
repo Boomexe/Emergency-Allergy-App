@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:emergency_allergy_app/auth/auth_gate.dart';
+import 'package:emergency_allergy_app/features/authentication/presentation/pages/auth_gate.dart';
 import 'package:emergency_allergy_app/screens/message_screen.dart';
+import 'package:emergency_allergy_app/service_locator.dart';
 import 'package:emergency_allergy_app/services/notification_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +74,8 @@ Future<void> main() async {
       );
     });
   }
+
+  await initializeDependencies();
 
   runApp(const MyApp());
 }

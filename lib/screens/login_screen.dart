@@ -1,6 +1,8 @@
-import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/features/authentication/data/models/signin_user_req.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
+import 'package:emergency_allergy_app/features/authentication/domain/usecases/signin.dart';
+import 'package:emergency_allergy_app/service_locator.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
 import 'package:flutter/material.dart';
 
@@ -21,8 +23,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String? passwordTextFieldError;
 
   void login(BuildContext context) async {
-    final auth = AuthService();
-
     setState(() {
       emailTextFieldError = null;
       passwordTextFieldError = null;
@@ -49,16 +49,17 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    try {
-      await auth.signInWithEmailAndPassword(
-          emailController.text, passwordController.text).then((value) {
-            showSnackBar(context, 'Successfully signed in');
-          });
-    } catch (e) {
-      List<String> errorMessage =
-          AuthService.getMessageFromErrorCode(e.toString().split(' ').last);
-      showSnackBar(context, '${errorMessage[0]}: ${errorMessage[1]}');
-    }
+    var result = await sl<SigninUseCase>().call(
+      params: SigninUserReq(
+        email: emailController.text,
+        password: passwordController.text,
+      ),
+    );
+
+    result.fold(
+      (l) => showSnackBar(context, l),
+      (r) => showSnackBar(context, r),
+    );
   }
 
   @override

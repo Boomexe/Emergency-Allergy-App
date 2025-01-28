@@ -1,5 +1,5 @@
 import 'package:choice/choice.dart';
-import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/features/authentication/data/sources/auth_firebase_service.dart';
 import 'package:emergency_allergy_app/components/custom_list_tile.dart';
 import 'package:emergency_allergy_app/components/form_textfield.dart';
 import 'package:emergency_allergy_app/components/list_view_seperator.dart';
@@ -210,7 +210,7 @@ class _CreateAllergyState extends State<CreateAllergy> {
       return;
     }
 
-    AuthService auth = AuthService();
+    AuthFirebaseServiceImpl auth = AuthFirebaseServiceImpl();
     User? user = auth.auth.currentUser;
 
     Allergy allergy = Allergy(

@@ -1,5 +1,5 @@
-import 'package:emergency_allergy_app/auth/auth_gate.dart';
-import 'package:emergency_allergy_app/auth/auth_service.dart';
+import 'package:emergency_allergy_app/features/authentication/presentation/pages/auth_gate.dart';
+import 'package:emergency_allergy_app/features/authentication/data/sources/auth_firebase_service.dart';
 import 'package:emergency_allergy_app/components/form_button.dart';
 import 'package:emergency_allergy_app/screens/home_screen.dart';
 import 'package:emergency_allergy_app/utils/modal_utils.dart';
@@ -15,8 +15,8 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   void signOut() async {
-    final auth = AuthService();
-    auth.signOut();
+    final auth = AuthFirebaseServiceImpl();
+    auth.signout();
 
     Navigator.pop(context);
     Navigator.push(
